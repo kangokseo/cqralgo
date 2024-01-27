@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'cqrsite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'd605gpil5lvijq',
         'USER': 'kmdnfmrixvlxmb', #postgres
         'PASSWORD': '98f03eb659debf1688b9e0ede8e3e305cd579b7a3103f3f5530ec3aa7cb5274a', #*****
