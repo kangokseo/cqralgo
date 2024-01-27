@@ -1,0 +1,1 @@
+web gunicorn cqrsite.wsgi:application --log-file -
