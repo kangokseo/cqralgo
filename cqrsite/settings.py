@@ -84,27 +84,27 @@ WSGI_APPLICATION = 'cqrsite.wsgi.application'
 #     }
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'd605gpil5lvijq',
-#         'USER': 'kmdnfmrixvlxmb', #postgres
-#         'PASSWORD': '98f03eb659debf1688b9e0ede8e3e305cd579b7a3103f3f5530ec3aa7cb5274a', #*****
-#         'HOST': 'ec2-52-54-200-216.compute-1.amazonaws.com', #빈칸이면 localhost
-#         'PORT': '5432', #빈칸이면 5432
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cqralgo',
-        'USER': 'postgres', #postgres
-        'PASSWORD': 'eugene99', #*****
-        'HOST': 'localhost', #빈칸이면 localhost
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'd605gpil5lvijq',
+        'USER': 'kmdnfmrixvlxmb', #postgres
+        'PASSWORD': '98f03eb659debf1688b9e0ede8e3e305cd579b7a3103f3f5530ec3aa7cb5274a', #*****
+        'HOST': 'ec2-52-54-200-216.compute-1.amazonaws.com', #빈칸이면 localhost
         'PORT': '5432', #빈칸이면 5432
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'cqralgo',
+#         'USER': 'postgres', #postgres
+#         'PASSWORD': 'eugene99', #*****
+#         'HOST': 'localhost', #빈칸이면 localhost
+#         'PORT': '5432', #빈칸이면 5432
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
