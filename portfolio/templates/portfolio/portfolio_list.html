@@ -1,19 +1,15 @@
-<html>
-<head>
-    <title>Django Portfolio List</title>
-</head>
+{% extends "base.html" %}
 
-<body>
-<div id="content">
-    <h1>Portfolio List</h1>
+{% block title %} portfolio_list.html {% endblock %}
+
+{% block content %}
+
+    <h1> Portfolio List </h1>
+    <br>
 
     <ul>
         {% for portfolio in object_list %}
         <li><a href="{% url 'detail' portfolio.id %}">{{ portfolio }}</a></li>
     {% endfor %}
     </ul>
-</div>
-
-</body>
-
-</html>
+{% endblock %}
