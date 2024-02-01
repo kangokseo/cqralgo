@@ -23,3 +23,6 @@ class UserEditView(UpdateView):
 class UserCreateDoneTV(TemplateView):
     template_name = 'registration/register_done.html'
 
+class UserLogoutDone(TemplateView):
+    template_name = 'registration/logout.html'
+

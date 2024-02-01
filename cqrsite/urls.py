@@ -22,16 +22,18 @@ from django.contrib.auth import views as auth_views
 # from django.conf import settings
 
 from cqrsite.views import HomeView
-from cqrsite.views import UserCreateView, UserCreateDoneTV, UserEditView
+from cqrsite.views import UserCreateView, UserCreateDoneTV, UserEditView, UserLogoutDone
 
 from portfolio.views import PortfolioDV, PortfolioLV
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('django.contrib.auth.urls')),
+    #path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/login/', include('django.contrib.auth.urls')),
     path('accounts/register/', UserCreateView.as_view(), name='register'),
     path('1/password/', auth_views.PasswordChangeView.as_view() ),
     path('accounts/edit_profile/', UserEditView.as_view(), name='edit_profile'),
+    path('accounts/logout/', UserLogoutDone.as_view(), name='logout'),
     path('accounts/register/done/', UserCreateDoneTV.as_view(), name='register_done'),
 
     #class-based views
