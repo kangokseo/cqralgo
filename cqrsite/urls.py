@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
 
 # from django.conf.urls.static import static
 # from django.conf import settings
@@ -29,6 +30,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/register/', UserCreateView.as_view(), name='register'),
+    path('1/password/', auth_views.PasswordChangeView.as_view() ),
     path('accounts/edit_profile/', UserEditView.as_view(), name='edit_profile'),
     path('accounts/register/done/', UserCreateDoneTV.as_view(), name='register_done'),
 
