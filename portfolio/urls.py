@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from cqrsite.views import MyAssetView, MgrOnlyView, RiskTolQ
+from cqrsite.views import MyAssetView, MgrOnlyView, RiskTolQsView
 
 
 #app_name = 'portfolio'
@@ -9,6 +9,6 @@ urlpatterns = [
     path('portfolio/<int:pk>/', views.PortfolioDV.as_view(), name='detail'),    
     path('myasset/', MyAssetView.as_view(), name='my_asset'),
     path('mgronly/', MgrOnlyView.as_view(), name='mgronly'),
-
+    path('myasset/risktolq', RiskTolQsView.as_view(), name='risktolq'),
 
 ]

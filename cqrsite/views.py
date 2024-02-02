@@ -14,7 +14,7 @@ class HomeView(TemplateView):
 class MyAssetView(TemplateView):
     template_name = 'portfolio/my_asset.html'
 
-class RiskTolQ(TemplateView):
+class RiskTolQsView(TemplateView):
     template_name = 'portfolio/risktolq_view.html'
 
 class MgrOnlyView(TemplateView):
