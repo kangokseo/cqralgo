@@ -22,7 +22,7 @@ from . import views
 # from django.conf.urls.static import static
 # from django.conf import settings
 
-from cqrsite.views import HomeView
+from cqrsite.views import HomeView, MyAssetView
 from cqrsite.views import UserCreateView, UserCreateDoneTV, UserEditView, UserLogoutView
 from portfolio.views import PortfolioDV, PortfolioLV
 
@@ -31,18 +31,17 @@ from portfolio.views import PortfolioDV, PortfolioLV
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-    #path('accounts/login/', include('django.contrib.auth.urls')),
+
     path('accounts/register/', UserCreateView.as_view(), name='register'),
     path('accounts/register/done/', UserCreateDoneTV.as_view(), name='register_done'),
 
     path('accounts/edit_profile/', UserEditView.as_view(), name='edit_profile'),
 
-    #path('1/password/', auth_views.PasswordChangeView.as_view() ),
+    path('<int:pk>/password/', auth_views.PasswordChangeView.as_view() ),
     path('accounts/logout/', UserLogoutView.as_view(), name='logged_out'),
 
-    #class-based views
     path('', HomeView.as_view(), name='home'),
-    path('portfolio/', include('portfolio.urls')),
+    path('', include('portfolio.urls')),
 
 ] 
 

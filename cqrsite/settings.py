@@ -26,7 +26,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-h9=sp9%*hddrh+nl+s*du))0er3c^hsiypm8)j2sr^+&xlz)j5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False #heroku
+#DEBUG = False #heroku
+DEBUG = True #development
 
 #ALLOWED_HOSTS = ['localhost','127.0.0.1','cqrsite-96a18609ac40.herokuapp.com','cqrsite.herokuapp.com']
 ALLOWED_HOSTS = []
@@ -87,31 +88,31 @@ TEMPLATES = [
 # }
 
 # heroku
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd605gpil5lvijq',
-        'USER': 'kmdnfmrixvlxmb', #postgres
-        'PASSWORD': '98f03eb659debf1688b9e0ede8e3e305cd579b7a3103f3f5530ec3aa7cb5274a', #*****
-        'HOST': 'ec2-52-54-200-216.compute-1.amazonaws.com', #빈칸이면 localhost
-        'PORT': '5432', #빈칸이면 5432
-    }
-}
-
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'cqralgo',
-#         'USER': 'postgres', #postgres
-#         'PASSWORD': 'eugene99', #*****
-#         'HOST': 'localhost', #빈칸이면 localhost
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'd605gpil5lvijq',
+#         'USER': 'kmdnfmrixvlxmb', #postgres
+#         'PASSWORD': '98f03eb659debf1688b9e0ede8e3e305cd579b7a3103f3f5530ec3aa7cb5274a', #*****
+#         'HOST': 'ec2-52-54-200-216.compute-1.amazonaws.com', #빈칸이면 localhost
 #         'PORT': '5432', #빈칸이면 5432
-#         'OPTIONS': {
-#             'client_encoding': 'UTF8',  # Set the correct encoding here
-#         },
-#     },
+#     }
 # }
+
+#postgres local
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'cqralgo',
+        'USER': 'postgres', #postgres
+        'PASSWORD': 'eugene99', #*****
+        'HOST': 'localhost', #빈칸이면 localhost
+        'PORT': '5432', #빈칸이면 5432
+        'OPTIONS': {
+            'client_encoding': 'UTF8',  # Set the correct encoding here
+        },
+    },
+}
 
 
 

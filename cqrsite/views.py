@@ -11,6 +11,15 @@ from django.urls import reverse_lazy
 class HomeView(TemplateView):
     template_name = 'home.html'
 
+class MyAssetView(TemplateView):
+    template_name = 'portfolio/my_asset.html'
+
+class RiskTolQ(TemplateView):
+    template_name = 'portfolio/risktolq_view.html'
+
+class MgrOnlyView(TemplateView):
+    template_name = 'portfolio/mgronly_view.html'
+
 class UserCreateView(CreateView):
     template_name = 'registration/register.html'
     form_class = UserCreationForm

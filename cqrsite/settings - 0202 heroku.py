@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-h9=sp9%*hddrh+nl+s*du))0er3c^hsiypm8)j2sr^+&xlz)j5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False #heroku
 
 #ALLOWED_HOSTS = ['localhost','127.0.0.1','cqrsite-96a18609ac40.herokuapp.com','cqrsite.herokuapp.com']
 ALLOWED_HOSTS = []
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'widget_tweaks',
     'portfolio.apps.PortfolioConfig'
 ]
 
@@ -85,6 +86,7 @@ TEMPLATES = [
 #     }
 # }
 
+# heroku
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -96,6 +98,7 @@ DATABASES = {
     }
 }
 
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
@@ -104,8 +107,14 @@ DATABASES = {
 #         'PASSWORD': 'eugene99', #*****
 #         'HOST': 'localhost', #빈칸이면 localhost
 #         'PORT': '5432', #빈칸이면 5432
-#     }
+#         'OPTIONS': {
+#             'client_encoding': 'UTF8',  # Set the correct encoding here
+#         },
+#     },
 # }
+
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -128,24 +137,26 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 #TIME_ZONE = 'UTC'
 TIME_ZONE = 'Asia/Seoul'
-
 USE_I18N = True
-
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR,  'staticfiles')
-#STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'), )
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'), )
 django_heroku.settings(locals())
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+#LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
