@@ -4,9 +4,9 @@ from django.views.generic import CreateView, UpdateView
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.urls import reverse_lazy
 
-
-
-
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.views.generic import TemplateView
 
 class HomeView(TemplateView):
     template_name = 'home.html'
@@ -17,8 +17,13 @@ class MyAssetView(TemplateView):
 class RiskTolQsView(TemplateView):
     template_name = 'portfolio/risktolq_view.html'
 
-class MgrOnlyView(TemplateView):
+class MgrOnlyView(UserPassesTestMixin, TemplateView):
     template_name = 'portfolio/mgronly_view.html'
+    login_url = '/'
+
+    def test_func(self):
+        return self.request.user.is_superuser
+    
 
 class UserCreateView(CreateView):
     template_name = 'registration/register.html'

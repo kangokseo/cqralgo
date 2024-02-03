@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %} 403.html {% endblock %}
+
+{% block content %}
+
+    <h1> Permission Denied</h1>
+    <br/>
+    <br/>
+    
+    {{exception}}
+
+    
+    <p class="font-weight-italic">Only manager can access this page. Please check your permission and log in again. </p>
+    <br/>
+    <p class="font-italic"><a href="{% url 'login' %}">Log in</a></p>
+
+
+{% endblock %}
