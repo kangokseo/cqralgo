@@ -4,21 +4,16 @@
 
 {% block content %}
 
-    <h1> My Account View is here </h1>
     <br>
-
-
     {% for profile in profile_item %}
-        <li>user_id: {{profile.user_id}}</li>
-        <li>id: {{profile.id}}</li>
-        <li>RiskTol: {{profile.RiskTol}}</li>
+        투자자리스크 성향: {{profile.RiskTol}} 
     {% endfor %}<br/>
 
 
-    <p> 성향분석 설문:  <a href="{% url 'add_survey' %}">Survey</a></p>
+    <p> 성향분석하기:  <a href="{% url 'add_survey' %}">Survey</a></p>
     
     <br>
 
-    <h2> Account Balance </h2>
+    <h1> Account Balance </h1>
 
 {% endblock %}

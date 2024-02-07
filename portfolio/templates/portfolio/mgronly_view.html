@@ -7,12 +7,16 @@
     <h1> Model Portfolio Management </h1>
     <br>
 
-    {% for mp in mp_list %}
-        <strong>id: {{ mp.id }}</strong>
-        <ul>
-            <li>portfolio id: {{ mp.portid}}</li>
-            <li>inception date: {{ mp.incept_date}}</li>
-        </ul>
-    {% endfor %}
-
+    {% if user.is_authenticated %}
+        {% for mp in mp_list %}
+            <strong>id: {{ mp.id }}</strong>
+            <ul>
+                <li>port id: {{ mp.portid}}</li>
+                <li>date: {{ mp.incept_date}}</li>
+            </ul>
+        {% endfor %}
+    {% else %}
+        <h2>You must be logged in first.</h2>
+        <p class="font-italic"><a href="{% url 'login' %}">Log in</a></p>
+    {% endif %}
 {% endblock %}
