@@ -1,9 +1,8 @@
 from django.contrib import admin
-from portfolio.models import Portfolio, Profile, InvUniv, ModelPort, Account
+from portfolio.models import Portfolio, Profile, InvUniv, ModelPort, Account, Questionarie
 
 # Register your models here.
 @admin.register(Portfolio)
-
 class PortfolioAdmin(admin.ModelAdmin):
     list_display = ('id', 'title',  'minRiskTol' , 'astcls5_h', 'astcls4_h', 'astcls3_h', 'astcls2_h', 'astcls1_h', 'rskast_h', 'astcls_max', 'astclsi_max')
 
@@ -24,3 +23,7 @@ class ModelPortAdmin(admin.ModelAdmin):
 @admin.register(Account)
 class AccountAdmin(admin.ModelAdmin):
     list_display=('id', 'user_id','계좌번호','계좌명', '은행코드','개설일시')
+
+@admin.register(Questionarie)
+class QuestionarieAdmin(admin.ModelAdmin):
+    list_display=('userid', 'QA1', 'QA2', 'QA3', 'QA4', 'QA5', 'QA6', 'QA7', 'riskscore')

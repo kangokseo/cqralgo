@@ -7,7 +7,15 @@
     <h1> My Account View is here </h1>
     <br>
 
-    <p> 성향분석 설문:  <a href="{% url 'risktolq' %}">Survey</a></p>
+
+    {% for profile in profile_item %}
+        <li>user_id: {{profile.user_id}}</li>
+        <li>id: {{profile.id}}</li>
+        <li>RiskTol: {{profile.RiskTol}}</li>
+    {% endfor %}<br/>
+
+
+    <p> 성향분석 설문:  <a href="{% url 'add_survey' %}">Survey</a></p>
     
     <br>
 

@@ -7,7 +7,12 @@
     <h1> Model Portfolio Management </h1>
     <br>
 
-    <ul>
+    {% for mp in mp_list %}
+        <strong>id: {{ mp.id }}</strong>
+        <ul>
+            <li>portfolio id: {{ mp.portid}}</li>
+            <li>inception date: {{ mp.incept_date}}</li>
+        </ul>
+    {% endfor %}
 
-    </ul>
 {% endblock %}

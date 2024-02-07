@@ -11,6 +11,7 @@ class Profile(models.Model):
         return str(self.user)
 
 
+
 class Portfolio(models.Model):
     #id = 포트폴리오id
     title = models.CharField('TITLE', max_length=100, blank=True, null=True) 
@@ -55,6 +56,22 @@ class InvUniv(models.Model):
     def __str__(self):
         return self.종목명 
     
+
+class Questionarie(models.Model):
+    userid = models.CharField(max_length=5, null=True, blank=True)
+    QA1 = models.CharField(max_length=5, null=True, blank=True)
+    QA2 = models.CharField(max_length=5, null=True, blank=True)
+    QA3 = models.CharField(max_length=5, null=True, blank=True)
+    QA4 = models.CharField(max_length=5, null=True, blank=True)
+    QA5 = models.CharField(max_length=5, null=True, blank=True)
+    QA6 = models.CharField(max_length=5, null=True, blank=True)
+    QA7 = models.CharField(max_length=5, null=True, blank=True)
+    riskscore =models.IntegerField(null=True, blank=True) #
+
+    def __str__(self):
+        return str(self.userid)
+
+
 class Account(models.Model):
     user_id = models.CharField(null=True, blank=True) 
     계좌번호 = models.CharField(max_length=10, blank=True, null=True) 
@@ -64,3 +81,4 @@ class Account(models.Model):
 
     def __str__(self):
         return self.계좌번호 
+

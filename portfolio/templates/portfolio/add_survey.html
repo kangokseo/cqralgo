@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %} survey_add.html {% endblock %}
+
+{% block content %}
+
+    <h1> Risk Tolerance Questionare </h1>
+    <br>
+
+    {% for profile in profile_item %}
+        <li>참고</li>
+        <li>{{profile.id}}</li>
+        <li>{{profile.riskscore}}</li>
+    {% endfor %}<br/>
+
+
+    {% if submitted %}
+        Submitted successfully!
+    {% else %}
+        <form action="" method=POST>
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit">Submit</button>
+        </form>
+    {% endif %}
+
+
+{% endblock %}

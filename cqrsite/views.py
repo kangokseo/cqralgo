@@ -8,14 +8,19 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views.generic import TemplateView
 
+
 class HomeView(TemplateView):
     template_name = 'home.html'
 
 class MyAssetView(TemplateView):
     template_name = 'portfolio/my_asset.html'
 
-class RiskTolQsView(TemplateView):
-    template_name = 'portfolio/risktolq_view.html'
+
+
+
+class SurveyView(TemplateView):
+    template_name = 'portfolio/survey_view.html'
+
 
 class MgrOnlyView(UserPassesTestMixin, TemplateView):
     template_name = 'portfolio/mgronly_view.html'

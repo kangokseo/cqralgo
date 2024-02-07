@@ -7,9 +7,14 @@
     <h1> Portfolio List </h1>
     <br>
 
-    <ul>
-        {% for portfolio in object_list %}
-        <li><a href="{% url 'detail' portfolio.id %}">{{ portfolio }}</a></li>
+
+    {% for port in port_list %}
+        <strong>id: {{ port.id }}</strong>
+        <ul>
+            <li>portfolio id: {{ port.portid}}</li>
+            <li>url: {{ port.url}}</li>
+            <li>title: <a href="{% url 'detail' port.id %}">{{ port.title}}</a></li>
+        </ul>
     {% endfor %}
-    </ul>
+
 {% endblock %}
