@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %} view_survey.html {% endblock %}
+
+{% block content %}
+
+    <h1> Risk Tolerance Questionare </h1>
+    <br>
+
+
+
+    <div class="card">
+        <div class="card-header"><strong>
+            {{survey_record.id}}</strong>
+        </div>
+        <div class="card-body">
+      
+      <p class="card-text">
+      <strong>Q1: </strong>{{survey_record.QA1}}</p>
+      
+      <p class="card-text">
+      <strong>Q2: </strong>{{survey_record.QA2}}
+      </p>
+      
+      <p class="card-text">
+      <strong>Q3: </strong>{{survey_record.QA3}}</p>
+      
+      <p class="card-text">
+      <strong>Q4: </strong>{{survey_record.QA4}}</p>
+      
+      <p class="card-text">
+      <strong>투자성향 점수: </strong>{{survey_record.riskscore}}</p>
+      
+          
+        </div>
+      </div>
+      
+      <br/><br/>
+      <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
+      
+      <a href="{% url 'update_survey' survey_record.id %}" class="btn btn-secondary">Update</a>
+
+      
+
+
+{% endblock %}

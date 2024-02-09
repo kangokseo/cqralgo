@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 
+from . import views
 from .views import HomeView, UserCreateView, UserCreateDoneTV, UserEditView, UserLogoutView
 
 
@@ -17,7 +18,8 @@ urlpatterns = [
     path('<int:pk>/password/', auth_views.PasswordChangeView.as_view() ),
     path('accounts/logout/', UserLogoutView.as_view(), name='logged_out'),
 
-    path('', HomeView.as_view(), name='home'),
+    #path('', HomeView.as_view(), name='home'),
+    path('', views.home, name='home'),
     path('', include('portfolio.urls')),
 
 ] 

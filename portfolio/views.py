@@ -7,9 +7,9 @@ from django.urls import reverse_lazy
 
 from cqrsite.views import HomeView
 from .forms import QuestionForm
-from .models import ModelPort, Portfolio, Profile, Questionarie
-
-
+from .models import ModelPort, Portfolio, Profile, Questionarie, dailyMPvalue
+from django.shortcuts import redirect
+from django.contrib import messages
 
 class PortfolioLV(ListView):
     model = Portfolio
@@ -39,24 +39,31 @@ def all_port(request):
 def my_asset(request):
     if request.user.is_authenticated:
         me = request.user.id
-        profile_item = Profile.objects.filter(user_id=me)
+        profile_item = Profile.objects.filter(user_id=me) ##
+        question_item = Questionarie.objects.filter(userid=me)
 
         print(profile_item)
-        return render(request, 'portfolio/my_asset.html', {"profile_item":profile_item})
+        print(question_item)
+        return render(request, 'portfolio/my_asset.html', {"profile_item":profile_item, "question_item":question_item})
 
     else:
         return render(request, 'portfolio/mgronly_view.html', {})
 
 
 def mgr_only(request):
-    mp_list = ModelPort.objects.all()
+    if request.user.is_authenticated and request.user.is_superuser:
+        daily_mp_vals = Portfolio.objects.all()
 
-    return render (request,'portfolio/mgronly_view.html', {'mp_list': mp_list})   
+        return render (request,'portfolio/mgronly_view.html', {'daily_mp_vals': daily_mp_vals})   
+
+    else:
+        return render(request, 'portfolio/mgronly_view.html', {})   
 
 
-def add_survey(request):
+def add_survey(request, pk):
     submitted = False
-
+    quest = Questionarie.objects.get(id=pk)
+    
     if request.method == "POST":
         form = QuestionForm(request.POST)
         if form.is_valid():
@@ -69,3 +76,21 @@ def add_survey(request):
             submitted = True
     return render(request, 'portfolio/add_survey.html', {'form':form, 'submitted':submitted})
 
+def customer_survey(request, pk):
+
+	survey_record  = Questionarie.objects.get(id=pk)
+
+	return render(request, 'portfolio/view_survey.html', {
+			"survey_record":survey_record
+			})
+
+
+def update_survey(request, pk):
+    cur_survey = Questionarie.objects.get(id=pk)
+    #form = QuestionForm(request.POST)
+    form = QuestionForm(request.POST or None, instance=cur_survey)
+    
+    return render(request, 'portfolio/update_survey.html', {'form':form})
+    
+		
+        

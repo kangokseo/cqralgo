@@ -4,8 +4,11 @@ from .models import Questionarie
 
 
 class QuestionForm(ModelForm):
+   # QA1 = forms.CharField(widget=forms.widgets.TextInput(attrs={"placeholder":"QA1", "class":"form-control"}), label="QA1")
+   # riskscore = forms.CharField(widget=forms.widgets.TextInput(attrs={"placeholder":"riskscore", "class":"form-control"}), label="RiskScore")
+
+
     class Meta:
         model = Questionarie
-        #fields = "__all__"
-        fields = ('userid','QA1','QA2','QA3','QA4','QA5','QA6','QA7','riskscore')
-
+        fields = "__all__"
+       
