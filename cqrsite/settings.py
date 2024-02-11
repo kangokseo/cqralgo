@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'widget_tweaks',
-    'portfolio.apps.PortfolioConfig'
+    'portfolio.apps.PortfolioConfig',
+
 ]
 
 MIDDLEWARE = [
@@ -103,7 +104,7 @@ TEMPLATES = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cqralgo',
+        'NAME': 'cqralgo2',
         'USER': 'postgres', #postgres
         'PASSWORD': 'eugene99', #*****
         'HOST': 'localhost', #빈칸이면 localhost

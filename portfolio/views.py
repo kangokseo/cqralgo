@@ -7,9 +7,51 @@ from django.urls import reverse_lazy
 
 from cqrsite.views import HomeView
 from .forms import QuestionForm
-from .models import ModelPort, Portfolio, Profile, Questionarie, dailyMPvalue
+from .models import ModelPort, Portfolio, Profile, Questionarie, dailyMPweight
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.core.paginator import Paginator
+
+from django.http import HttpResponse
+from portfolio.utilis.calculator import Calculator
+from cqrsite.utils.pdUpdater import cqrDB
+
+
+def update_daily_weights(request):
+    db = cqrDB()
+    db.update_daily_weights()
+    print("success")
+    return HttpResponse("Success")
+    
+
+
+
+
+def calculate_sum(request):
+    calc = Calculator()  # Create an instance of the Calculator class
+    
+    # Use the methods of the Calculator instance
+    sum_result = calc.sum(10,5)
+    
+    # Prepare a response string
+    response_content = (
+        f"Sum: {sum_result}<br>"
+    )
+    
+    return HttpResponse(response_content)
+
+def calculate_minus(request):
+    calc = Calculator()  # Create an instance of the Calculator class
+    
+    # Use the methods of the Calculator instance
+    minus_result = calc.minus(10,5)
+    
+    # Prepare a response string
+    response_content = (
+        f"Minus: {minus_result}<br>"
+    )
+    
+    return HttpResponse(response_content)
 
 class PortfolioLV(ListView):
     model = Portfolio
@@ -52,9 +94,14 @@ def my_asset(request):
 
 def mgr_only(request):
     if request.user.is_authenticated and request.user.is_superuser:
-        daily_mp_vals = Portfolio.objects.all()
+        #daily_mp_w = dailyMPweight.objects.all()
 
-        return render (request,'portfolio/mgronly_view.html', {'daily_mp_vals': daily_mp_vals})   
+        p = Paginator(dailyMPweight.objects.all(), 20)
+        page = request.GET.get('page')
+        mp_w = p.get_page(page)
+
+        #return render (request,'portfolio/mgronly_view.html', {'daily_mp_w': daily_mp_w, 'mp_w': mp_w})   
+        return render (request,'portfolio/mgronly_view.html', {'mp_w': mp_w})   
 
     else:
         return render(request, 'portfolio/mgronly_view.html', {})   
@@ -87,10 +134,26 @@ def customer_survey(request, pk):
 
 def update_survey(request, pk):
     cur_survey = Questionarie.objects.get(id=pk)
-    #form = QuestionForm(request.POST)
+    
     form = QuestionForm(request.POST or None, instance=cur_survey)
+
+
+    if form.is_valid():
+        form.save()
+        messages.success(request, "Record Has Been Updated!")
+        return redirect('home')
     
     return render(request, 'portfolio/update_survey.html', {'form':form})
+
+
+
+    # print("Update is successful!")
+    # messages.success(request, "Update is successful!")
+
+    # daily_mp_vals = Portfolio.objects.all()
+
+    # return render (request,'portfolio/mgronly_view.html', {'daily_mp_vals': daily_mp_vals})  
+
     
 		
         

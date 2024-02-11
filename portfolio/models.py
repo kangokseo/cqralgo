@@ -97,20 +97,39 @@ class dailyMPvalue(models.Model):
 
     date = models.DateTimeField(null=True, blank=True)
     port_id = models.CharField(null=True, blank=True)
-    item1_val = models.DecimalField (max_digits=20, decimal_places=6)
-    item2_val = models.DecimalField (max_digits=20, decimal_places=6)
-    item3_val = models.DecimalField (max_digits=20, decimal_places=6)
-    item4_val = models.DecimalField (max_digits=20, decimal_places=6)
-    item5_val = models.DecimalField (max_digits=20, decimal_places=6)
-    item6_val = models.DecimalField (max_digits=20, decimal_places=6)
-    item7_val = models.DecimalField (max_digits=20, decimal_places=6)
-    item8_val = models.DecimalField (max_digits=20, decimal_places=6)
-    item9_val = models.DecimalField (max_digits=20, decimal_places=6)
-    port_val = models.DecimalField (max_digits=20, decimal_places=6)
-    port_ret = models.DecimalField (max_digits=20, decimal_places=6)
+    item1_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    item2_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    item3_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    item4_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    item5_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    item6_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    item7_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    item8_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    port_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    port_ret = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
     
     def __str__(self):
         return self.date 
+
+
+class dailyMPweight(models.Model): 
+
+    date = models.DateTimeField(null=True, blank=True)
+    port_id = models.CharField(null=True, blank=True)
+    item1_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    item2_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    item3_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    item4_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    item5_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    item6_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    item7_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    item8_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    port_total = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+
+    
+    def __str__(self):
+        return self.date 
+
 
 #postgreSQL
 # CREATE TABLE portfolio_dailyMPval (
@@ -124,7 +143,6 @@ class dailyMPvalue(models.Model):
 # 	item6_val NUMERIC(20,6),
 # 	item7_val NUMERIC(20,6),
 # 	item8_val NUMERIC(20,6),
-# 	item9_val NUMERIC(20,6),
 # 	port_val NUMERIC(20,6),
 # 	port_ret NUMERIC(20,6)
 # );

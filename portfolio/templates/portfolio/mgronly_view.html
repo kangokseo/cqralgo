@@ -7,28 +7,41 @@
     <h1> Model Portfolio Management </h1>
     <br>
 
-    <table class="table table-hover">
+    <table class="table table-sm table-hover">
         <thead>
           <tr>
-            <th scope="col">id</th>
-            <th scope="col">title</th>
-            <th scope="col">url</th>
-            <th scope="col">minRiskTol</th>
+            <th scope="col">date</th>
+            <th scope="col">코스닥150</th>
+            <th scope="col">KODEX200</th>
+            <th scope="col">나스닥100</th>
+            <th scope="col">SP500</th>
+            <th scope="col">국고채3</th>
+            <th scope="col">단기채</th>
+            <th scope="col">통안채</th>
+            <th scope="col">cash</th>
+            <th scope="col">total</th>
           </tr>
         </thead>
         <tbody>
-        
+
 
         {% if user.is_authenticated %}
-            {% if daily_mp_vals %}
-                {% for daily_mp_val in daily_mp_vals %}
+            {% if mp_w %}
+                {% for mp in mp_w %}
                 <tr>
-                    <td>{{daily_mp_val.id}}</td>
-                    <td>{{daily_mp_val.title}}</td>
-                    <td>{{daily_mp_val.url}}</td>
-                    <td>{{daily_mp_val.minRiskTol}}</td>
+                    <td>{{mp.date}}</td>
+                    <td>{{mp.item1_val}}</td>
+                    <td>{{mp.item2_val}}</td>
+                    <td>{{mp.item3_val}}</td>
+                    <td>{{mp.item4_val}}</td>
+                    <td>{{mp.item5_val}}</td>
+                    <td>{{mp.item6_val}}</td>
+                    <td>{{mp.item7_val}}</td>
+                    <td>{{mp.item8_val}}</td>
+                    <td>{{mp.port_total}}</td>
                 </tr>    
                 {% endfor %}
+
             {% endif %}
     
         {% else %}
@@ -39,6 +52,36 @@
         </tbody>
     </table>
          
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">          
+      
+      {% if mp_w.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+      
+          <li class="page-item"><a class="page-link" href="?page={{ mp_w.previous_page_number }}">Previous</a></li>
+          
+      {% endif %}
+      
+      {% for i in nums %}
+          <li class="page-item"><a class="page-link" href="?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
+      {% endfor %}
+      
+      {% if mp_w.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{ mp_w.next_page_number }}">Next</a></li>
+      
+          <li class="page-item"><a class="page-link" href="?page={{ mp_w.paginator.num_pages }}">Last &raquo</a></li>
+      
+      {% endif %}
+      
+       </ul>
+      </nav>
 
+      <div class="d-flex justify-content-end">
+        <p>
+            <a href="{% url 'update_daily_weights' %}" class="btn btn-secondary mr-2  btn-sm">Update MP</a>
+            <a href="{% url 'calculate_minus' %}" class="btn btn-secondary btn-sm">Refresh MP</a>
+            <br>
+        </p>
+    </div>
 
 {% endblock %}

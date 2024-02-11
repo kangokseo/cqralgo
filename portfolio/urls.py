@@ -19,6 +19,10 @@ urlpatterns = [
     path('mgr_only/', views.mgr_only, name='mgr_only'),
     path('myasset/survey', SurveyView.as_view(), name='survey'),
     
+    
 
+    path('util', views.update_daily_weights, name='update_daily_weights'),
+    path('cal/sum', views.calculate_sum, name='calculate_sum'),
+    path('cal/minus', views.calculate_minus, name='calculate_minus'),
 ]
 
