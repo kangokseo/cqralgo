@@ -4,9 +4,14 @@
 
 {% block content %}
 
-    <h1> Model Portfolio Management </h1>
+    <h2> Daily Model Portfolio Weight </h2>
     <br>
-
+    <div class="d-flex justify-content-center">
+        <p>
+            <a href="{% url 'mgr_only1' %}" class="btn btn-secondary mr-2 btn-sm">Daily Value</a>
+            <a href="{% url 'mgr_only2' %}" class="btn btn-secondary mr-2 btn-sm">Monthly Value</a>
+        </p>
+    </div>
     <table class="table table-sm table-hover">
         <thead>
           <tr>
@@ -78,8 +83,10 @@
 
       <div class="d-flex justify-content-end">
         <p>
-            <a href="{% url 'update_daily_weights' %}" class="btn btn-secondary mr-2  btn-sm">Update MP</a>
-            <a href="{% url 'calculate_minus' %}" class="btn btn-secondary btn-sm">Refresh MP</a>
+            <a> Test transation: </a>
+            <a href="{% url 'update_daily_weights' %}" class="btn btn-secondary mr-2  btn-sm">Update daily MP weight</a>
+            <a href="{% url 'update_daily_value' %}" class="btn btn-secondary btn-sm">Update daily MP value</a>
+            <a href="{% url 'update_monthly_value' %}" class="btn btn-secondary btn-sm">Update monthly MP value</a>
             <br>
         </p>
     </div>

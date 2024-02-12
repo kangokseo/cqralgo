@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %} mgronly2_view.html {% endblock %}
+
+{% block content %}
+
+    <h2> Daily Model Portfolio Value </h2>
+    <br>
+    <div class="d-flex justify-content-center">
+        <p>
+            <a href="{% url 'mgr_only' %}" class="btn btn-secondary mr-2  btn-sm">Daily Weight</a>
+            <a href="{% url 'mgr_only2' %}" class="btn btn-secondary mr-2  btn-sm">Monthly Value</a>
+        </p>
+    </div>
+
+    <table class="table table-sm table-hover">
+        <thead>
+          <tr>
+            <th scope="col">date</th>
+            <th scope="col">코스닥150</th>
+            <th scope="col">KODEX200</th>
+            <th scope="col">나스닥100</th>
+            <th scope="col">SP500</th>
+            <th scope="col">국고채3</th>
+            <th scope="col">단기채</th>
+            <th scope="col">통안채</th>
+            <th scope="col">cash</th>
+            <th scope="col">value</th>
+            <th scope="col">수익률</th>
+            <th scope="col">누적수익률</th>
+          </tr>
+        </thead>
+        <tbody>
+
+
+        {% if user.is_authenticated %}
+            {% if mp_v %}
+                {% for mp in mp_v %}
+                <tr>
+                    <td>{{mp.date}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{mp.port_val}}</td>
+                    <td>{{mp.port_ret}}</td>
+                    <td></td>
+                </tr>    
+                {% endfor %}
+
+            {% endif %}
+    
+        {% else %}
+            <h2>You must be logged in first.</h2>
+            <p class="font-italic"><a href="{% url 'login' %}">Log in</a></p>
+        {% endif %}
+
+        </tbody>
+    </table>
+         
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">          
+      
+      {% if mp_v.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+      
+          <li class="page-item"><a class="page-link" href="?page={{ mp_v.previous_page_number }}">Previous</a></li>
+          
+      {% endif %}
+      
+      {% for i in nums %}
+          <li class="page-item"><a class="page-link" href="?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
+      {% endfor %}
+      
+      {% if mp_v.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{ mp_v.next_page_number }}">Next</a></li>
+      
+          <li class="page-item"><a class="page-link" href="?page={{ mp_v.paginator.num_pages }}">Last &raquo</a></li>
+      
+      {% endif %}
+      
+       </ul>
+      </nav>
+
+
+
+{% endblock %}

@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 
 from cqrsite.views import HomeView
 from .forms import QuestionForm
-from .models import ModelPort, Portfolio, Profile, Questionarie, dailyMPweight
+from .models import ModelPort, Portfolio, Profile, Questionarie, dailyMPweight, dailyMPvalue, monthlyMPvalue
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
@@ -25,6 +25,18 @@ def update_daily_weights(request):
     
 
 
+def update_daily_value(request):
+    db = cqrDB()
+    db.update_daily_value()
+    print("success")
+    return HttpResponse("Success")
+
+
+def update_monthly_value(request):
+    db = cqrDB()
+    db.update_monthly_value()
+    print("success")
+    return HttpResponse("Success")
 
 
 def calculate_sum(request):
@@ -94,9 +106,9 @@ def my_asset(request):
 
 def mgr_only(request):
     if request.user.is_authenticated and request.user.is_superuser:
-        #daily_mp_w = dailyMPweight.objects.all()
+        daily_mp_w = dailyMPweight.objects.all().order_by('-date')
 
-        p = Paginator(dailyMPweight.objects.all(), 20)
+        p = Paginator(daily_mp_w, 20)
         page = request.GET.get('page')
         mp_w = p.get_page(page)
 
@@ -106,6 +118,32 @@ def mgr_only(request):
     else:
         return render(request, 'portfolio/mgronly_view.html', {})   
 
+def mgr_only1(request):
+    if request.user.is_authenticated and request.user.is_superuser:
+        daily_mp_v = dailyMPvalue.objects.all().order_by('-date')
+
+        p = Paginator(daily_mp_v, 20)
+        page = request.GET.get('page')
+        mp_v = p.get_page(page)
+ 
+        return render (request,'portfolio/mgronly1_view.html', {'mp_v': mp_v})   
+
+    else:
+        return render(request, 'portfolio/mgronly1_view.html', {})   
+
+def mgr_only2(request): #monthly mp value
+    if request.user.is_authenticated and request.user.is_superuser:
+        monthl_mp = monthlyMPvalue.objects.all().order_by('-date')
+
+        p = Paginator(monthl_mp, 20)
+        page = request.GET.get('page')
+        mp_v = p.get_page(page)
+ 
+        return render (request,'portfolio/mgronly2_view.html', {'mp_v': mp_v})   
+
+    else:
+        return render(request, 'portfolio/mgronly2_view.html', {})   
+    
 
 def add_survey(request, pk):
     submitted = False

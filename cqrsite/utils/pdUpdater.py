@@ -58,7 +58,48 @@ class cqrDB:
         conn.close()
 
 
+    def update_daily_value(self):
+        curObj = conn.cursor()
 
 
-#Date,KODEX 200 mkt val,KODEX 국고채3년 mkt val,TIGER 미국나스닥100 mkt val,TIGER 미국S&P500선물(H) mkt val,KODEX 단기채권 mkt val,TIGER 단기통안채 mkt val,KODEX 코스닥150 mkt val,cash_rem,total
-#2015-10-30 00:00:00,9.98%,16.64%,19.99%,19.99%,16.66%,16.65%,0.00%,0.08%,100.00%
+        df = pd.read_csv(r'C:\Users\kango\Desktop\cqralgo\cqrsite\portfolio\cvs\일별수익률추이20240208.csv')
+        df=df[['Date','port_val','일별수익률', '누적수익률']]
+
+        for idx in range (len(df)):
+            s_date = df.Date.values[idx][:10]
+            item1_val = round(df.port_val.values[idx],6)
+            item2_val = round(df.일별수익률.values[idx],6)
+
+            sqlst = f"INSERT INTO portfolio_dailyMPvalue " \
+                         f"(date, port_val, port_ret) values " \
+                         f"('{s_date}', {item1_val}, {item2_val})"
+            curObj.execute(sqlst)
+           
+            print(sqlst)
+
+
+        conn.commit()
+        conn.close()
+
+
+    def update_monthly_value(self):
+        curObj = conn.cursor()
+
+
+        df = pd.read_csv(r'C:\Users\kango\Desktop\cqralgo\cqrsite\portfolio\cvs\월별수익률추이20240208.csv')
+        df=df[['Date','port_val']]
+
+        for idx in range (len(df)):
+            s_date = df.Date.values[idx][:10]
+            port_id = 1
+            port_ret = round(df.port_val.values[idx],6)
+
+            sqlst = f"INSERT INTO portfolio_monthlyMPvalue " \
+                         f"(date, port_id, port_ret) values " \
+                         f"('{s_date}', { port_id}, {port_ret})"
+            curObj.execute(sqlst)
+           
+            print(sqlst)
+
+        conn.commit()
+        conn.close()

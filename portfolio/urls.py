@@ -16,12 +16,16 @@ urlpatterns = [
     path('update_survey/<int:pk>', views.update_survey, name='update_survey'),
     path('add_survey/<int:pk>', views.add_survey, name='add_survey'),
 
-    path('mgr_only/', views.mgr_only, name='mgr_only'),
+    path('mgr_only/', views.mgr_only, name='mgr_only'), #daily weight view
+    path('mgr_only1/', views.mgr_only1, name='mgr_only1'), #daily value view
+    path('mgr_only2/', views.mgr_only2, name='mgr_only2'), #monthly return view
     path('myasset/survey', SurveyView.as_view(), name='survey'),
     
     
 
     path('util', views.update_daily_weights, name='update_daily_weights'),
+    path('util1', views.update_daily_value, name='update_daily_value'),
+    path('util2', views.update_monthly_value, name='update_monthly_value'),
     path('cal/sum', views.calculate_sum, name='calculate_sum'),
     path('cal/minus', views.calculate_minus, name='calculate_minus'),
 ]
