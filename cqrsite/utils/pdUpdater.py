@@ -50,9 +50,36 @@ class cqrDB:
             print(sqlst)
 
 
-        # sqlst = "INSERT INTO portfolio_dailympvalue " +\
-        #     "(date, port_id, item1_val, item2_val, item3_val, item4_val, item5_val, port_val, port_ret) values " +\
-        #     "('2024/03/01', 1, 0.3, 0.4, 0.3, 0, 0, 1000, 0.1)"
+
+        conn.commit()
+        conn.close()
+
+
+    def update_clsweight(self):
+        curObj = conn.cursor()
+
+        df = pd.read_csv(r'C:\Users\kango\Desktop\cqralgo\cqrsite\portfolio\cvs\자산별투자비중추이20240208.csv')
+        df=df.rename(columns={'5':'cls5', '3':'cls3','2':'cls2', '1':'cls1'})
+        #df=df[['Date','5','3','2','11','total','위험자산비중']]
+
+        for idx in range (len(df)):
+            s_date = df.Date.values[idx][:10]
+            i_port_id = 1
+            item5_val = round(float(df.cls5.values[idx].rstrip('%'))/100,6)
+            item4_val =0
+            item3_val = round(float(df.cls3.values[idx].rstrip('%'))/100,6)
+            item2_val = round(float(df.cls2.values[idx].rstrip('%')) / 100,6)
+            item1_val = round(float(df.cls1.values[idx].rstrip('%')) / 100,6)
+            tot_val = round(float(df.total.values[idx].rstrip('%')) / 100,6)
+            risk_val = round(float(df.위험자산비중.values[idx].rstrip('%')) / 100,6)
+
+            sqlst = f"INSERT INTO portfolio_MPclsweight " \
+                         f"(date, port_id, cls5_val, cls4_val, cls3_val, cls2_val, cls1_val, tot_val, risk_val) values " \
+                         f"('{s_date}', {i_port_id}, {item5_val}, {item4_val}, {item3_val}, {item2_val}, {item1_val},{tot_val}, {risk_val})"
+            curObj.execute(sqlst)
+            print (s_date )
+           
+            print(sqlst)
 
         conn.commit()
         conn.close()

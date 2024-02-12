@@ -24,6 +24,11 @@ def update_daily_weights(request):
     return HttpResponse("Success")
     
 
+def update_clsweight(request):
+    db = cqrDB()
+    db.update_clsweight()
+    print("success")
+    return HttpResponse("Success")
 
 def update_daily_value(request):
     db = cqrDB()
@@ -118,6 +123,20 @@ def mgr_only(request):
     else:
         return render(request, 'portfolio/mgronly_view.html', {})   
 
+def mgr_only3(request): #자산별 weight
+    if request.user.is_authenticated and request.user.is_superuser:
+        daily_mp_w = dailyMPweight.objects.all().order_by('-date')
+
+        p = Paginator(daily_mp_w, 20)
+        page = request.GET.get('page')
+        mp_w = p.get_page(page)
+
+        #return render (request,'portfolio/mgronly_view.html', {'daily_mp_w': daily_mp_w, 'mp_w': mp_w})   
+        return render (request,'portfolio/mgronly3_view.html', {'mp_w': mp_w})   
+
+    else:
+        return render(request, 'portfolio/mgronly3_view.html', {})   
+    
 def mgr_only1(request):
     if request.user.is_authenticated and request.user.is_superuser:
         daily_mp_v = dailyMPvalue.objects.all().order_by('-date')

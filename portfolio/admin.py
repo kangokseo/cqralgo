@@ -28,10 +28,10 @@ class AccountAdmin(admin.ModelAdmin):
 class QuestionarieAdmin(admin.ModelAdmin):
     list_display=('userid', 'QA1', 'QA2', 'QA3', 'QA4', 'QA5', 'QA6', 'QA7', 'riskscore')
 
-@admin.register(dailyMPweight)
-class dailyMPweightAdmin(admin.ModelAdmin):
-    list_display=('date' ,'port_id')   
+# @admin.register(dailyMPweight)
+# class dailyMPweightAdmin(admin.ModelAdmin):
+#     list_display=('date' ,'port_id')   
 
-@admin.register(dailyMPvalue)
-class dailyMPvalueAdmin(admin.ModelAdmin):
-    list_display=('date', 'port_id')   
+# @admin.register(dailyMPvalue)
+# class dailyMPvalueAdmin(admin.ModelAdmin):
+#     list_display=('date', 'port_id')   

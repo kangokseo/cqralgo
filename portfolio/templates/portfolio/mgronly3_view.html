@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %} mgronly2_view.html {% endblock %}
+{% block title %} mgronly3_view.html {% endblock %}
 
 {% block content %}
 
-    <h2> Monthly Model Portfolio Value </h2>
+    <h2> 자산별 Weight </h2>
     <br>
     <div class="d-flex justify-content-center">
         <p>
             <a href="{% url 'mgr_only' %}" class="btn btn-secondary mr-2  btn-sm">종목별 Weight</a>
-            <a href="{% url 'mgr_only3' %}" class="btn btn-secondary mr-2 btn-sm">자산별 Weight</a>
-            <a href="{% url 'mgr_only1' %}" class="btn btn-secondary mr-2  btn-sm">Daily Value</a>
+            <a href="{% url 'mgr_only1' %}" class="btn btn-secondary mr-2 btn-sm">Daily Value</a>
+            <a href="{% url 'mgr_only2' %}" class="btn btn-secondary mr-2  btn-sm">Monthly Value</a>
         </p>
     </div>
 
@@ -18,17 +18,13 @@
         <thead>
           <tr>
             <th scope="col">date</th>
-            <th scope="col">코스닥150</th>
-            <th scope="col">KOSPI200</th>
-            <th scope="col">나스닥100</th>
-            <th scope="col">SP500</th>
-            <th scope="col">국고채3</th>
-            <th scope="col">단기채</th>
-            <th scope="col">통안채</th>
+            <th scope="col">위험등급5</th>
+            <th scope="col">위험등급4</th>
+            <th scope="col">위험등급3</th>
+            <th scope="col">위험등급2</th>
+            <th scope="col">위험등급1</th>
             <th scope="col">cash</th>
-            <th scope="col">value</th>
-            <th scope="col">수익률</th>
-            <th scope="col">누적수익률</th>
+            <th scope="col">total</th>
           </tr>
         </thead>
         <tbody>
@@ -47,7 +43,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
+                    <td>{{mp.port_val}}</td>
                     <td>{{mp.port_ret}}</td>
                     <td></td>
                 </tr>    
@@ -86,6 +82,7 @@
       
        </ul>
       </nav>
+
 
 
 {% endblock %}

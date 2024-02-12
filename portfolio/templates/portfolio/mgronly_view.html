@@ -4,10 +4,11 @@
 
 {% block content %}
 
-    <h2> Daily Model Portfolio Weight </h2>
+    <h2> 종목별 Weight </h2>
     <br>
     <div class="d-flex justify-content-center">
         <p>
+            <a href="{% url 'mgr_only3' %}" class="btn btn-secondary mr-2 btn-sm">자산별 Weight</a>
             <a href="{% url 'mgr_only1' %}" class="btn btn-secondary mr-2 btn-sm">Daily Value</a>
             <a href="{% url 'mgr_only2' %}" class="btn btn-secondary mr-2 btn-sm">Monthly Value</a>
         </p>
@@ -17,7 +18,7 @@
           <tr>
             <th scope="col">date</th>
             <th scope="col">코스닥150</th>
-            <th scope="col">KODEX200</th>
+            <th scope="col">KOSPI200</th>
             <th scope="col">나스닥100</th>
             <th scope="col">SP500</th>
             <th scope="col">국고채3</th>
@@ -80,11 +81,13 @@
       
        </ul>
       </nav>
-
+      <br>
+      <br>
       <div class="d-flex justify-content-end">
         <p>
             <a> Test transation: </a>
-            <a href="{% url 'update_daily_weights' %}" class="btn btn-secondary mr-2  btn-sm">Update daily MP weight</a>
+            <a href="{% url 'update_daily_weights' %}" class="btn btn-secondary mr-2  btn-sm">Update Item weight</a>
+            <a href="{% url 'update_clsweight' %}" class="btn btn-secondary mr-2  btn-sm">Update Class weight</a>
             <a href="{% url 'update_daily_value' %}" class="btn btn-secondary btn-sm">Update daily MP value</a>
             <a href="{% url 'update_monthly_value' %}" class="btn btn-secondary btn-sm">Update monthly MP value</a>
             <br>

@@ -130,6 +130,23 @@ class dailyMPweight(models.Model):
     def __str__(self):
         return self.date 
 
+
+class MPclsweight(models.Model): 
+
+    date = models.DateTimeField(null=True, blank=True)
+    port_id = models.CharField(null=True, blank=True)
+    cls5_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    cls4_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    cls3_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    cls2_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    cls1_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    total = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    risk_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    
+    def __str__(self):
+        return self.date 
+    
+
 class monthlyMPvalue(models.Model): 
 
     date = models.DateTimeField(null=True, blank=True)
