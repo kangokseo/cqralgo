@@ -17,9 +17,10 @@ urlpatterns = [
     path('add_survey/<int:pk>', views.add_survey, name='add_survey'),
 
     path('mgr_only/', views.mgr_only, name='mgr_only'), #종목별 weight
+    path('mgr_only3/', views.mgr_only3, name='mgr_only3'), #자산별 weight
     path('mgr_only1/', views.mgr_only1, name='mgr_only1'), #daily value 
     path('mgr_only2/', views.mgr_only2, name='mgr_only2'), #monthly return 
-    path('mgr_only3/', views.mgr_only3, name='mgr_only3'), #자산별 weight
+
     path('myasset/survey', SurveyView.as_view(), name='survey'),
     
     

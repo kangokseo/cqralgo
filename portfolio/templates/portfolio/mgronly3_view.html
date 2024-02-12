@@ -31,20 +31,17 @@
 
 
         {% if user.is_authenticated %}
-            {% if mp_v %}
-                {% for mp in mp_v %}
+            {% if mp_w %}
+                {% for mp in mp_w %}
                 <tr>
                     <td>{{mp.date}}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>{{mp.port_val}}</td>
-                    <td>{{mp.port_ret}}</td>
+                    <td>{{mp.cls5_val}}</td>
+                    <td>{{mp.cls4_val}}</td>
+                    <td>{{mp.cls3_val}}</td>
+                    <td>{{mp.cls2_val}}</td>
+                    <td>{{mp.cls1_val}}</td>
+                    <td>{{mp.total}}</td>
+                    <td>{{mp.risk_value}}</td>
                     <td></td>
                 </tr>    
                 {% endfor %}

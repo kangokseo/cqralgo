@@ -74,7 +74,7 @@ class cqrDB:
             risk_val = round(float(df.위험자산비중.values[idx].rstrip('%')) / 100,6)
 
             sqlst = f"INSERT INTO portfolio_MPclsweight " \
-                         f"(date, port_id, cls5_val, cls4_val, cls3_val, cls2_val, cls1_val, tot_val, risk_val) values " \
+                         f"(date, port_id, cls5_val, cls4_val, cls3_val, cls2_val, cls1_val, total, risk_val) values " \
                          f"('{s_date}', {i_port_id}, {item5_val}, {item4_val}, {item3_val}, {item2_val}, {item1_val},{tot_val}, {risk_val})"
             curObj.execute(sqlst)
             print (s_date )

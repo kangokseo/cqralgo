@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 
 from cqrsite.views import HomeView
 from .forms import QuestionForm
-from .models import ModelPort, Portfolio, Profile, Questionarie, dailyMPweight, dailyMPvalue, monthlyMPvalue
+from .models import ModelPort, Portfolio, Profile, Questionarie, dailyMPweight, dailyMPvalue, monthlyMPvalue, MPclsweight
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
@@ -109,7 +109,7 @@ def my_asset(request):
         return render(request, 'portfolio/mgronly_view.html', {})
 
 
-def mgr_only(request):
+def mgr_only(request): #종목별 weight
     if request.user.is_authenticated and request.user.is_superuser:
         daily_mp_w = dailyMPweight.objects.all().order_by('-date')
 
@@ -125,7 +125,7 @@ def mgr_only(request):
 
 def mgr_only3(request): #자산별 weight
     if request.user.is_authenticated and request.user.is_superuser:
-        daily_mp_w = dailyMPweight.objects.all().order_by('-date')
+        daily_mp_w = MPclsweight.objects.all().order_by('-date')
 
         p = Paginator(daily_mp_w, 20)
         page = request.GET.get('page')
@@ -137,7 +137,7 @@ def mgr_only3(request): #자산별 weight
     else:
         return render(request, 'portfolio/mgronly3_view.html', {})   
     
-def mgr_only1(request):
+def mgr_only1(request): #daily MP value
     if request.user.is_authenticated and request.user.is_superuser:
         daily_mp_v = dailyMPvalue.objects.all().order_by('-date')
 
@@ -150,7 +150,7 @@ def mgr_only1(request):
     else:
         return render(request, 'portfolio/mgronly1_view.html', {})   
 
-def mgr_only2(request): #monthly mp value
+def mgr_only2(request): #monthly mp value 
     if request.user.is_authenticated and request.user.is_superuser:
         monthl_mp = monthlyMPvalue.objects.all().order_by('-date')
 
