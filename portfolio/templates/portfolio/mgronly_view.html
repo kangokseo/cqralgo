@@ -35,16 +35,16 @@
             {% if mp_w %}
                 {% for mp in mp_w %}
                 <tr>
-                    <td>{{mp.date}}</td>
-                    <td>{{mp.cls5_}}</td>
-                    <td>{{mp.item2_val}}</td>
-                    <td>{{mp.item3_val}}</td>
-                    <td>{{mp.item4_val}}</td>
-                    <td>{{mp.item5_val}}</td>
-                    <td>{{mp.item6_val}}</td>
-                    <td>{{mp.item7_val}}</td>
-                    <td>{{mp.item8_val}}</td>
-                    <td>{{mp.port_total}}</td>
+                    <td>{{mp.date|date:"Y/m/d"}}</td>
+                    <td>{{mp.item1_val|floatformat:4}}</td>
+                    <td>{{mp.item2_val|floatformat:4}}</td>
+                    <td>{{mp.item3_val|floatformat:4}}</td>
+                    <td>{{mp.item4_val|floatformat:4}}</td>
+                    <td>{{mp.item5_val|floatformat:4}}</td>
+                    <td>{{mp.item6_val|floatformat:4}}</td>
+                    <td>{{mp.item7_val|floatformat:4}}</td>
+                    <td>{{mp.item8_val|floatformat:4}}</td>
+                    <td>{{mp.port_total|floatformat:2}}</td>
                 </tr>    
                 {% endfor %}
 

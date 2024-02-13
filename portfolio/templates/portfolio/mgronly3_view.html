@@ -23,8 +23,8 @@
             <th scope="col">위험등급3</th>
             <th scope="col">위험등급2</th>
             <th scope="col">위험등급1</th>
-            <th scope="col">cash</th>
             <th scope="col">total</th>
+            <th scope="col">위험자산비중</th>
           </tr>
         </thead>
         <tbody>
@@ -34,14 +34,14 @@
             {% if mp_w %}
                 {% for mp in mp_w %}
                 <tr>
-                    <td>{{mp.date}}</td>
-                    <td>{{mp.cls5_val}}</td>
-                    <td>{{mp.cls4_val}}</td>
-                    <td>{{mp.cls3_val}}</td>
-                    <td>{{mp.cls2_val}}</td>
-                    <td>{{mp.cls1_val}}</td>
-                    <td>{{mp.total}}</td>
-                    <td>{{mp.risk_value}}</td>
+                    <td>{{mp.date|date:"Y/m/d"}}</td>
+                    <td>{{mp.cls5_val|floatformat:4}}</td>
+                    <td>{{mp.cls4_val|floatformat:4}}</td>
+                    <td>{{mp.cls3_val|floatformat:4}}</td>
+                    <td>{{mp.cls2_val|floatformat:4}}</td>
+                    <td>{{mp.cls1_val|floatformat:4}}</td>
+                    <td>{{mp.total|floatformat:2}}</td>
+                    <td>{{mp.risk_value|floatformat:4}}</td>
                     <td></td>
                 </tr>    
                 {% endfor %}

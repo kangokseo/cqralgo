@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load humanize %}
 {% block title %} mgronly2_view.html {% endblock %}
 
 {% block content %}
@@ -38,7 +38,7 @@
             {% if mp_v %}
                 {% for mp in mp_v %}
                 <tr>
-                    <td>{{mp.date}}</td>
+                    <td>{{mp.date|date:"Y/m/d"}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -47,8 +47,8 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>{{mp.port_val}}</td>
-                    <td>{{mp.port_ret}}</td>
+                    <td>{{mp.port_val|floatformat:2|intcomma }}</td>
+                    <td>{{mp.port_ret|floatformat:4}}</td>
                     <td></td>
                 </tr>    
                 {% endfor %}
