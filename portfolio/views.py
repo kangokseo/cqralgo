@@ -199,7 +199,7 @@ def update_survey(request, pk):
         form.save()
         messages.success(request, "Record Has Been Updated!")
         return redirect('home')
-    
+
     return render(request, 'portfolio/update_survey.html', {'form':form})
 
 
