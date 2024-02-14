@@ -46,6 +46,7 @@ def update_monthly_value(request):
     return HttpResponse("Success")
 
 
+
 def calculate_sum(request):
     calc = Calculator()  # Create an instance of the Calculator class
     
@@ -273,6 +274,7 @@ def add_survey(request, pk):
             submitted = True
     return render(request, 'portfolio/add_survey.html', {'form':form, 'submitted':submitted})
 
+
 def customer_survey(request, pk):
 
 	survey_record  = Questionarie.objects.get(id=pk)
@@ -287,20 +289,66 @@ def update_survey(request, pk):
     
     form = QuestionForm(request.POST or None, instance=cur_survey)
 
-    if form.is_valid():
-        form.save()
-        print("not success")
-        #return redirect('home')
+    if form.is_valid():     
+
+        #instance = form.save(commit=False)
+        #instance.riskscore=a
+
+        a=cal_risk(form)
+        instance = form.save(commit=False)
+        instance.riskscore = a
+        instance.save()
+        #form.cleaned_data['riskscore'] = a
+        #instance.save
+        #form.save()
+        print (a)
+        print("success")
+
+
     else:
         print("not success")
 
     return render(request, 'portfolio/update_survey.html', {
         'form':form,
         'survey':cur_survey,
- 
         })
 
 
     
-		
-        
+##
+
+    
+    
+
+def cal_risk(request):  
+
+    QA1_scores = {'1': 12.5,'2': 12.5,'3': 9.3,'4': 6.2, '5': 3.1,}
+    QA2_scores = {'1': 3.1, '2': 6.2, '3': 9.3,'4': 12.5,'5': 15.6,}
+    QA3_scores = {'1': 3.1, '2': 6.2, '3': 9.3,'4': 12.5,'5': 15.6,}
+    QA4_scores = {'1': 3.1, '2': 6.2, '3': 9.3,'4': 12.5,}
+    QA5_scores = {'1': 15.6,'2': 12.5,'3': 9.3,'4': 6.2, '5': 3.1,}
+    QA6_scores = {'1': 9.3, '2': 6.2, '3': 3.1,}
+    QA7_scores = {'1': -6.2,'2': 6.2, '3': 12.5,'4': 18.7,}
+
+    score_mappings = {'QA1': QA1_scores,'QA2': QA2_scores,'QA3': QA3_scores,'QA4': QA4_scores,'QA5': QA5_scores,'QA6': QA6_scores,'QA7': QA7_scores,}
+    
+    total_score = 0
+    questions_and_scores = [
+                ('QA1', QA1_scores),
+                ('QA2', QA2_scores),
+                ('QA3', QA3_scores),
+                ('QA4', QA4_scores),
+                ('QA5', QA5_scores),
+                ('QA6', QA6_scores),
+                ('QA7', QA7_scores),
+            ]
+
+    for field, scores in questions_and_scores:
+            input_option = request.cleaned_data.get(field)
+            score = scores.get(input_option, 0) 
+            total_score += score
+            
+    else:
+        return total_score
+    
+    return total_score

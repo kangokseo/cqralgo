@@ -130,3 +130,5 @@ class cqrDB:
 
         conn.commit()
         conn.close()
+
+

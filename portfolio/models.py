@@ -76,7 +76,7 @@ class Questionarie(models.Model):
     QA5 = models.CharField(max_length=5, null=True, blank=True)
     QA6 = models.CharField(max_length=5, null=True, blank=True)
     QA7 = models.CharField(max_length=5, null=True, blank=True)
-    riskscore =models.IntegerField(null=True, blank=True) #
+    riskscore =models.CharField(null=True, blank=True)
 
     def __str__(self):
         return str(self.userid)

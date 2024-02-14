@@ -103,5 +103,6 @@ class QuestionForm(ModelForm):
 
     class Meta:
         model = Questionarie
-        fields = "__all__"  # Or specify the fields you need
+        #fields = "__all__"  # Or specify the fields you need
+        fields = ['QA1', 'QA2', 'QA3', 'QA4', 'QA5', 'QA6', 'QA7']
 
