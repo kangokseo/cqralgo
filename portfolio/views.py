@@ -15,7 +15,9 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse
 from portfolio.utilis.calculator import Calculator
 from cqrsite.utils.pdUpdater import cqrDB
-
+from datetime import datetime
+from datetime import date
+from django.utils import timezone
 
 def update_daily_weights(request):
     db = cqrDB()
@@ -109,57 +111,148 @@ def my_asset(request):
         return render(request, 'portfolio/mgronly_view.html', {})
 
 
+
+
 def mgr_only(request): #종목별 weight
-    if request.user.is_authenticated and request.user.is_superuser:
-        daily_mp_w = dailyMPweight.objects.all().order_by('-date')
+    if request.user.is_authenticated and request.user.is_superuser :
+
+        querydict=request.GET.copy()
+
+        if querydict.get('fromdate') is None:
+            today = date.today()
+            fromdate = date(today.year - 2, today.month, today.day)
+            fromdate = fromdate.strftime("%Y-%m-%d")
+            todate = date.today().strftime("%Y-%m-%d")
+
+        else:
+            fromdate= request.GET.get('fromdate')
+            todate = request.GET.get('todate' )
+        
+        date_from = fromdate
+        date_to = todate
+
+        daily_mp_w = dailyMPweight.objects.filter(date__gte=date_from, date__lte=date_to).order_by('-date')
 
         p = Paginator(daily_mp_w, 20)
         page = request.GET.get('page')
         mp_w = p.get_page(page)
-
-        #return render (request,'portfolio/mgronly_view.html', {'daily_mp_w': daily_mp_w, 'mp_w': mp_w})   
-        return render (request,'portfolio/mgronly_view.html', {'mp_w': mp_w})   
-
+        
+        return render (request,'portfolio/mgronly_view.html', {
+                'mp_w': mp_w,
+                "querydict":querydict,
+                "fromdate":fromdate,
+                "todate":todate,
+                "date_from":date_from,
+                "date_to":date_to,
+                })   
     else:
-        return render(request, 'portfolio/mgronly_view.html', {})   
+        return render (request,'portfolio/mgronly_view.html', {  })   
 
 def mgr_only3(request): #자산별 weight
     if request.user.is_authenticated and request.user.is_superuser:
-        daily_mp_w = MPclsweight.objects.all().order_by('-date')
+        querydict=request.GET.copy()
+
+        if querydict.get('fromdate') is None:
+            today = date.today()
+            fromdate = date(today.year - 2, today.month, today.day)
+            fromdate = fromdate.strftime("%Y-%m-%d")
+            todate = date.today().strftime("%Y-%m-%d")
+
+        else:
+            fromdate= request.GET.get('fromdate')
+            todate = request.GET.get('todate' )
+        
+        date_from = fromdate
+        date_to = todate
+
+        daily_mp_w = MPclsweight.objects.filter(date__gte=date_from, date__lte=date_to).order_by('-date')
 
         p = Paginator(daily_mp_w, 20)
         page = request.GET.get('page')
         mp_w = p.get_page(page)
-
-        #return render (request,'portfolio/mgronly_view.html', {'daily_mp_w': daily_mp_w, 'mp_w': mp_w})   
-        return render (request,'portfolio/mgronly3_view.html', {'mp_w': mp_w})   
+        
+        return render (request,'portfolio/mgronly3_view.html', {
+                'mp_w': mp_w,
+                "querydict":querydict,
+                "fromdate":fromdate,
+                "todate":todate,
+                "date_from":date_from,
+                "date_to":date_to,
+                })   
+    
 
     else:
         return render(request, 'portfolio/mgronly3_view.html', {})   
     
 def mgr_only1(request): #daily MP value
     if request.user.is_authenticated and request.user.is_superuser:
-        daily_mp_v = dailyMPvalue.objects.all().order_by('-date')
+        querydict=request.GET.copy()
 
-        p = Paginator(daily_mp_v, 20)
+        if querydict.get('fromdate') is None:
+            today = date.today()
+            fromdate = date(today.year - 2, today.month, today.day)
+            fromdate = fromdate.strftime("%Y-%m-%d")
+            todate = date.today().strftime("%Y-%m-%d")
+
+        else:
+            fromdate= request.GET.get('fromdate')
+            todate = request.GET.get('todate' )
+        
+        date_from = fromdate
+        date_to = todate
+
+        daily_mp_w = dailyMPvalue.objects.filter(date__gte=date_from, date__lte=date_to).order_by('-date')
+
+        p = Paginator(daily_mp_w, 20)
         page = request.GET.get('page')
         mp_v = p.get_page(page)
- 
-        return render (request,'portfolio/mgronly1_view.html', {'mp_v': mp_v})   
+        
+        return render (request,'portfolio/mgronly1_view.html', {
+                'mp_v': mp_v,
+                "querydict":querydict,
+                "fromdate":fromdate,
+                "todate":todate,
+                "date_from":date_from,
+                "date_to":date_to,
+                })   
+    
 
     else:
         return render(request, 'portfolio/mgronly1_view.html', {})   
 
 def mgr_only2(request): #monthly mp value 
     if request.user.is_authenticated and request.user.is_superuser:
-        monthl_mp = monthlyMPvalue.objects.all().order_by('-date')
+        querydict=request.GET.copy()
 
-        p = Paginator(monthl_mp, 20)
+        if querydict.get('fromdate') is None:
+            today = date.today()
+            fromdate = date(today.year - 2, today.month, today.day)
+            fromdate = fromdate.strftime("%Y-%m-%d")
+            todate = date.today().strftime("%Y-%m-%d")
+
+        else:
+            fromdate= request.GET.get('fromdate')
+            todate = request.GET.get('todate' )
+        
+        date_from = fromdate
+        date_to = todate
+
+        daily_mp_w = monthlyMPvalue.objects.filter(date__gte=date_from, date__lte=date_to).order_by('-date')
+
+        p = Paginator(daily_mp_w, 20)
         page = request.GET.get('page')
         mp_v = p.get_page(page)
- 
-        return render (request,'portfolio/mgronly2_view.html', {'mp_v': mp_v})   
-
+        
+        return render (request,'portfolio/mgronly2_view.html', {
+                'mp_v': mp_v,
+                "querydict":querydict,
+                "fromdate":fromdate,
+                "todate":todate,
+                "date_from":date_from,
+                "date_to":date_to,
+                })   
+    
+    
     else:
         return render(request, 'portfolio/mgronly2_view.html', {})   
     
@@ -185,7 +278,7 @@ def customer_survey(request, pk):
 	survey_record  = Questionarie.objects.get(id=pk)
 
 	return render(request, 'portfolio/view_survey.html', {
-			"survey_record":survey_record
+			"survey_record":survey_record,
 			})
 
 
@@ -200,7 +293,10 @@ def update_survey(request, pk):
         messages.success(request, "Record Has Been Updated!")
         return redirect('home')
 
-    return render(request, 'portfolio/update_survey.html', {'form':form})
+    return render(request, 'portfolio/update_survey.html', {
+        'form':form,
+        'survey':cur_survey,
+        })
 
 
 

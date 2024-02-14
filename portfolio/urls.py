@@ -17,6 +17,7 @@ urlpatterns = [
     path('add_survey/<int:pk>', views.add_survey, name='add_survey'),
 
     path('mgr_only/', views.mgr_only, name='mgr_only'), #종목별 weight
+    #path('mgr_only/<str:fromdate>/<str:todate>/', views.mgr_only, name='mgr_only'), #종목별 weight
     path('mgr_only3/', views.mgr_only3, name='mgr_only3'), #자산별 weight
     path('mgr_only1/', views.mgr_only1, name='mgr_only1'), #daily value 
     path('mgr_only2/', views.mgr_only2, name='mgr_only2'), #monthly return 
@@ -29,6 +30,7 @@ urlpatterns = [
     path('util1', views.update_daily_value, name='update_daily_value'),
     path('util2', views.update_monthly_value, name='update_monthly_value'),
     path('util4', views.update_clsweight, name='update_clsweight'),
+
     path('cal/sum', views.calculate_sum, name='calculate_sum'),
     path('cal/minus', views.calculate_minus, name='calculate_minus'),
 ]

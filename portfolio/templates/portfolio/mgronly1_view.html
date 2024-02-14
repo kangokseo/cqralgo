@@ -4,10 +4,17 @@
 
 {% block content %}
 
-    <h2> Daily Model Portfolio Value </h2>
+    <h2> Daily Value </h2>
     <br>
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-end">
         <p>
+
+            <form id="dateForm" action="{% url 'mgr_only1' %}" method="get">
+                From: <input type="date" id="fromdate" name="fromdate" value="{{ fromdate }}" />
+                ~ To: <input type="date" id="todate" name="todate"  value="{{ todate }}"/>
+                <button type="submit" class="btn btn-secondary mr-2 btn-sm">Search</button>
+            </form>
+            
             <a href="{% url 'mgr_only' %}" class="btn btn-secondary mr-2  btn-sm">종목별 Weight</a>
             <a href="{% url 'mgr_only3' %}" class="btn btn-secondary mr-2 btn-sm">자산별 Weight</a>
             <a href="{% url 'mgr_only2' %}" class="btn btn-secondary mr-2  btn-sm">Monthly Value</a>
