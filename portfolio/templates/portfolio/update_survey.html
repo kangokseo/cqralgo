@@ -6,14 +6,15 @@
 
     <h1> Risk Tolerance Questionare </h1>
     <br>
-    {{survey}}
+    id: {{survey.userid}}, riskscore: {{survey.riskscore}}, profile: {{profile.id}}
 
+    <!--
     {% for profile in profile_item %}
         <li>참고</li>
         <li>{{profile.id}}</li>
         <li>{{profile.riskscore}}</li>
     {% endfor %}<br/>
-
+-->
 
     {% if submitted %}
         Submitted successfully!
@@ -26,6 +27,7 @@
             <button type="submit">제출</button>
         </form>
     {% endif %}
+
 
 
 {% endblock %}

@@ -287,25 +287,19 @@ def update_survey(request, pk):
     
     form = QuestionForm(request.POST or None, instance=cur_survey)
 
-
     if form.is_valid():
         form.save()
-        messages.success(request, "Record Has Been Updated!")
-        return redirect('home')
+        print("not success")
+        #return redirect('home')
+    else:
+        print("not success")
 
     return render(request, 'portfolio/update_survey.html', {
         'form':form,
         'survey':cur_survey,
+ 
         })
 
-
-
-    # print("Update is successful!")
-    # messages.success(request, "Update is successful!")
-
-    # daily_mp_vals = Portfolio.objects.all()
-
-    # return render (request,'portfolio/mgronly_view.html', {'daily_mp_vals': daily_mp_vals})  
 
     
 		
