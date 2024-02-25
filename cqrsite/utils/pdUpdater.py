@@ -19,7 +19,7 @@ class cqrDB:
     def __del__(self):
         self.conn.close()
 
-    def update_daily_weights(self): #종목별투자비중추이 업데이트
+    def update_daily_weights(self): #종목별투자비중추이 초기업데이트
         curObj = self.conn.cursor()
 
         try:
@@ -73,7 +73,7 @@ class cqrDB:
         #conn.close()
 
 
-    def update_clsweight(self): #자산별투자비중추이 업데이트
+    def update_clsweight(self): #자산별투자비중추이 초기업데이트
         curObj = self.conn.cursor()
 
         try:
@@ -113,7 +113,7 @@ class cqrDB:
         
 
 
-    def update_daily_value(self): #일별수익률추이 업데이트
+    def update_daily_value(self): #일별수익률추이 초기업데이트
         curObj = self.conn.cursor()
 
         # Delete existing records in portfolio_monthlyMPvalue
@@ -148,7 +148,7 @@ class cqrDB:
         self.conn.commit()  # Commit the transaction if all inserts are successful
         
 
-    def update_monthly_value(self): #월별수익률추이 업데이트
+    def update_monthly_value(self): #월별수익률추이 초기업데이트
         curObj = self.conn.cursor()
 
         try:
