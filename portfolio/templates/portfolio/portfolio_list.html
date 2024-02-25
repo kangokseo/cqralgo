@@ -7,14 +7,25 @@
     <h1> Portfolio List </h1>
     <br>
 
-
     {% for port in port_list %}
-        <strong>id: {{ port.id }}</strong>
+        <strong>Portfolio id: {{ port.id }}</strong> <br>
         <ul>
-            <li>portfolio id: {{ port.portid}}</li>
-            <li>url: {{ port.url}}</li>
-            <li>title: <a href="{% url 'detail' port.id %}">{{ port.title}}</a></li>
-        </ul>
+            <li>title: <a>{{ port.title}}</a></li>
+        </ul>      
     {% endfor %}
+
+    <div class="d-flex justify-content-center">
+        <p>          
+            <a> 적극형 Haloween (11-4월 주식 70, 5-10월 코스닥 축소) :  </a>
+            <a href="{% url 'algo_View' %}" class="btn btn-secondary mr-2  btn-sm">벡테스팅 결과 </a>
+            <br><br>
+            <a> 적극형 Haloween (짝수11-4 주식 70, 홀수11-4 주식 50%) : </a>
+            <a href="{% url 'algo1_View' %}" class="btn btn-secondary mr-2  btn-sm">벡테스팅 결과 </a>
+            <br><br>
+            <a> 적극형 Haloween (짝수11-7 주식 70, 홀수11-7 주식 50%) :</a>
+            <a href="{% url 'algo2_View' %}" class="btn btn-secondary mr-2  btn-sm">벡테스팅 결과 </a>
+            <br><br>
+        </p>
+    </div>
 
 {% endblock %}

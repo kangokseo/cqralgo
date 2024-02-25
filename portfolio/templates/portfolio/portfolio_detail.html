@@ -3,10 +3,12 @@
 {% block title %} portfolio_detail.html {% endblock %}
 
 {% block content %}
-    <h1>{{ object.title }}</h1>
+    <h1>{{ object.title }}</h1> <br>
 
-    <ul><li>설명: <a href="{{ object.url }}">{{ object.url }}</a></li>
-        
+    <ul>
+        <li>Haloween (11-4월 주식 70, 5-10월 코스닥 축소) : <a href="{% url 'algo_View' %}"> 벡테스팅 결과 </a></li><br>
+        <li>Haloween (짝수11-4 주식 70, 홀수11-4 주식 50%) : <a href="{% url 'algo1_View' %}"> 벡테스팅 결과 </a></li><br>
+        <li>Haloween (짝수11-7 주식 70, 홀수11-7 주식 50%) : <a href="{% url 'algo2_View' %}"> 벡테스팅 결과 </a></li><br>
     </ul>
 
 {% endblock %}

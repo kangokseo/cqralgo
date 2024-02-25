@@ -7,14 +7,18 @@
     <br>
     {% for profile in profile_item %}
         투자자리스크 성향: ({{profile.RiskTol}}) {{profile.RiskTolDesc}} {{profile.user}} {{profile.id}} 
-        <p> 성향분석하기:  <a href="{% url 'update_survey' profile.id %}">Survey</a></p>
+        <p> 성향분석하기:  <a href="{% url 'view_survey' profile.id %}">Survey</a></p>
     {% endfor %}<br/>
 
-
-   
 
     <br>
 
     <h1> Account Balance </h1>
+    <br><br>
+    {% for item in data %}
+    dnca_tot_amt: {{ item.dnca_tot_amt }} <br>
+    {% endfor%}
+    <br><br>
+
 
 {% endblock %}

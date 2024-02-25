@@ -90,15 +90,18 @@
        </ul>
       </nav>
       <br>
-      <br>
       <div class="d-flex justify-content-end">
-        <p>
-            <a> Test transation: </a>
+        <p>          
+            <a> Algorithm test: </a>
+            <a href="{% url 'algo' %}" class="btn btn-secondary mr-2  btn-sm">Original Algo</a>
+            <a href="{% url 'algo1' %}" class="btn btn-secondary mr-2  btn-sm">Algo1 (10-4:5-10)</a>
+            <a href="{% url 'algo2' %}" class="btn btn-secondary btn-sm">Algo2 (11-7:8-10)</a>
+            <br><br>
+            <a> Transation test: </a>
             <a href="{% url 'update_daily_weights' %}" class="btn btn-secondary mr-2  btn-sm">Update Item weight</a>
             <a href="{% url 'update_clsweight' %}" class="btn btn-secondary mr-2  btn-sm">Update Class weight</a>
             <a href="{% url 'update_daily_value' %}" class="btn btn-secondary btn-sm">Update daily MP value</a>
             <a href="{% url 'update_monthly_value' %}" class="btn btn-secondary btn-sm">Update monthly MP value</a>
-            <br>
         </p>
     </div>
 
