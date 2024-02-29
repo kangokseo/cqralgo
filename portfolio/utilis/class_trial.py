@@ -16,7 +16,6 @@ class StockData:
                                 interval = int, 
                                 group_by = 'column')
         return self.data
-        
     
     def clean(self):
 
@@ -134,16 +133,8 @@ class StockData:
         """ End of backtest /// """
         return self.shares, self.cash_rem, self.mkt_val,self.strat
     
-    def algo1(self,initial_cash):
+    def algo1(self,initial_cash,odd_buy,odd_hold,even_buy,even_hold):  # 11 - 4, 5 - 10 
         # Halloween Adjusted 짝수 홀수 11 - 4 월 (아빠)
-
-        # (짝수해10월말진입. 홀수해 4월말청산): 코스닥 30% 코스피20% S&P 20% 나스닥30% 주식비중
-        # (홀수해 5-10월): 코스닥 30%를 ‘TIGER CD금리투자’(현금) 로 교체.
-
-        # (홀수해11-짝수해4월): 주식5(코덱스200만).채권5
-        # (짝수해 5-10월): 주식3(코덱스200만).채권7
-        #
-
         """ Without the assumption of starting cash"""
 
         """ Weights """
@@ -154,11 +145,10 @@ class StockData:
         even_passive_stock_w = 0.3
         even_passive_bond_w = 0.7
 
-        odd_buy = np.array([0.2*odd_stock_w, (1/3*odd_bond_w), 0.3*odd_stock_w, 0.2*odd_stock_w, (1/3*odd_bond_w), (1/3*odd_bond_w), 0.3*odd_stock_w])          # Even 11 - Odd 4
-        odd_hold = np.array([0.2*odd_stock_w, (1/3*odd_bond_w), 0.3*odd_stock_w, 0.2*odd_stock_w, (1/3*odd_bond_w), (1/3*odd_bond_w), 0.0*odd_stock_w])         # Odd 5 - Odd 10
-        
-        even_buy = np.array([0.2*even_stock_w, (1/3*even_bond_w), 0.4*even_stock_w, 0.4*even_stock_w, (1/3*even_bond_w), (1/3*even_bond_w), 0.0*even_stock_w])  # Odd 11 - Even 4
-        even_hold = np.array([0.0*even_passive_stock_w, (1/3*even_passive_bond_w), 0.5*even_passive_stock_w, 0.5*even_passive_stock_w, (1/3*even_passive_bond_w), (1/3*even_passive_bond_w), 0.0*even_passive_stock_w])  # Even 5 - Even 10
+        #odd_buy = np.array([0.4*odd_stock_w, (1/3*odd_bond_w), 0.0*odd_stock_w, 0.0*odd_stock_w, (1/3*odd_bond_w), (1/3*odd_bond_w), 0.6*odd_stock_w])          # Even 11 - Odd 4
+        #odd_hold = np.array([0.4*odd_stock_w, (1/3*odd_bond_w), 0.0*odd_stock_w, 0.0*odd_stock_w, (1/3*odd_bond_w), (1/3*odd_bond_w), 0.3*odd_stock_w])         # Odd 5 - Odd 10
+        #even_buy = np.array([0.4*even_stock_w, (1/3*even_bond_w), 0.0*even_stock_w, 0.0*even_stock_w, (1/3*even_bond_w), (1/3*even_bond_w), 0.6*even_stock_w])  # Odd 11 - Even 4. NOTE: Here, we shift Kospi weight to Nasdaq instead of S&P 500 to be consistent with our logic that 11-4 should be more aggressive than 5-10. 
+        #even_hold = np.array([0.5*even_passive_stock_w, (1/3*even_passive_bond_w), 0.0*even_passive_stock_w, 0.0*even_passive_stock_w, (1/3*even_passive_bond_w), (1/3*even_passive_bond_w), 0.5*even_passive_stock_w])  # Even 5 - Even 10
         
         port_list = [initial_cash]  # Seed money 
         port = port_list[0]
@@ -200,17 +190,17 @@ class StockData:
 
             # When to rebalance (Rebalance at last trading day of month)
                     
-            if i == 0: 
+            if i == 0: # 첫 계정 오픈 날!
                 if bool(self.df['end of month'][i]) == False:  # If we start at end of the month
-                    if ((self.df.month.values[i] in [10,11,12]) & (self.df.year.values[i]%2 == 0)) or ((self.df.month.values[i] in [1,2,3]) & (self.df.year.values[i]%2 == 1)): # Halloween strategy
+                    if ((self.df.month.values[i] in [10,11,12]) & (self.df.year.values[i]%2 == 0)) or ((self.df.month.values[i] in [1,2,3]) & (self.df.year.values[i]%2 == 1)): # Halloween strategy. Ex) 2016.10 말 - 2017.3월말. 
                         X = odd_buy 
-                        x = "aggressive"
+                        x = "odd aggressive"
                         self.strat.append(x)
                     elif (self.df.month.values[i] in [4,5,6,7,8,9]) & (self.df.year.values[i]%2 == 1): 
                         X = odd_hold 
                         x = "odd passive"
                         self.strat.append(x)
-                    elif ((self.df.month.values[i] in [10,11,12]) & (self.df.year.values[i]%2 == 1)) or ((self.df.month.values[i] in [1,2,3]) & (self.df.year.values[i]%2 == 0)): 
+                    elif ((self.df.month.values[i] in [10,11,12]) & (self.df.year.values[i]%2 == 1)) or ((self.df.month.values[i] in [1,2,3]) & (self.df.year.values[i]%2 == 0)): # ex) 2017.10 - 2018.3
                         X = even_buy 
                         x = "even aggressive"
                         self.strat.append(x)
@@ -218,7 +208,7 @@ class StockData:
                         X = even_hold
                         x = "even passive"
                         self.strat.append(x)
-                else:                                # If we start in the middle of the month
+                else:    # If we don't start at end of the month
                     if ((self.df.month.values[i] in [11,12]) & (self.df.year.values[i]%2 == 0)) or ((self.df.month.values[i] in [1,2,3,4]) & (self.df.year.values[i]%2 == 1)): 
                         X = odd_buy 
                         x = "odd aggressive"
@@ -248,8 +238,8 @@ class StockData:
                 # Indicate: Rebalance date
                 self.rebal.append(True)
 
-            else: 
-                if bool(self.df['end of month'][i]) == False: # Rebalance when end of month
+            else: # 첫 오픈 이후 only rebalance at end of month! 
+                if bool(self.df['end of month'][i]) == False: # If end of month, we balance. 
                     #print("Rebalance", test1["Date"][i])
                     # Determine which strategy to use
                     if ((self.df.month.values[i] in [10,11,12]) & (self.df.year.values[i]%2 == 0)) or ((self.df.month.values[i] in [1,2,3]) & (self.df.year.values[i]%2 == 1)): # Halloween strategy
@@ -278,10 +268,11 @@ class StockData:
                     
                     # Indicate: Rebalance date
                     self.rebal.append(True)
-
+                # No else because if not end of month, we don't do anything. 
+                    
         return self.shares, self.cash_rem, self.mkt_val,self.strat
     
-    def algo2(self,initial_cash):
+    def algo2(self,initial_cash):            # 11 - 7, 8 - 9
         # Halloween Adjusted 짝수 홀수 11 - 7 월! (아빠꺼 변형)
         """ Without the assumption of starting cash"""
 
@@ -445,15 +436,18 @@ class StockData:
         report['일별수익률'] = self.result['port_val'].pct_change()
         report['누적수익률'] = self.result['port_val']/self.result['port_val'][0]-1
         report.replace(np.nan, 0, inplace = True)
-        self.report1 = report[['port_val','일별수익률','누적수익률']]
+        del report['strat']
+        self.report1 = report
         return self.report1
     
     # 2. 월별수익률추이
     def monthly_ret(self):
-        self.report2 = pd.DataFrame(self.report1[(self.report1.reset_index().index == 0) | ~(self.report1.reset_index().Date.dt.month - \
-                    self.report1.reset_index().Date.shift(-1).dt.month).isin([0,np.nan]).values]['port_val'].pct_change())
+        self.report2 = self.report1[(self.report1.reset_index().index == 0) |(self.report1.reset_index().index == (len(self.report1)-1) ) | ~(self.report1.reset_index().Date.dt.month - \
+                    self.report1.reset_index().Date.shift(-1).dt.month).isin([0,np.nan]).values].iloc[:,:-2]
+        #self.report2.columns = ['월별수익률']
+        self.report2['월별수익률'] = self.report2['port_val'].pct_change()
         self.report2.replace(np.nan, 0, inplace = True)
-        self.report2.columns = ['월별수익률']
+        self.report2['누적수익률'] = self.report2['port_val']/self.report2['port_val'][0]-1
         return self.report2
     
     # (Function to be used for #3)
@@ -472,7 +466,7 @@ class StockData:
         asset_perc['total'] = asset_perc.sum(axis = 1)
         asset_perc['위험자산비중'] = asset_perc[[5]]
 
-        self.max_asset_weight = asset_perc.iloc[:,:5].max().max()
+        self.max_asset_weight = asset_perc.iloc[:,:5].max().max()   # 개별 자산비중 최고치
         self.X = asset_perc.applymap(self.to_percentage)
         self.X['rebal'] = self.rebal
         return self.max_asset_weight, self.X

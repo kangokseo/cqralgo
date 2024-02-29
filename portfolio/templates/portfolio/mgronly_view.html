@@ -93,10 +93,10 @@
       <div class="d-flex justify-content-end">
         <p>          
             <a> Daily 데이터 maintenance: </a>
-            <a class="btn btn-secondary mr-2  btn-sm">종목별투자비중</a>
-            <a class="btn btn-secondary mr-2  btn-sm">자산별투자비중</a>
-            <a class="btn btn-secondary btn-sm">일일수익률</a>
-            <a class="btn btn-secondary btn-sm">월별수익률</a>
+            <a href="{% url 'add_daily_weights' %}" class="btn btn-secondary mr-2  btn-sm">종목별투자비중</a>
+            <a href="{% url 'add_clsweight' %}" class="btn btn-secondary mr-2  btn-sm">자산별투자비중</a>
+            <a href="{% url 'add_daily_value' %}" class="btn btn-secondary btn-sm">일일수익률</a>
+            <a href="{% url 'add_monthly_value' %}" class="btn btn-secondary btn-sm">월별수익률</a>
             <br><br>
             <a> 초기 데이터 업데이트: </a>
             <a href="{% url 'update_daily_weights' %}" class="btn btn-secondary mr-2  btn-sm">종목별투자비중</a>

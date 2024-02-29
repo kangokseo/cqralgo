@@ -32,10 +32,9 @@
             <th scope="col">국고채3</th>
             <th scope="col">단기채</th>
             <th scope="col">통안채</th>
-            <th scope="col">cash</th>
             <th scope="col">value</th>
-            <th scope="col">수익률</th>
-            <th scope="col">누적수익률</th>
+            <th scope="col">일수익</th>
+            <th scope="col">누적수익</th>
           </tr>
         </thead>
         <tbody>
@@ -46,17 +45,16 @@
                 {% for mp in mp_v %}
                 <tr>
                     <td>{{mp.date|date:"Y/m/d"}}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{{mp.item1_val|floatformat:2|intcomma}}</td>
+                    <td>{{mp.item2_val|floatformat:2|intcomma}}</td>
+                    <td>{{mp.item3_val|floatformat:2|intcomma}}</td>
+                    <td>{{mp.item4_val|floatformat:2|intcomma}}</td>
+                    <td>{{mp.item5_val|floatformat:2|intcomma}}</td>
+                    <td>{{mp.item6_val|floatformat:2|intcomma}}</td>
+                    <td>{{mp.item7_val|floatformat:2|intcomma}}</td>
                     <td>{{mp.port_val|floatformat:2|intcomma }}</td>
                     <td>{{mp.port_ret|floatformat:4}}</td>
-                    <td></td>
+                    <td>{{mp.acum_ret|floatformat:4}}</td>
                 </tr>    
                 {% endfor %}
 

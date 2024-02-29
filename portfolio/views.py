@@ -33,25 +33,37 @@ from .forms import QuestionForm
 from .models import ModelPort, Portfolio, Profile, Questionarie, dailyMPweight, dailyMPvalue, monthlyMPvalue, MPclsweight
 from .kisapi import get_app_key, get_app_secret, checkbalance, get_ak
 
-# 기본 할로윈 전략으로 모델포트폴리오를 만들고, 일별수익률, 월별수익률, 자산별투자비중, 종목별투자비중, 리밸런싱발생내역 생성 
+# 기본할로윈: 모델포트폴리오를 만들고, 일별수익률, 월별수익률, 자산별투자비중, 종목별투자비중, 리밸런싱발생내역 생성 
 def algo(request): 
     tic = ["069500.KS", "229200.KS",
              "133690.KS", "143850.KS",
              "114260.KS", "153130.KS", "157450.KS"
-             ]
-    stock_data = StockData(tic) #KODEX, Bonds, NASDAQ, S&P, Cash, MMF, KOSDAQ
-    data = stock_data.download_data('2000-01-01', '2024-2-20','1d') 
+             ] #KODEX, Bonds, NASDAQ, S&P, Cash, MMF, KOSDAQ
+    fromdate = "2012-01-01"
+    todate = date.today().strftime("%Y-%m-%d")
+
+    stock_data = StockData(tic) 
+    data = stock_data.download_data(fromdate, todate,'1d') 
     data.Close.dropna(thresh = 6)
     df,ret = stock_data.clean()
     
-    odd_buy = np.array([0.2*0.7, (1/3*0.3), 0.3*0.7, 0.2*0.7, (1/3*0.3), (1/3*0.3), 0.3*0.7]) 
-    odd_hold = np.array([0.2*0.7, (1/3*0.3), 0.3*0.7, 0.2*0.7, (1/3*0.3), (1/3*0.3), 0.0*0.7])
+    odd_stock_w = 1
+    odd_bond_w = 0
+    even_stock_w = 1
+    even_bond_w = 0
+    even_passive_stock_w = 1
+    even_passive_bond_w = 0
 
-    halloween = stock_data.algo_original_halloween(odd_buy, odd_hold, 10000000)
+    odd_buy = np.array([0.4*odd_stock_w, (1/3*odd_bond_w), 0.0*odd_stock_w, 0.0*odd_stock_w, (1/3*odd_bond_w), (1/3*odd_bond_w), 0.6*odd_stock_w])          # Even 11 - Odd 4. Active
+    odd_hold = np.array([0.0*odd_stock_w, (1/3*odd_bond_w), 0.5*odd_stock_w, 0.5*odd_stock_w, (1/3*odd_bond_w), (1/3*odd_bond_w), 0.0*odd_stock_w])         # Odd 5 - Odd 10. 
+    even_buy = np.array([0.5*even_stock_w, (1/3*even_bond_w), 0.0*even_stock_w, 0.0*even_stock_w, (1/3*even_bond_w), (1/3*even_bond_w), 0.5*even_stock_w])  # Odd 11 - Even 4. NOTE: Here, we shift Kospi weight to Nasdaq instead of S&P 500 to be consistent with our logic that 11-4 should be more aggressive than 5-10. 
+    even_hold = np.array([0.0*even_passive_stock_w, (1/3*even_passive_bond_w), 0.5*even_passive_stock_w, 0.5*even_passive_stock_w, (1/3*even_passive_bond_w), (1/3*even_passive_bond_w), 0.0*even_passive_stock_w])  # Even 5 - Even 10
+
+    halloween_adj = stock_data.algo1(1000,odd_buy,odd_hold,even_buy,even_hold) #할로윈변형 호출
     
     stock_data.results()[0]
     stock_data.results()[1]
-    
+ 
     now = datetime.now()
     formatted_now = now.strftime("%Y%m%d")  
 
@@ -72,22 +84,24 @@ def algo(request):
     rebal_history.to_csv(rf'C:\kannie\적극형_리밸런싱발생내역{formatted_now}.csv')
 
     # extend pandas functionality with metrics, etc.
-    qs.extend_pandas()
-    daily_ret.iloc[:,1]
+    # qs.extend_pandas()
+    # daily_ret.iloc[:,1]
     
     # Format the date and time as a string in the desired format, e.g., "YYYY-MM-DD_HH-MM-SS"
     # Construct the file path including the formatted date and time
-    now = datetime.now()
-    formatted_now = now.strftime("%Y%m%d_%H%M")  
-    html_file_path = rf'C:\kannie\Halloween_kospi_{formatted_now}.html'
+    # now = datetime.now()
+    # formatted_now = now.strftime("%Y%m%d_%H%M")  
+    # html_file_path = rf'C:\kannie\Halloween_kospi_{formatted_now}.html'
 
-    qs.reports.html(daily_ret.iloc[:,1], benchmark="^KS11", output=html_file_path, title='Halloween_KS11')
-    webbrowser.open(html_file_path)
+    # qs.reports.html(daily_ret.iloc[:,1], benchmark="^KS11", output=html_file_path, title='Halloween_KS11')
+    # webbrowser.open(html_file_path)
 
-    return HttpResponse(html_file_path)
-    #return HttpResponse("success")
+    # return HttpResponse(html_file_path)
+    # return HttpResponse("success")
 
-# (짝수해 7:3,홀수해 3:7) 할로윈 전략으로 모델포트폴리오를 만들고, 일별수익률, 월별수익률, 자산별투자비중, 종목별투자비중, 리밸런싱발생내역 생성 
+    return render(request, 'portfolio/AdjHalloween_all.html')
+
+# 할로윈변형 (짝수해,홀수해) 
 def algo1(request):
 
     # Halloween Adjusted 짝수 홀수 11 - 4 월 (아빠)
@@ -134,8 +148,7 @@ def algo1(request):
 
     return HttpResponse(html_file_path)
 
-
-# (짝수해 7:3,홀수해 3:7) 할로윈(11-7월 변형) 전략으로 모델포트폴리오를 만들고, 일별수익률, 월별수익률, 자산별투자비중, 종목별투자비중, 리밸런싱발생내역 생성 
+# 할로윈변형 (짝수해,홀수해, 월 변경)
 def algo2(request):
     tic = ["069500.KS", "229200.KS",
              "133690.KS", "143850.KS",
@@ -176,9 +189,8 @@ def algo2(request):
 
     return HttpResponse(html_file_path)
 
-
 def algo_View(request):
-    return render(request, 'portfolio/Halloween_spy.html')
+    return render(request, 'portfolio/AdjHalloween_all.html')
 
 def algo1_View(request):
     return render(request, 'portfolio/Halloween_spy1.html')
@@ -187,6 +199,31 @@ def algo2_View(request):
     return render(request, 'portfolio/Halloween_spy2.html')
 
 
+def add_daily_weights(request): #종목별투자비중추이 업데이트
+    db = cqrDB()
+    db.add_daily_weights()
+    print("success")
+    return HttpResponse("Success add_daily_weights")
+
+def add_clsweight(request): #자산별투자비중추이 업데이트
+    db = cqrDB()
+    db.add_clsweight()
+    print("success")
+    return HttpResponse("Success add_clsweight")
+
+def add_daily_value(request): #일별수익률추이 업데이트
+    print("starting add_daily_value")
+    db = cqrDB()    
+    db.add_daily_value()
+    return HttpResponse("Success add_daily_value")
+
+def add_monthly_value(request): #월별수익률추이 업데이트
+    db = cqrDB()
+    db.add_monthly_value()
+    print("success")
+    return HttpResponse("Success add_monthly_value")
+
+##
 def update_daily_weights(request): #종목별투자비중추이 업데이트
     db = cqrDB()
     db.update_daily_weights()
@@ -211,7 +248,6 @@ def update_monthly_value(request): #월별수익률추이 업데이트
     print("success")
     return HttpResponse("Success update_monthly_value")
 
-
 class PortfolioLV(ListView):
     model = Portfolio
 
@@ -221,10 +257,8 @@ class PortfolioDV(DetailView):
 class MyAssetView(TemplateView):
     template_name = 'portfolio/my_asset.html'
 
-
 class SurveyView(TemplateView):
     template_name = 'portfolio/survey_view.html'
-
 
 class MgrOnlyView(UserPassesTestMixin, TemplateView):
     template_name = 'portfolio/mgronly_view.html'
@@ -232,7 +266,6 @@ class MgrOnlyView(UserPassesTestMixin, TemplateView):
 
     def test_func(self):
         return self.request.user.is_superuser
-
 
 def all_port(request):
     port_list = Portfolio.objects.all()
@@ -317,8 +350,6 @@ def my_asset(request):
     else:
         return render(request, 'portfolio/mgronly_view.html', {})
 
-
-
 def mgr_only(request): #종목별 weight 조회
     if request.user.is_authenticated and request.user.is_superuser :
 
@@ -326,7 +357,12 @@ def mgr_only(request): #종목별 weight 조회
 
         if querydict.get('fromdate') is None:
             today = date.today()
-            fromdate = date(today.year - 2, today.month, today.day)
+
+            try:
+                fromdate = date(today.year - 2, today.month, today.day)
+            except ValueError: 
+                fromdate = date(today.year - 2, today.month, 28)
+
             fromdate = fromdate.strftime("%Y-%m-%d")
             todate = date.today().strftime("%Y-%m-%d")
         else:
@@ -358,7 +394,12 @@ def mgr_only3(request): #자산별 weight 조회
 
         if querydict.get('fromdate') is None:
             today = date.today()
-            fromdate = date(today.year - 2, today.month, today.day)
+
+            try:
+                fromdate = date(today.year - 2, today.month, today.day)
+            except ValueError: 
+                fromdate = date(today.year - 2, today.month, 28)
+
             fromdate = fromdate.strftime("%Y-%m-%d")
             todate = date.today().strftime("%Y-%m-%d")
         else:
@@ -390,7 +431,12 @@ def mgr_only1(request): #daily value 조회
 
         if querydict.get('fromdate') is None:
             today = date.today()
-            fromdate = date(today.year - 2, today.month, today.day)
+
+            try:
+                fromdate = date(today.year - 2, today.month, today.day)
+            except ValueError: 
+                fromdate = date(today.year - 2, today.month, 28)
+
             fromdate = fromdate.strftime("%Y-%m-%d")
             todate = date.today().strftime("%Y-%m-%d")
         else:
@@ -422,7 +468,12 @@ def mgr_only2(request): #monthly value 조회
 
         if querydict.get('fromdate') is None:
             today = date.today()
-            fromdate = date(today.year - 2, today.month, today.day)
+
+            try:
+                fromdate = date(today.year - 2, today.month, today.day)
+            except ValueError: 
+                fromdate = date(today.year - 2, today.month, 28)
+
             fromdate = fromdate.strftime("%Y-%m-%d")
             todate = date.today().strftime("%Y-%m-%d")
         else:
@@ -471,7 +522,6 @@ def customer_survey(request, pk):
 	return render(request, 'portfolio/view_survey.html', {
 			"survey_record":survey_record,
 			})
-
 
 def update_survey(request, pk):
     cur_survey = Questionarie.objects.get(id=pk)

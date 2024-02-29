@@ -61,6 +61,7 @@ class InvUniv(models.Model):
     자산군 = models.CharField(null=True, blank=True)  #ETF/주식
     자산종류 = models.CharField(null=True, blank=True) #지수ETF/채권ETF
     위험도 = models.CharField(null=True, blank=True) #1-5
+
     def __str__(self):
         return self.종목명 
     
@@ -91,25 +92,6 @@ class Account(models.Model):
         return self.계좌번호 
 
 
-class dailyMPvalue(models.Model): 
-
-    date = models.DateTimeField(null=True, blank=True)
-    port_id = models.CharField(null=True, blank=True)
-    item1_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
-    item2_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
-    item3_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
-    item4_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
-    item5_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
-    item6_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
-    item7_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
-    item8_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
-    port_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
-    port_ret = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
-    
-    def __str__(self):
-        return self.date 
-
-
 class dailyMPweight(models.Model): 
 
     date = models.DateTimeField(null=True, blank=True)
@@ -123,7 +105,6 @@ class dailyMPweight(models.Model):
     item7_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
     item8_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
     port_total = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
-
     
     def __str__(self):
         return self.date 
@@ -145,6 +126,27 @@ class MPclsweight(models.Model):
         return self.date 
     
 
+
+class dailyMPvalue(models.Model): 
+
+    date = models.DateTimeField(null=True, blank=True)
+    port_id = models.CharField(null=True, blank=True)
+    item1_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    item2_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    item3_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    item4_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    item5_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    item6_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    item7_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    item8_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    port_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    port_ret = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    acum_ret = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    
+    def __str__(self):
+        return self.date 
+
+
 class monthlyMPvalue(models.Model): 
 
     date = models.DateTimeField(null=True, blank=True)
@@ -159,6 +161,7 @@ class monthlyMPvalue(models.Model):
     item8_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
     port_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
     port_ret = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
+    acum_ret = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
     
     def __str__(self):
         return self.date 

@@ -36,6 +36,11 @@ urlpatterns = [
     path('util2', views.update_monthly_value, name='update_monthly_value'),
     path('util4', views.update_clsweight, name='update_clsweight'),
 
+    path('util_1', views.add_daily_weights, name='add_daily_weights'),
+    path('util1_1', views.add_daily_value, name='add_daily_value'),
+    path('util2_1', views.add_monthly_value, name='add_monthly_value'),
+    path('util4_1', views.add_clsweight, name='add_clsweight'),
+
     path('cal/sum', views.calculate_sum, name='calculate_sum'),
     path('cal/minus', views.calculate_minus, name='calculate_minus'),
 ]
