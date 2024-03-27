@@ -24,7 +24,8 @@ import webbrowser
 import matplotlib.pyplot as plt
 import quantstats as qs
 import yfinance as yf
-
+import shutil
+import matplotlib.pyplot as plt
 from portfolio.utilis.calculator import Calculator
 from portfolio.utilis.class_trial import StockData
 from cqrsite.utils.pdUpdater import cqrDB
@@ -32,6 +33,11 @@ from cqrsite.views import HomeView
 from .forms import QuestionForm
 from .models import ModelPort, Portfolio, Profile, Questionarie, dailyMPweight, dailyMPvalue, monthlyMPvalue, MPclsweight
 from .kisapi import get_app_key, get_app_secret, checkbalance, get_ak
+
+from cqrsite.utils.system_ver1 import systemtrade
+import os
+os.environ['MPLBACKEND'] = 'Agg'
+
 
 # 기본할로윈: 모델포트폴리오를 만들고, 일별수익률, 월별수익률, 자산별투자비중, 종목별투자비중, 리밸런싱발생내역 생성 
 def algo(request): 
@@ -67,39 +73,55 @@ def algo(request):
     now = datetime.now()
     formatted_now = now.strftime("%Y%m%d")  
 
-    daily_ret = stock_data.daily_ret() # 1. 일별수익률추이
-    daily_ret.to_csv(rf'C:\kannie\적극형_일별수익률추이{formatted_now}.csv')
+    # 1. 일별수익률추이
+    source_file_path = rf'portfolio/templates/적극형_일별수익률추이{formatted_now}.csv'
+    destination_file_path = r'portfolio/templates/적극형_일별수익률추이.csv'
+    daily_ret = stock_data.daily_ret() 
+    daily_ret.to_csv(destination_file_path)
+    #shutil.copy(source_file_path, destination_file_path)
+
+    # 2. 월별수익률추이
+    source_file_path = rf'portfolio/templates/적극형_월별수익률추이{formatted_now}.csv'
+    destination_file_path = r'portfolio/templates/적극형_월별수익률추이.csv'
+    monthly_ret = stock_data.monthly_ret() 
+    monthly_ret.to_csv(destination_file_path)
+    #shutil.copy(source_file_path, destination_file_path)
     
-    monthly_ret = stock_data.monthly_ret() # 2. 월별수익률추이
-    monthly_ret.to_csv(rf'C:\kannie\적극형_월별수익률추이{formatted_now}.csv')
-    
-    port_weights = stock_data.portfolio_by_asset_class() # 3. 자산별투자비중추이
+    # 3. 자산별투자비중추이
+    source_file_path = rf'portfolio/templates/적극형_자산별투자비중추이{formatted_now}.csv'
+    destination_file_path = r'portfolio/templates/적극형_자산별투자비중추이.csv'   
+    port_weights = stock_data.portfolio_by_asset_class() 
     port_weights = port_weights[1]
-    port_weights.to_csv(rf'C:\kannie\적극형_자산별투자비중추이{formatted_now}.csv')
+    port_weights.to_csv(destination_file_path)
+    #shutil.copy(source_file_path, destination_file_path)
     
-    cls_weight=stock_data.portfolio_by_ind_assets() # 4. 종목별투자비중추이
-    cls_weight.to_csv(rf'C:\kannie\적극형_종목별투자비중추이{formatted_now}.csv')
+    # 4. 종목별투자비중추이
+    source_file_path = rf'portfolio/templates/적극형_종목별투자비중추이{formatted_now}.csv'
+    destination_file_path = r'portfolio/templates/적극형_종목별투자비중추이.csv'  
+    cls_weight=stock_data.portfolio_by_ind_assets() 
+    cls_weight.to_csv(destination_file_path)
+    #shutil.copy(source_file_path, destination_file_path)
    
-    rebal_history = stock_data.rebalance_history()  # 5. 리밸런싱발생내역
-    rebal_history.to_csv(rf'C:\kannie\적극형_리밸런싱발생내역{formatted_now}.csv')
+    # 5. 리밸런싱발생내역
+    source_file_path = rf'portfolio/templates/적극형_리밸런싱발생내역{formatted_now}.csv'
+    # destination_file_path = r'portfolio/templates/적극형_리밸런싱발생내역.csv'     
+    # rebal_history = stock_data.rebalance_history()  
+    # rebal_history.to_csv(destination_file_path)
+    #shutil.copy(source_file_path, destination_file_path)
 
     # extend pandas functionality with metrics, etc.
-    # qs.extend_pandas()
-    # daily_ret.iloc[:,1]
+    qs.extend_pandas()
+    daily_ret.iloc[:,1]
     
-    # Format the date and time as a string in the desired format, e.g., "YYYY-MM-DD_HH-MM-SS"
-    # Construct the file path including the formatted date and time
-    # now = datetime.now()
-    # formatted_now = now.strftime("%Y%m%d_%H%M")  
-    # html_file_path = rf'C:\kannie\Halloween_kospi_{formatted_now}.html'
+    html_file_path = rf'portfolio/templates/portfolio/AdjHalloween_all.html'
 
-    # qs.reports.html(daily_ret.iloc[:,1], benchmark="^KS11", output=html_file_path, title='Halloween_KS11')
-    # webbrowser.open(html_file_path)
+    qs.reports.html(daily_ret['일별수익률']     
+                , benchmark="^GSPC", output=html_file_path, title='Halloween_kospi_kosdaq')
+    #webbrowser.open(html_file_path)
 
-    # return HttpResponse(html_file_path)
-    # return HttpResponse("success")
-
+    #return HttpResponse("success")
     return render(request, 'portfolio/AdjHalloween_all.html')
+
 
 # 할로윈변형 (짝수해,홀수해) 
 def algo1(request):
@@ -193,34 +215,93 @@ def algo_View(request):
     return render(request, 'portfolio/AdjHalloween_all.html')
 
 def algo1_View(request):
-    return render(request, 'portfolio/Halloween_spy1.html')
+    return render(request, 'portfolio/templates/AdjHalloween_all.html')
 
 def algo2_View(request):
-    return render(request, 'portfolio/Halloween_spy2.html')
+    return render(request, 'portfolio/templates/Halloween_all_2.html')
 
+def rebalancing(request):
+
+ 
+    keyring.set_password('real_app_key', 'a_kannie', 'PSnvAltwjE5ZrOaITkVgetxCutSSexVH4qEw')
+    keyring.set_password('real_app_secret', 'a_kannie', 'LLhGO6tUDaepjBRFtocxjcYPZbkLfR5mKRFJrPccIkOBVfLsUhkVMFNWy7h7bWAD4CSq3nPowAYX/MMocSI9MAXrbNximason8X8V44iWkrrH/+IJT7E8CAN6fiCQwcnuHLZi/ryI/AzgHLHxwf56cCj/jEMtjrvxf6aITV5WrzSSmYLNOg=')    
+    
+    app_key = 'real_app_key'
+    app_secret = 'real_app_secret'
+    ID = 'a_kannie'
+    mock = '0' # 실전
+    cano = '64099516' # 카니실전
+   
+    sys1 = systemtrade(app_key, app_secret, ID, mock , cano) 
+    df1 = sys1.main()
+    print(df1)
+
+    # sys1.rebalancing_trade_at_once()
+    # sys1.execute()
+
+
+    keyring.set_password('mock_app_key', 'v_kannie', 'PSnwe2lboWhKABz4afYQUf5Cnm0x6IlBxt6F')
+    keyring.set_password('mock_app_secret', 'v_kannie', 'zFilo09//IcL6SKcVd+VHCxiGuhmVhu+llV1emGjL+J202Y9w1hxyFszqhvzBXjcM34t3QTULxOxM5heeVPCJJQSTSaiZEYMHXyddWCaLVwZiT93dpzgwfnOC0Stc1pmvlxbBAzux5ASV+hZuiYAZ6KTYKxexelADUlR3mIBDbeNfBkNuiw=')
+    app_key = 'mock_app_key'
+    app_secret = 'mock_app_secret'
+    mock = '1' 
+    ID = 'v_kannie'  
+    cano = '50102070' #카니 모의
+
+    sys2 = systemtrade(app_key, app_secret, ID, mock, cano) 
+    df2 = sys2.main()
+    print(df2)
+
+
+
+    keyring.set_password('mock_app_key', '@2229673', 'PSy3N0hiW3taBNYtIzKpuH2xnZ6jt72KqpQf')
+    keyring.set_password('mock_app_secret', '@2229673', '7/xPBWEvxqjEWPZ7R/w5XhA/bXX7ULjmL7da6Amn4/0drE+8HYXf9vAt/GrB93vsOzVp1vxzQ1+95gvpux2GlM9r8O3zs72TabFVezX7usnkA8AKAC+e2YVBXgms5lVxNFRBJ9tXoS9ypS7yjWfm09BB6ZCXtQJkaSmR4gsT21rAJOiZUeA=')
+
+    app_key = 'mock_app_key'
+    app_secret = 'mock_app_secret'
+    mock = '1' 
+    ID = '@2229673' 
+    cano = '50102559' #유진 모의
+    
+    sys3 = systemtrade(app_key, app_secret, ID, mock, cano) 
+    df3 = sys3.main()
+    print(df3)
+
+    # sys3.rebalancing_trade_at_once()
+    # sys3.execute()
+
+    return HttpResponse("Success monthly rebalancing")
+
+def add_daily(request):
+    db = cqrDB()
+    db.add_daily_weights()  #종목별투자비중추이 업데이트
+    db.add_clsweight()  #자산별투자비중추이 업데이트
+    db.add_daily_value() #일별수익률추이 업데이트
+    db.add_monthly_value() #월별수익률추이 업데이트
+    return HttpResponse("Success add_daily_weights")
 
 def add_daily_weights(request): #종목별투자비중추이 업데이트
     db = cqrDB()
     db.add_daily_weights()
-    print("success")
+    print("Success add_daily_weights")
     return HttpResponse("Success add_daily_weights")
 
 def add_clsweight(request): #자산별투자비중추이 업데이트
     db = cqrDB()
     db.add_clsweight()
-    print("success")
+    print("Success add_clsweight")
     return HttpResponse("Success add_clsweight")
 
-def add_daily_value(request): #일별수익률추이 업데이트
-    print("starting add_daily_value")
+def add_daily_value(request): #일별수익률추이 업데이트 
     db = cqrDB()    
     db.add_daily_value()
+    print("Success add_daily_value")
     return HttpResponse("Success add_daily_value")
 
 def add_monthly_value(request): #월별수익률추이 업데이트
     db = cqrDB()
     db.add_monthly_value()
-    print("success")
+    print("Success add_monthly_value")
     return HttpResponse("Success add_monthly_value")
 
 ##
@@ -280,14 +361,25 @@ def my_asset(request):
         profile_item = Profile.objects.filter(user_id=me) ##
         question_item = Questionarie.objects.filter(userid=me)
 
-        keyring.set_password('real_app_key', 'kannie', 'PSnvAltwjE5ZrOaITkVgetxCutSSexVH4qEw')
-        keyring.set_password('real_app_secrect', 'kannie', 'LLhGO6tUDaepjBRFtocxjcYPZbkLfR5mKRFJrPccIkOBVfLsUhkVMFNWy7h7bWAD4CSq3nPowAYX/MMocSI9MAXrbNximason8X8V44iWkrrH/+IJT7E8CAN6fiCQwcnuHLZi/ryI/AzgHLHxwf56cCj/jEMtjrvxf6aITV5WrzSSmYLNOg=')
+        keyring.set_password('mock_app_key', '@2229673', 'PSy3N0hiW3taBNYtIzKpuH2xnZ6jt72KqpQf')
+        keyring.set_password('mock_app_secret', '@2229673', '7/xPBWEvxqjEWPZ7R/w5XhA/bXX7ULjmL7da6Amn4/0drE+8HYXf9vAt/GrB93vsOzVp1vxzQ1+95gvpux2GlM9r8O3zs72TabFVezX7usnkA8AKAC+e2YVBXgms5lVxNFRBJ9tXoS9ypS7yjWfm09BB6ZCXtQJkaSmR4gsT21rAJOiZUeA=')
+        
+        key_name = 'mock_app_key'
+        secret_name = 'mock_app_secret'
+        ID = '@2229673'
+        mock = '1' # (1:mock, 0:real)
+        cano = '50102559' #계좌번호
+        #유진모의
 
-        keyring.set_password('mock_app_key', 'kannie', 'PSnwe2lboWhKABz4afYQUf5Cnm0x6IlBxt6F')
-        keyring.set_password('mock_app_secret', 'kannie', 'zFilo09//IcL6SKcVd+VHCxiGuhmVhu+llV1emGjL+J202Y9w1hxyFszqhvzBXjcM34t3QTULxOxM5heeVPCJJQSTSaiZEYMHXyddWCaLVwZiT93dpzgwfnOC0Stc1pmvlxbBAzux5ASV+hZuiYAZ6KTYKxexelADUlR3mIBDbeNfBkNuiw=')
 
-        app_key = keyring.get_password('mock_app_key', 'kannie')
-        app_secret = keyring.get_password('mock_app_secret','kannie')
+        # keyring.set_password('real_app_key', 'kannie', 'PSnvAltwjE5ZrOaITkVgetxCutSSexVH4qEw')
+        # keyring.set_password('real_app_secrect', 'kannie', 'LLhGO6tUDaepjBRFtocxjcYPZbkLfR5mKRFJrPccIkOBVfLsUhkVMFNWy7h7bWAD4CSq3nPowAYX/MMocSI9MAXrbNximason8X8V44iWkrrH/+IJT7E8CAN6fiCQwcnuHLZi/ryI/AzgHLHxwf56cCj/jEMtjrvxf6aITV5WrzSSmYLNOg=')
+
+        # keyring.set_password('mock_app_key', 'kannie', 'PSnwe2lboWhKABz4afYQUf5Cnm0x6IlBxt6F')
+        # keyring.set_password('mock_app_secret', 'kannie', 'zFilo09//IcL6SKcVd+VHCxiGuhmVhu+llV1emGjL+J202Y9w1hxyFszqhvzBXjcM34t3QTULxOxM5heeVPCJJQSTSaiZEYMHXyddWCaLVwZiT93dpzgwfnOC0Stc1pmvlxbBAzux5ASV+hZuiYAZ6KTYKxexelADUlR3mIBDbeNfBkNuiw=')
+
+        # app_key = keyring.get_password('mock_app_key', 'kannie')
+        # app_secret = keyring.get_password('mock_app_secret','kannie')
 
         url_base = "https://openapivts.koreainvestment.com:29443" #모의투자
         #url_base = "https://openapivts.koreainvestment.com:9443" #실전투자
@@ -296,8 +388,8 @@ def my_asset(request):
         path = "oauth2/tokenP"
         body = {
             "grant_type": "client_credentials",
-            "appkey": app_key,
-            "appsecret": app_secret,
+            "appkey": key_name,
+            "appsecret": secret_name,
         }
 
         url = f"{url_base}/{path}"
@@ -312,13 +404,13 @@ def my_asset(request):
         headers = {
             "Content-Type": "application/json",
             "authorization": f"Bearer {access_token}",
-            "appKey": app_key,
-            "appSecret": app_secret,
+            "appKey": key_name,
+            "appSecret": secret_name,
             "tr_id": "VTTC8434R"
         }
 
         params = {
-            "CANO": "50102070",  # 계좌번호 앞 8지리
+            "CANO": "50102559",  # 계좌번호 앞 8지리
             "ACNT_PRDT_CD": "01",  # 계좌번호 뒤 2자리
             "AFHR_FLPR_YN": "N",  # 시간외단일가여부
             "OFL_YN": "",  # 공란
@@ -357,20 +449,29 @@ def mgr_only(request): #종목별 weight 조회
 
         if querydict.get('fromdate') is None:
             today = date.today()
-
             try:
-                fromdate = date(today.year - 2, today.month, today.day)
+                fromdate = date(today.year - 10, today.month, today.day)
             except ValueError: 
-                fromdate = date(today.year - 2, today.month, 28)
+                fromdate = date(today.year - 10, today.month, 28)
 
             fromdate = fromdate.strftime("%Y-%m-%d")
-            todate = date.today().strftime("%Y-%m-%d")
+            todate = date.today().strftime("%Y-%m-%d")    
+
         else:
             fromdate= request.GET.get('fromdate')
             todate = request.GET.get('todate' )
-        
+            
+            if fromdate is None or fromdate.strip() == "" or todate is None or todate.strip() == "":
+                today = date.today()
+                try:
+                    fromdate = date(today.year - 10, today.month, today.day)
+                except ValueError: 
+                    fromdate = date(today.year - 10, today.month, 28)
+                fromdate = fromdate.strftime("%Y-%m-%d")
+                todate = date.today().strftime("%Y-%m-%d")    
+
         date_from = fromdate
-        date_to = todate
+        date_to = todate          
         daily_mp_w = dailyMPweight.objects.filter(date__gte=date_from, date__lte=date_to).order_by('-date')
 
         p = Paginator(daily_mp_w, 20)
@@ -388,23 +489,32 @@ def mgr_only(request): #종목별 weight 조회
     else:
         return render (request,'portfolio/mgronly_view.html', {  })   
 
-def mgr_only3(request): #자산별 weight 조회
+def mgr_only3(request): #자산별투자비중조회
     if request.user.is_authenticated and request.user.is_superuser:
         querydict=request.GET.copy()
 
         if querydict.get('fromdate') is None:
             today = date.today()
-
             try:
-                fromdate = date(today.year - 2, today.month, today.day)
+                fromdate = date(today.year - 10, today.month, today.day)
             except ValueError: 
-                fromdate = date(today.year - 2, today.month, 28)
+                fromdate = date(today.year - 10, today.month, 28)
 
             fromdate = fromdate.strftime("%Y-%m-%d")
-            todate = date.today().strftime("%Y-%m-%d")
+            todate = date.today().strftime("%Y-%m-%d")    
+
         else:
             fromdate= request.GET.get('fromdate')
             todate = request.GET.get('todate' )
+            
+            if fromdate is None or fromdate.strip() == "" or todate is None or todate.strip() == "":
+                today = date.today()
+                try:
+                    fromdate = date(today.year - 10, today.month, today.day)
+                except ValueError: 
+                    fromdate = date(today.year - 10, today.month, 28)
+                fromdate = fromdate.strftime("%Y-%m-%d")
+                todate = date.today().strftime("%Y-%m-%d")    
         
         date_from = fromdate
         date_to = todate
@@ -425,23 +535,32 @@ def mgr_only3(request): #자산별 weight 조회
     else:
         return render(request, 'portfolio/mgronly3_view.html', {})   
     
-def mgr_only1(request): #daily value 조회
+def mgr_only1(request): #일별수익률조회
     if request.user.is_authenticated and request.user.is_superuser:
         querydict=request.GET.copy()
 
         if querydict.get('fromdate') is None:
             today = date.today()
-
             try:
-                fromdate = date(today.year - 2, today.month, today.day)
+                fromdate = date(today.year - 10, today.month, today.day)
             except ValueError: 
-                fromdate = date(today.year - 2, today.month, 28)
+                fromdate = date(today.year - 10, today.month, 28)
 
             fromdate = fromdate.strftime("%Y-%m-%d")
-            todate = date.today().strftime("%Y-%m-%d")
+            todate = date.today().strftime("%Y-%m-%d")    
+
         else:
             fromdate= request.GET.get('fromdate')
             todate = request.GET.get('todate' )
+            
+            if fromdate is None or fromdate.strip() == "" or todate is None or todate.strip() == "":
+                today = date.today()
+                try:
+                    fromdate = date(today.year - 10, today.month, today.day)
+                except ValueError: 
+                    fromdate = date(today.year - 10, today.month, 28)
+                fromdate = fromdate.strftime("%Y-%m-%d")
+                todate = date.today().strftime("%Y-%m-%d")    
         
         date_from = fromdate
         date_to = todate
@@ -462,23 +581,32 @@ def mgr_only1(request): #daily value 조회
     else:
         return render(request, 'portfolio/mgronly1_view.html', {})   
 
-def mgr_only2(request): #monthly value 조회
+def mgr_only2(request): #월별수익률조회
     if request.user.is_authenticated and request.user.is_superuser:
         querydict=request.GET.copy()
 
         if querydict.get('fromdate') is None:
             today = date.today()
-
             try:
-                fromdate = date(today.year - 2, today.month, today.day)
+                fromdate = date(today.year - 10, today.month, today.day)
             except ValueError: 
-                fromdate = date(today.year - 2, today.month, 28)
+                fromdate = date(today.year - 10, today.month, 28)
 
             fromdate = fromdate.strftime("%Y-%m-%d")
-            todate = date.today().strftime("%Y-%m-%d")
+            todate = date.today().strftime("%Y-%m-%d")    
+
         else:
             fromdate= request.GET.get('fromdate')
             todate = request.GET.get('todate' )
+            
+            if fromdate is None or fromdate.strip() == "" or todate is None or todate.strip() == "":
+                today = date.today()
+                try:
+                    fromdate = date(today.year - 10, today.month, today.day)
+                except ValueError: 
+                    fromdate = date(today.year - 10, today.month, 28)
+                fromdate = fromdate.strftime("%Y-%m-%d")
+                todate = date.today().strftime("%Y-%m-%d")    
         
         date_from = fromdate
         date_to = todate

@@ -91,18 +91,24 @@
       </nav>
       <br>
       <div class="d-flex justify-content-end">
-        <p>          
+        <p>
+            <a href="{% url 'algo' %}" class="btn btn-secondary mr-2 btn-sm">모델 업데이트 (cvs생성/매일) </a>                 
+            <a href="{% url 'add_daily' %}" class="btn btn-secondary mr-2  btn-sm">포트폴리오 업데이트 (db수정/매일) </a><br><br>
+            <a href="{% url 'rebalancing' %}" class="btn btn-secondary mr-2  btn-sm">계좌 리밸런싱 (한투/매달) </a>
+            <br><br>
+            <!--
             <a> Daily 데이터 maintenance: </a>
             <a href="{% url 'add_daily_weights' %}" class="btn btn-secondary mr-2  btn-sm">종목별투자비중</a>
             <a href="{% url 'add_clsweight' %}" class="btn btn-secondary mr-2  btn-sm">자산별투자비중</a>
             <a href="{% url 'add_daily_value' %}" class="btn btn-secondary btn-sm">일일수익률</a>
             <a href="{% url 'add_monthly_value' %}" class="btn btn-secondary btn-sm">월별수익률</a>
-            <br><br>
+            <br><br>            
             <a> 초기 데이터 업데이트: </a>
             <a href="{% url 'update_daily_weights' %}" class="btn btn-secondary mr-2  btn-sm">종목별투자비중</a>
             <a href="{% url 'update_clsweight' %}" class="btn btn-secondary mr-2  btn-sm">자산별투자비중</a>
             <a href="{% url 'update_daily_value' %}" class="btn btn-secondary btn-sm">일일수익률</a>
             <a href="{% url 'update_monthly_value' %}" class="btn btn-secondary btn-sm">월별수익률</a>
+            -->
         </p>
     </div>
 

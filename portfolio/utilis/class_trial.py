@@ -6,6 +6,7 @@ class StockData:
     def __init__(self, ticker):
         self.ticker = ticker
         self.data = None
+        
 
     def download_data(self, start_date, end_date, int):
         """
@@ -18,7 +19,6 @@ class StockData:
         return self.data
     
     def clean(self):
-
         """ Clean Data """
         self.df = self.data.Close.dropna(thresh = 7)
         self.df = (self.df.pct_change()+1)      # Output as returns
@@ -40,14 +40,11 @@ class StockData:
         # Halloween Strategy 
         port_list = [initial_cash]  # Set seed money (= initial portfolio value)
         port = port_list[0]
-
         self.shares = []              # record shares 
         self.mkt_val = []             # mkt value of assets
         self.cash_rem = []            # cash remaining 
         self.strat = []               # aggressive/defensive 
-
         self.rebal = []
-
         invested = False              # Indicator for whether we have entered the market or not
 
         """ Start Backtest! """
@@ -410,8 +407,6 @@ class StockData:
 
         return self.shares, self.cash_rem, self.mkt_val,self.strat
 
-
-
     def results(self):
         """ Organize results """
         # 1. Shares, Market Value, Portfolio Value 
@@ -442,7 +437,7 @@ class StockData:
     
     # 2. 월별수익률추이
     def monthly_ret(self):
-        self.report2 = self.report1[(self.report1.reset_index().index == 0) |(self.report1.reset_index().index == (len(self.report1)-1) ) | ~(self.report1.reset_index().Date.dt.month - \
+        self.report2 = self.report1[(self.report1.reset_index().index == 0) |(self.report1.reset_index().index == (len(self.report1)-1) ) | ~(self.report1.reset_index().Date.dt.month - 
                     self.report1.reset_index().Date.shift(-1).dt.month).isin([0,np.nan]).values].iloc[:,:-2]
         #self.report2.columns = ['월별수익률']
         self.report2['월별수익률'] = self.report2['port_val'].pct_change()

@@ -92,9 +92,9 @@ class Account(models.Model):
         return self.계좌번호 
 
 
-class dailyMPweight(models.Model): 
+class dailyMPweight(models.Model): #종목별투자비중추이
 
-    date = models.DateTimeField(null=True, blank=True)
+    date = models.DateField(null=True, blank=True)
     port_id = models.CharField(null=True, blank=True)
     item1_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
     item2_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
@@ -110,9 +110,9 @@ class dailyMPweight(models.Model):
         return self.date 
 
 
-class MPclsweight(models.Model): 
+class MPclsweight(models.Model): #자산별투자비중추이
 
-    date = models.DateTimeField(null=True, blank=True)
+    date = models.DateField(null=True, blank=True)
     port_id = models.CharField(null=True, blank=True)
     cls5_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
     cls4_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
@@ -127,9 +127,9 @@ class MPclsweight(models.Model):
     
 
 
-class dailyMPvalue(models.Model): 
+class dailyMPvalue(models.Model):  #일별수익률추기
 
-    date = models.DateTimeField(null=True, blank=True)
+    date = models.DateField(null=True, blank=True)
     port_id = models.CharField(null=True, blank=True)
     item1_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
     item2_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
@@ -147,9 +147,9 @@ class dailyMPvalue(models.Model):
         return self.date 
 
 
-class monthlyMPvalue(models.Model): 
+class monthlyMPvalue(models.Model): #월별수익률추이
 
-    date = models.DateTimeField(null=True, blank=True)
+    date = models.DateField(null=True, blank=True)
     port_id = models.CharField(null=True, blank=True)
     item1_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)
     item2_val = models.DecimalField (max_digits=20, decimal_places=6,null=True, blank=True)

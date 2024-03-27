@@ -4,23 +4,34 @@ import json
 import pandas as pd
 
 def get_app_key():
+
+    # 유진 모의계좌
+    # keyring.set_password('mock_app_key', 'kannie', 'PSy3N0hiW3taBNYtIzKpuH2xnZ6jt72KqpQf')
+    # keyring.set_password('mock_app_secret', 'kannie', '7/xPBWEvxqjEWPZ7R/w5XhA/bXX7ULjmL7da6Amn4/0drE+8HYXf9vAt/GrB93vsOzVp1vxzQ1+95gvpux2GlM9r8O3zs72TabFVezX7usnkA8AKAC+e2YVBXgms5lVxNFRBJ9tXoS9ypS7yjWfm09BB6ZCXtQJkaSmR4gsT21rAJOiZUeA=')
+
     keyring.set_password('real_app_key', 'kannie', 'PSnvAltwjE5ZrOaITkVgetxCutSSexVH4qEw')
     keyring.set_password('real_app_secrect', 'kannie', 'LLhGO6tUDaepjBRFtocxjcYPZbkLfR5mKRFJrPccIkOBVfLsUhkVMFNWy7h7bWAD4CSq3nPowAYX/MMocSI9MAXrbNximason8X8V44iWkrrH/+IJT7E8CAN6fiCQwcnuHLZi/ryI/AzgHLHxwf56cCj/jEMtjrvxf6aITV5WrzSSmYLNOg=')
 
     keyring.set_password('mock_app_key', 'kannie', 'PSnwe2lboWhKABz4afYQUf5Cnm0x6IlBxt6F')
     keyring.set_password('mock_app_secret', 'kannie', 'zFilo09//IcL6SKcVd+VHCxiGuhmVhu+llV1emGjL+J202Y9w1hxyFszqhvzBXjcM34t3QTULxOxM5heeVPCJJQSTSaiZEYMHXyddWCaLVwZiT93dpzgwfnOC0Stc1pmvlxbBAzux5ASV+hZuiYAZ6KTYKxexelADUlR3mIBDbeNfBkNuiw=')
 
+    #app_key = keyring.get_password('mock_app_key', 'kannie')
     app_key = keyring.get_password('mock_app_key', 'kannie')
     get_app_key = app_key
 
     return get_app_key
     
 def get_app_secret():
-    keyring.set_password('real_app_key', 'kannie', 'PSnvAltwjE5ZrOaITkVgetxCutSSexVH4qEw')
-    keyring.set_password('real_app_secrect', 'kannie', 'LLhGO6tUDaepjBRFtocxjcYPZbkLfR5mKRFJrPccIkOBVfLsUhkVMFNWy7h7bWAD4CSq3nPowAYX/MMocSI9MAXrbNximason8X8V44iWkrrH/+IJT7E8CAN6fiCQwcnuHLZi/ryI/AzgHLHxwf56cCj/jEMtjrvxf6aITV5WrzSSmYLNOg=')
+     # 유진 모의계좌
+    # keyring.set_password('real_app_key', 'kannie', 'PSnvAltwjE5ZrOaITkVgetxCutSSexVH4qEw')
+    # keyring.set_password('real_app_secrect', 'kannie', 'LLhGO6tUDaepjBRFtocxjcYPZbkLfR5mKRFJrPccIkOBVfLsUhkVMFNWy7h7bWAD4CSq3nPowAYX/MMocSI9MAXrbNximason8X8V44iWkrrH/+IJT7E8CAN6fiCQwcnuHLZi/ryI/AzgHLHxwf56cCj/jEMtjrvxf6aITV5WrzSSmYLNOg=')
 
     keyring.set_password('mock_app_key', 'kannie', 'PSnwe2lboWhKABz4afYQUf5Cnm0x6IlBxt6F')
     keyring.set_password('mock_app_secret', 'kannie', 'zFilo09//IcL6SKcVd+VHCxiGuhmVhu+llV1emGjL+J202Y9w1hxyFszqhvzBXjcM34t3QTULxOxM5heeVPCJJQSTSaiZEYMHXyddWCaLVwZiT93dpzgwfnOC0Stc1pmvlxbBAzux5ASV+hZuiYAZ6KTYKxexelADUlR3mIBDbeNfBkNuiw=')
+
+    keyring.set_password('mock_app_key', 'kannie', 'PSy3N0hiW3taBNYtIzKpuH2xnZ6jt72KqpQf')
+    keyring.set_password('mock_app_secret', 'kannie', '7/xPBWEvxqjEWPZ7R/w5XhA/bXX7ULjmL7da6Amn4/0drE+8HYXf9vAt/GrB93vsOzVp1vxzQ1+95gvpux2GlM9r8O3zs72TabFVezX7usnkA8AKAC+e2YVBXgms5lVxNFRBJ9tXoS9ypS7yjWfm09BB6ZCXtQJkaSmR4gsT21rAJOiZUeA=')
+
 
     app_secret = keyring.get_password('mock_app_secret','kannie')
     get_app_secret = app_secret
@@ -60,7 +71,8 @@ def checkbalance(app_key, app_secret, access_token):
     }
 
     params = {
-        "CANO": "50102070",  # 계좌번호 앞 8지리
+        "CANO": "50102070",  # 카니계좌번호 앞 8지리 
+        #"CANO": "50102559", # 유진 계좌번호 앞 8지리
         "ACNT_PRDT_CD": "01",  # 계좌번호 뒤 2자리
         "AFHR_FLPR_YN": "N",  # 시간외단일가여부
         "OFL_YN": "",  # 공란
