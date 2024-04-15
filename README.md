@@ -10,7 +10,7 @@ Based on the investors' risk tolerance level, they can select portfolio model ty
 - Conservative portfolio: 100% fixed income and cash asset.
 
 ## Backtesting Result
-Comparing the performance of **aggresive portfolio** consisting entirely of stocks for the last 12 years against S&P500 benchmark, ChesleyAlgo model returned higher return and higher sharpe ratio. Monthly reblancing occured as a basis.
+Comparing the performance of **aggresive portfolio** consisting entirely of stocks for the last 12 years against S&P500 benchmark, ChesleyAlgo model returned higher return rate as well as higher sharpe ratio. Monthly reblancing occured as a basis.
 <p align="left">
   <img alt="Dark" src="Images/backtest.png" width="80%"> 
 </p>
