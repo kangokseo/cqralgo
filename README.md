@@ -15,4 +15,7 @@ This algorithm puruses a strategy of following the stock market direction and pr
  
 **Eugene Park** <a href="https://github.com/parkakn" target="_blank" rel="noopener noreferrer">Github</a>, <a href="https://www.linkedin.com/in/eugene-park-" target="_blank" rel="noopener noreferrer">Linkedin</a>
 
+**Eugene Park** <a href="https://github.com/parkakn" target="_blank" rel="noopener noreferrer">Github</a>, <a href="https://www.linkedin.com/in/eugene-park-" target="_blank" rel="noopener noreferrer">Linkedin</a>
+
+
 
