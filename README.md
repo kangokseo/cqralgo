@@ -1,3 +1,11 @@
-## ChesleyAlgo: Robo-Advisor algorithm using seasonality strategy
+# ChesleyAlgo: Robo-Advisor algorithm using seasonality strategy
 
-This algorithm puruses a strategy of following the stock market direction and presents asset allocation and portfolio according to investor's preference and market condition.
+This algorithm puruses a strategy of following the stock market direction and presents portfolio according to investor's risk tolerance and market condition. The goal of this Robo-advisor algorithm is providing optimal portfolio suitable for investor's propensity while achieving returns exceeding the benchmark KOSPI (Korean Composite Stock Price Indexe).
+
+## Asset allocation & User profile
+
+
+## Backtesting Result
+
+
+## Further Research
