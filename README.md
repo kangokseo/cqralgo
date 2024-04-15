@@ -6,6 +6,10 @@ This algorithm puruses a strategy of following the stock market direction and pr
 
 
 ## Backtesting Result
-
+<p align="center">
+  <img alt="Dark" src="Images/jfe_site.png" width="45%"> 
+&nbsp; &nbsp; &nbsp; &nbsp;
+  <img alt="Light" src="Images/gs_citation_ex.png" width="45%">
+</p>
 
 ## Further Research
