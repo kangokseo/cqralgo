@@ -1,5 +1,7 @@
 # ChesleyAlgo: Robo-Advisor algorithm using seasonality strategy
 
+<a href="https://www.linkedin.com/in/kangokseo" target="_blank">Kang Ok Seo</a> , <a href="https://github.com/parkakn" target="_blank">Eugene Park</a>
+
 This algorithm puruses a strategy of following the stock market direction and presents portfolio according to investor's risk tolerance and market condition. The goal of this Robo-advisor algorithm is providing optimal portfolio suitable for investor's propensity while achieving returns exceeding the benchmark S&P500 index.
 
 ## Asset allocation 
@@ -15,7 +17,3 @@ Comparing the performance of **aggresive portfolio** consisting entirely of stoc
   <img alt="Dark" src="Images/backtest.png" width="80%"> 
 </p>
 
-
-## Credit
- 
-- **Eugene Park** <a href="https://github.com/parkakn" target="_blank">Github</a>, <a href="https://www.linkedin.com/in/eugene-park-" target="_blank">Linkedin</a>
