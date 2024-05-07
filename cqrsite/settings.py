@@ -15,6 +15,11 @@ import os
 import django_heroku
 import dj_database_url
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-h9=sp9%*hddrh+nl+s*du))0er3c^hsiypm8)j2sr^+&xlz)j5'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = False #heroku
@@ -89,26 +94,15 @@ TEMPLATES = [
 #     }
 # }
 
-# heroku
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'd605gpil5lvijq',
-#         'USER': 'kmdnfmrixvlxmb', #postgres
-#         'PASSWORD': '98f03eb659debf1688b9e0ede8e3e305cd579b7a3103f3f5530ec3aa7cb5274a', #*****
-#         'HOST': 'ec2-52-54-200-216.compute-1.amazonaws.com', #빈칸이면 localhost
-#         'PORT': '5432', #빈칸이면 5432
-#     }
-# }
 
 #postgres local
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cqralgo2',
-        'USER': 'postgres', #postgres
-        'PASSWORD': 'eugene99', #*****
-        'HOST': 'localhost', #빈칸이면 localhost
+        'ENGINE': os.environ.get("DB_ENGINE"),
+        'NAME': os.environ.get("DB_NAME"),  
+        'USER': os.environ.get("DB_USER"), 
+        'PASSWORD': os.environ.get("DB_PASSWORD"),
+        'HOST': os.environ.get("DB_HOST"), #빈칸이면 localhost
         'PORT': '5432', #빈칸이면 5432
         'OPTIONS': {
             'client_encoding': 'UTF8',  # Set the correct encoding here

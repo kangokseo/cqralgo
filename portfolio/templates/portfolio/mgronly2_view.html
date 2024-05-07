@@ -4,19 +4,23 @@
 
 {% block content %}
 
-    <h2> 월별 수익률 </h2>
+    {% if type == 5 %}    <h2>공격형 월별 수익률</h2>
+    {% elif type == 4 %}   <h2>적극형 월별 수익률</h2>
+    {% elif type == 3 %}   <h2>중립형 월별 수익률</h2>
+    {% elif type == 2 %}   <h2>안전형 월별 수익률</h2>
+    {% endif %}
     <br>
     <div class="d-flex justify-content-end">
         <p>
-            <form id="dateForm" action="{% url 'mgr_only2' %}" method="get">
+            <form id="dateForm" action="{% url 'mgr_only2' type%}" method="get">
                 From: <input type="date" id="fromdate" name="fromdate" value="{{ fromdate }}" />
                 ~ To: <input type="date" id="todate" name="todate"  value="{{ todate }}"/>
                 <button type="submit" class="btn btn-secondary mr-2 btn-sm">Search</button>
             </form>
          
-            <a href="{% url 'mgr_only' %}"  class="btn btn-secondary mr-2  btn-sm">종목별투자비중</a>
-            <a href="{% url 'mgr_only3' %}" class="btn btn-secondary mr-2 btn-sm">자산별투자비중</a>
-            <a href="{% url 'mgr_only1' %}" class="btn btn-secondary mr-2  btn-sm">일별수익률</a>
+            <a href="{% url 'mgr_only' type%}"  class="btn btn-secondary mr-2  btn-sm">종목별투자비중</a>
+            <a href="{% url 'mgr_only3' type%}" class="btn btn-secondary mr-2 btn-sm">자산별투자비중</a>
+            <a href="{% url 'mgr_only1' type%}" class="btn btn-secondary mr-2  btn-sm">일별수익률</a>
         </p>
     </div>
 
@@ -73,20 +77,20 @@
         <ul class="pagination justify-content-center">          
       
       {% if mp_v.has_previous %}
-          <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+          <li class="page-item"><a class="page-link" style="color: black;" href="?page=1"> &laquo 맨앞 </a></li>
       
-          <li class="page-item"><a class="page-link" href="?page={{ mp_v.previous_page_number }}">Previous</a></li>
+          <li class="page-item"><a class="page-link" style="color: black;" href="?page={{ mp_v.previous_page_number }}"> < 이전 </a></li>
           
       {% endif %}
       
       {% for i in nums %}
-          <li class="page-item"><a class="page-link" href="?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
+          <li class="page-item"><a class="page-link" style="color: black;" href="?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
       {% endfor %}
       
       {% if mp_v.has_next %}
-          <li class="page-item"><a class="page-link" href="?page={{ mp_v.next_page_number }}">Next</a></li>
+          <li class="page-item"><a class="page-link" style="color: black;" href="?page={{ mp_v.next_page_number }}"> 다음 > </a></li>
       
-          <li class="page-item"><a class="page-link" href="?page={{ mp_v.paginator.num_pages }}">Last &raquo</a></li>
+          <li class="page-item"><a class="page-link" style="color: black;" href="?page={{ mp_v.paginator.num_pages }}"> 맨뒤 &raquo </a></li>
       
       {% endif %}
       

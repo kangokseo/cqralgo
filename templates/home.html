@@ -1,45 +1,27 @@
 {% extends 'base.html' %}
 
-{% load static %}
+{% block title %}Home{% endblock %}
 
-{% block title %}home.html{% endblock %}
 
-{% block extra-style %}
-<style type="text/css">
-.home-image {
-    background-image: url("{%static 'img/robo.png' %}");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 70%;
-    height: 500px;
-    padding: 20px 0 0 20px;
-}
-.title {
-    color: #144121;
-    font-weight:bond;
-    font-style: italic;
-}
-.powered {
-    color: rgba(19, 71, 31, 0.715); 
-    position: relative;
-    top: 80%;
-    font-style: italic;
-}
-</style>
-{% endblock %}
 
-{% block content %} 
-    <div class="home-image">
-        <h2 class="title">체슬리알고 RATB</h2>
-        <h4 class="powered"><i class="fas fa-arrow-circle-right"></i>powered by Chesley Investment & Chesley QR</h4>
+<div class="container">
+    <div class="content">
+
+    {% block content %}
+    
+    <br>
+    <h2 class="title" style="display: flex; justify-content: center; text-align: center;">체슬리알고 RATB</h2>
+
+    <div>
+        {% load static %}  
+        <img src= {% static "img/robo.png" %} /> 
+        <h4 class="powered" style="justify-content: center; text-align: right;">powered by Chesley Investment & Chesley QR</h4>
     </div>
 
-{% endblock %}
-
-{% block footer %}
-<footer class="fixed-bottom bg-info">
-    <div class="text-white text-right mr-5"> by Chesley QR
+    {% endblock %}
     </div>
+</div>
 
-</footer>
-{% endblock %}
+
+
+

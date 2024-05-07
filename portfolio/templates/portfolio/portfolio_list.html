@@ -5,34 +5,17 @@
 {% block title %} portfolio_list.html {% endblock %}
 
 {% block content %}
-
-    <h1> Portfolio List </h1>
+    <br>
+    <h2> 체슬리알고 모델 </h2>
     <br><br>
-    <div class="d-flex justify-content-center">
+    <div class="d-flex">
         <p>          
-            <a> <b>변형 할로윈 모델</b> (11-4월 국내주식 적극적, 5-10월 미국주식 적극적) </a><br><br>
-            <a href="{% url 'algo_View' %}" class="btn btn-secondary mr-2 btn-sm">모델 결과 보기</a> <br><br><br>
-            <a> <b>할로윈 모델 벤치마크 (11-4월)</b> </a> <br><br>
-            <a href="{% static 'Halloween_kospi.html' %}" class="btn btn-secondary mr-2 btn-sm"> 코스피200 결과 보기</a> 
-            <a href="{% static 'Halloween_kosdaq.html' %}" class="btn btn-secondary mr-2 btn-sm"> 코스닥150 결과 보기</a>
-            <a href="{% static 'Halloween_sp500.html' %}" class="btn btn-secondary mr-2 btn-sm"> S&P500 결과 보기</a> 
-            <a href="{% static 'Halloween_nasdaq.html' %}" class="btn btn-secondary mr-2 btn-sm"> 나스낙100 결과 보기</a> 
-            <br><br><br>
-            <a> <b>할로윈 모델 벤치마크 (5-10월)</b> </a> <br><br>
-            <a href="{% static 'Halloween_kospi200_summer.html' %}" class="btn btn-secondary mr-2 btn-sm"> 코스피200 결과 보기</a>                
-            <a href="{% static 'Halloween_kosdaq150_summer.html' %}" class="btn btn-secondary mr-2 btn-sm"> 코스닥150 결과 보기</a>           
-            <a href="{% static 'Halloween_sp500_summer.html' %}" class="btn btn-secondary mr-2 btn-sm"> S&P500 결과 보기</a> 
-            <a href="{% static 'Halloween_nasdaq100_summer.html' %}" class="btn btn-secondary mr-2 btn-sm"> 나스닥100 결과 보기</a> 
-            <br><br><br> 
-            <a> 할로윈 모델 벤치마크 <b>(11-4월):  코스닥 vs 코스닥150 </b> </a> <br><br>
-            <a href="{% static 'Halloween_kosdaq_comp.html' %}" class="btn btn-secondary mr-2 btn-sm"> 코스닥 결과 보기</a>
-            <a> vs </a> 
-            <a href="{% static 'Halloween_kosdaq150.html' %}" class="btn btn-secondary mr-2 btn-sm"> 코스닥150 결과 보기</a> 
-            <br><br><br>
-            <a> 할로윈 모델 벤치마크 <b> (11-4월): 나스닥 vs 나스닥100 </b> </a> <br><br>                         
-            <a href="{% static 'Halloween_nasdaq_comp.html' %}" class="btn btn-secondary mr-2 btn-sm"> 나스닥 결과 보기</a> 
-            <a> vs </a> 
-            <a href="{% static 'Halloween_nasdaq100.html' %}" class="btn btn-secondary mr-2 btn-sm"> 나스닥100 결과 보기</a>  
+            
+            <a href="{% url 'algo_View' 5 %}" class="btn btn-secondary mr-2 btn-sm">공격형 모델 결과 보기</a> 위험자산군의 비중을 100%까지 운용 <br><br>
+            <a href="{% url 'algo_View' 4 %}" class="btn btn-secondary mr-2 btn-sm">적극형 모델 결과 보기</a> 위험자산군의 비중을 70%로 제한, 나머지는 채권형으로 운용<br><br>
+            <a href="{% url 'algo_View' 3 %}" class="btn btn-secondary mr-2 btn-sm">중립형 모델 결과 보기</a> 위험자산군의 비중을 50%로 제한, 나머지는 채권형으로 운용<br><br>
+            <a href="{% url 'algo_View' 2 %}" class="btn btn-secondary mr-2 btn-sm">안정형 모델 결과 보기</a> 위험자산군의 비중을 30%로 제한, 나머지는 채권형으로 운용<br><br>
+
             <br><br><br> 
         </p>
         <br>

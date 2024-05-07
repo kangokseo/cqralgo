@@ -18,7 +18,6 @@ urlpatterns = [
     path('<int:pk>/password/', auth_views.PasswordChangeView.as_view() ),
     path('accounts/logout/', UserLogoutView.as_view(), name='logged_out'),
 
-    #path('', HomeView.as_view(), name='home'),
     path('', views.home, name='home'),
     path('', include('portfolio.urls')),
 

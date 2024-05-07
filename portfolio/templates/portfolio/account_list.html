@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %} account_list.html {% endblock %}
+
+{% block content %}
+    <br>
+    <h2> 계좌 관리 </h2>
+    <br><br>
+
+    <table class="table table-sm table-hover">
+            
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Account Type</th>
+                <th>Account Number</th>
+                <th>Portfolio Title</th>
+                <th>Type</th>
+                <th></th>
+                <th>계좌상세/월간리밸런싱</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for account in account_v %}
+            <tr>
+                <td>{{ account.0 }}</td>
+                <td>{{ account.1 }}</td>
+                <td>{{ account.2 }}</td>
+                <td>{{ account.5 }}</td>
+                <td>{{ account.6 }}</td>
+                <td><a href="{% url 'account_item' account.8 %}" class="btn btn-secondary mr-2 btn-sm">계좌 상세 </a></td>
+                <td><a href="{% url 'rebalancing_06' account.8 %}" class="btn btn-secondary mr-2 btn-sm">장후시간외. 15:30-16:00 </a></td>
+                <td><a href="{% url 'rebalancing_00' account.8 %}" class="btn btn-secondary mr-2 btn-sm">지정가. 9:00-3:30</a></td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8">No accounts available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+
+
+    </table>
+
+
+{% endblock %}

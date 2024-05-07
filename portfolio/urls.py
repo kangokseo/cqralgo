@@ -9,6 +9,8 @@ urlpatterns = [
     path('portfolio/', views.all_port, name='all_port'),
     path('portfolio/<int:pk>/', views.PortfolioDV.as_view(), name='detail'),    
     path('my_asset/', views.my_asset, name='my_asset'),
+    path('account_list/', views.account_list, name='account_list'),
+    path('account_item/<int:id>', views.account_item, name='account_item'),
     
     #path('show_survey/<profile_id>', views.show_survey, name='show_survey'),
     path('survey/<int:pk>', views.customer_survey, name='view_survey'),
@@ -16,35 +18,21 @@ urlpatterns = [
     path('add_survey/<int:pk>', views.add_survey, name='add_survey'),
 
     #path('mgr_only/<str:fromdate>/<str:todate>/', views.mgr_only, name='mgr_only'), #종목별 weight
-    path('mgr_only/', views.mgr_only, name='mgr_only'), #종목별 weight
-    path('mgr_only1/', views.mgr_only1, name='mgr_only1'), #일별수익률추이
-    path('mgr_only2/', views.mgr_only2, name='mgr_only2'), #monthly return 
-    path('mgr_only3/', views.mgr_only3, name='mgr_only3'), #자산별 weight
+    path('mgr_only/ty<int:ty>/', views.mgr_only, name='mgr_only'), #종목별 weight
+    path('mgr_only/ty<int:ty>/1/', views.mgr_only1, name='mgr_only1'), #일별수익률추이
+    path('mgr_only/ty<int:ty>/2/', views.mgr_only2, name='mgr_only2'), #월별수익률 
+    path('mgr_only/ty<int:ty>/3/', views.mgr_only3, name='mgr_only3'), #자산별 weight
 
     #path('myasset/survey', SurveyView.as_view(), name='survey'),
-    path('algo', views.algo, name='algo'), #run algo
-    path('algo1', views.algo1, name='algo1'), #run algo1
-    path('algo2', views.algo2, name='algo2'), #run algo2
+    path('algo/<int:ty>/', views.algo, name='algo'), #run algo
 
-    path('algoview/', views.algo_View, name='algo_View'), 
-    path('algo1view/', views.algo1_View, name='algo1_View'), 
-    path('algo2view/', views.algo2_View, name='algo2_View'), 
+    path('algoview/<int:ty>', views.algo_View, name='algo_View'),  #모델결과보기
+
+    path('util_daily/<int:ty>/', views.add_daily, name='add_daily'),
+    path('util_rebal_00/<int:id>', views.rebalancing_00, name='rebalancing_00'),
+    path('util_rebal_06/<int:id>', views.rebalancing_06, name='rebalancing_06'),
+    path('util_daily/init/<int:ty>/', views.init_add_daily, name='init_add_daily'),
 
 
-    path('util', views.update_daily_weights, name='update_daily_weights'),
-    path('util1', views.update_daily_value, name='update_daily_value'),
-    path('util2', views.update_monthly_value, name='update_monthly_value'),
-    path('util4', views.update_clsweight, name='update_clsweight'),
-
-    path('util_1', views.add_daily_weights, name='add_daily_weights'),
-    path('util1_1', views.add_daily_value, name='add_daily_value'),
-    path('util2_1', views.add_monthly_value, name='add_monthly_value'),
-    path('util4_1', views.add_clsweight, name='add_clsweight'),
-
-    path('util_daily', views.add_daily, name='add_daily'),
-    path('util_rebal', views.rebalancing, name='rebalancing'),
-
-    path('cal/sum', views.calculate_sum, name='calculate_sum'),
-    path('cal/minus', views.calculate_minus, name='calculate_minus'),
 ]
 

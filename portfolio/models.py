@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 class Profile(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
+    user_name = models.CharField(null=True, blank=True)
     RiskTol = models.CharField(max_length=5, null=True, blank=True) #위험성향
     RiskTolDesc = models.CharField(max_length=10, null=True, blank=True) #위험성향설명
     def __str__(self):
@@ -13,9 +14,11 @@ class Profile(models.Model):
 
 class Portfolio(models.Model):
     #id = 포트폴리오id
+    portfolio_id = models.CharField(max_length=5, null=True, blank=True)
     title = models.CharField('TITLE', max_length=100, blank=True, null=True) 
     portid = models.IntegerField(null=True, blank=True) #알고리즘id
-    url = models.URLField('URL', unique=True)
+    sub_type = models.CharField(max_length=5, null=True, blank=True)
+    sub_type_desc = models.CharField(max_length=10, null=True, blank=True)
     minRiskTol = models.CharField(max_length=5, null=True, blank=True) #최저가능 위험성향
     astcls5_h =models.IntegerField(null=True, blank=True) #위험등급자산5_최고값 
     astcls5_l =models.IntegerField(null=True, blank=True) #위험등급자산5_최저값
@@ -68,6 +71,7 @@ class InvUniv(models.Model):
 
 class Questionarie(models.Model):
     userid = models.CharField(max_length=5, null=True, blank=True)
+    user_name = models.CharField(null=True, blank=True)
     QA1 = models.CharField(max_length=5, null=True, blank=True)
     QA2 = models.CharField(max_length=5, null=True, blank=True)
     QA3 = models.CharField(max_length=5, null=True, blank=True)
@@ -87,9 +91,17 @@ class Account(models.Model):
     계좌명 = models.CharField(null=True, blank=True) 
     은행코드 = models.CharField(null=True, blank=True)  
     개설일시 = models.CharField(null=True, blank=True) 
+    cano = models.CharField(max_length=10, blank=True, null=True) 
+    app_key = models.CharField(max_length=50, blank=True, null=True) 
+    app_secret = models.CharField(max_length=300, blank=True, null=True) 
+    portfolio_id = models.CharField(max_length=10, blank=True, null=True) 
 
     def __str__(self):
         return self.계좌번호 
+
+ # cano = '64099516' # 카니실전
+    # keyring.set_password('real_app_key', 'a_kannie', 'PSnvAltwjE5ZrOaITkVgetxCutSSexVH4qEw')
+    # keyring.set_password('real_app_secret', 'a_kannie', 'LLhGO6tUDaepjBRFtocxjcYPZbkLfR5mKRFJrPccIkOBVfLsUhkVMFNWy7h7bWAD4CSq3nPowAYX/MMocSI9MAXrbNximason8X8V44iWkrrH/+IJT7E8CAN6fiCQwcnuHLZi/ryI/AzgHLHxwf56cCj/jEMtjrvxf6aITV5WrzSSmYLNOg=')    
 
 
 class dailyMPweight(models.Model): #종목별투자비중추이

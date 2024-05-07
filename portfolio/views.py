@@ -26,308 +26,18 @@ import quantstats as qs
 import yfinance as yf
 import shutil
 import matplotlib.pyplot as plt
-from portfolio.utilis.calculator import Calculator
-from portfolio.utilis.class_trial import StockData
-from cqrsite.utils.pdUpdater import cqrDB
+import os
+
+from portfolio.utilis.MP_gen import StockData       #cvs 모델링
+from portfolio.utilis.dbUpdater import cqrDB 
+from portfolio.utilis.dbUpdater import accountDB        #db 클래스
+from portfolio.utilis.KIS_api import systemtrade    #한투 트랜잭션
+
 from cqrsite.views import HomeView
 from .forms import QuestionForm
-from .models import ModelPort, Portfolio, Profile, Questionarie, dailyMPweight, dailyMPvalue, monthlyMPvalue, MPclsweight
-from .kisapi import get_app_key, get_app_secret, checkbalance, get_ak
+from .models import ModelPort, Portfolio, Profile, Questionarie, dailyMPweight, dailyMPvalue, monthlyMPvalue, MPclsweight, Account
 
-from cqrsite.utils.system_ver1 import systemtrade
-import os
 os.environ['MPLBACKEND'] = 'Agg'
-
-
-# 기본할로윈: 모델포트폴리오를 만들고, 일별수익률, 월별수익률, 자산별투자비중, 종목별투자비중, 리밸런싱발생내역 생성 
-def algo(request): 
-    tic = ["069500.KS", "229200.KS",
-             "133690.KS", "143850.KS",
-             "114260.KS", "153130.KS", "157450.KS"
-             ] #KODEX, Bonds, NASDAQ, S&P, Cash, MMF, KOSDAQ
-    fromdate = "2012-01-01"
-    todate = date.today().strftime("%Y-%m-%d")
-
-    stock_data = StockData(tic) 
-    data = stock_data.download_data(fromdate, todate,'1d') 
-    data.Close.dropna(thresh = 6)
-    df,ret = stock_data.clean()
-    
-    odd_stock_w = 1
-    odd_bond_w = 0
-    even_stock_w = 1
-    even_bond_w = 0
-    even_passive_stock_w = 1
-    even_passive_bond_w = 0
-
-    odd_buy = np.array([0.4*odd_stock_w, (1/3*odd_bond_w), 0.0*odd_stock_w, 0.0*odd_stock_w, (1/3*odd_bond_w), (1/3*odd_bond_w), 0.6*odd_stock_w])          # Even 11 - Odd 4. Active
-    odd_hold = np.array([0.0*odd_stock_w, (1/3*odd_bond_w), 0.5*odd_stock_w, 0.5*odd_stock_w, (1/3*odd_bond_w), (1/3*odd_bond_w), 0.0*odd_stock_w])         # Odd 5 - Odd 10. 
-    even_buy = np.array([0.5*even_stock_w, (1/3*even_bond_w), 0.0*even_stock_w, 0.0*even_stock_w, (1/3*even_bond_w), (1/3*even_bond_w), 0.5*even_stock_w])  # Odd 11 - Even 4. NOTE: Here, we shift Kospi weight to Nasdaq instead of S&P 500 to be consistent with our logic that 11-4 should be more aggressive than 5-10. 
-    even_hold = np.array([0.0*even_passive_stock_w, (1/3*even_passive_bond_w), 0.5*even_passive_stock_w, 0.5*even_passive_stock_w, (1/3*even_passive_bond_w), (1/3*even_passive_bond_w), 0.0*even_passive_stock_w])  # Even 5 - Even 10
-
-    halloween_adj = stock_data.algo1(1000,odd_buy,odd_hold,even_buy,even_hold) #할로윈변형 호출
-    
-    stock_data.results()[0]
-    stock_data.results()[1]
- 
-    now = datetime.now()
-    formatted_now = now.strftime("%Y%m%d")  
-
-    # 1. 일별수익률추이
-    source_file_path = rf'portfolio/templates/적극형_일별수익률추이{formatted_now}.csv'
-    destination_file_path = r'portfolio/templates/적극형_일별수익률추이.csv'
-    daily_ret = stock_data.daily_ret() 
-    daily_ret.to_csv(destination_file_path)
-    #shutil.copy(source_file_path, destination_file_path)
-
-    # 2. 월별수익률추이
-    source_file_path = rf'portfolio/templates/적극형_월별수익률추이{formatted_now}.csv'
-    destination_file_path = r'portfolio/templates/적극형_월별수익률추이.csv'
-    monthly_ret = stock_data.monthly_ret() 
-    monthly_ret.to_csv(destination_file_path)
-    #shutil.copy(source_file_path, destination_file_path)
-    
-    # 3. 자산별투자비중추이
-    source_file_path = rf'portfolio/templates/적극형_자산별투자비중추이{formatted_now}.csv'
-    destination_file_path = r'portfolio/templates/적극형_자산별투자비중추이.csv'   
-    port_weights = stock_data.portfolio_by_asset_class() 
-    port_weights = port_weights[1]
-    port_weights.to_csv(destination_file_path)
-    #shutil.copy(source_file_path, destination_file_path)
-    
-    # 4. 종목별투자비중추이
-    source_file_path = rf'portfolio/templates/적극형_종목별투자비중추이{formatted_now}.csv'
-    destination_file_path = r'portfolio/templates/적극형_종목별투자비중추이.csv'  
-    cls_weight=stock_data.portfolio_by_ind_assets() 
-    cls_weight.to_csv(destination_file_path)
-    #shutil.copy(source_file_path, destination_file_path)
-   
-    # 5. 리밸런싱발생내역
-    source_file_path = rf'portfolio/templates/적극형_리밸런싱발생내역{formatted_now}.csv'
-    # destination_file_path = r'portfolio/templates/적극형_리밸런싱발생내역.csv'     
-    # rebal_history = stock_data.rebalance_history()  
-    # rebal_history.to_csv(destination_file_path)
-    #shutil.copy(source_file_path, destination_file_path)
-
-    # extend pandas functionality with metrics, etc.
-    qs.extend_pandas()
-    daily_ret.iloc[:,1]
-    
-    html_file_path = rf'portfolio/templates/portfolio/AdjHalloween_all.html'
-
-    qs.reports.html(daily_ret['일별수익률']     
-                , benchmark="^GSPC", output=html_file_path, title='Halloween_kospi_kosdaq')
-    #webbrowser.open(html_file_path)
-
-    #return HttpResponse("success")
-    return render(request, 'portfolio/AdjHalloween_all.html')
-
-
-# 할로윈변형 (짝수해,홀수해) 
-def algo1(request):
-
-    # Halloween Adjusted 짝수 홀수 11 - 4 월 (아빠)
-
-    # (짝수해10월말진입. 홀수해 4월말청산): 주식7(코스닥 30% 코스피20% S&P 20% 나스닥30% 주식비중) 채권3 
-    # (홀수해 5-10월): 코스닥 30%를 ‘TIGER CD금리투자’(현금)로 교체
-    # (홀수해11-짝수해4월): 주식5(코덱스200만). 채권5
-    # (짝수해 5-10월): 주식3(코덱스200만). 채권7
-        
-    tic = ["069500.KS", "229200.KS",
-             "133690.KS", "143850.KS",
-             "114260.KS", "153130.KS", "157450.KS"
-             ]
-    stock_data = StockData(tic) #KODEX, Bonds, NASDAQ, S&P, Cash, MMF, KOSDAQ
-    data = stock_data.download_data('2000-01-01', '2024-2-20','1d') 
-    data.Close.dropna(thresh = 6)
-    df,ret = stock_data.clean()
-        
-    halloween_adj = stock_data.algo1(10000000)
-    stock_data.results()[0]
-    
-    daily_ret = stock_data.daily_ret()  # 1. 일별수익률추이
-    
-    monthly_ret = stock_data.monthly_ret() # 2. 월별수익률추이
-    
-    port_weights = stock_data.portfolio_by_asset_class() # 3. 자산별투자비중추이
-    port_weights[1]
-    
-    stock_data.portfolio_by_ind_assets() # 4. 종목별투자비중추이
-   
-    stock_data.rebalance_history() # 5. 리밸런싱발생내역
-
-    qs.extend_pandas()
-    daily_ret.iloc[:,1]
-
-    # Format the date and time as a string in the desired format, e.g., "YYYY-MM-DD_HH-MM-SS"
-    # Construct the file path including the formatted date and time
-    now = datetime.now()
-    formatted_now = now.strftime("%Y%m%d_%H%M")  
-    html_file_path = rf'C:\kannie\Halloween_kospi_{formatted_now}.html'
-
-    qs.reports.html(daily_ret.iloc[:,1], benchmark="^KS11", output=html_file_path, title='Halloween1_KS11')
-    webbrowser.open(html_file_path)
-
-    return HttpResponse(html_file_path)
-
-# 할로윈변형 (짝수해,홀수해, 월 변경)
-def algo2(request):
-    tic = ["069500.KS", "229200.KS",
-             "133690.KS", "143850.KS",
-             "114260.KS", "153130.KS", "157450.KS"
-             ]
-    stock_data = StockData(tic) #KODEX, Bonds, NASDAQ, S&P, Cash, MMF, KOSDAQ
-    data = stock_data.download_data('2000-01-01', '2024-2-20','1d') 
-    data.Close.dropna(thresh = 6)
-    df,ret = stock_data.clean()
-
-    halloween_adj = stock_data.algo2(10000000)
-
-    stock_data.results()[0]
-    stock_data.results()[1]
-
-    daily_ret = stock_data.daily_ret()  # 1. 일별수익률추이
-   
-    monthly_ret = stock_data.monthly_ret() # 2. 월별수익률추이
-   
-    port_weights = stock_data.portfolio_by_asset_class() # 3. 자산별투자비중추이
-    port_weights[1]
-    
-    stock_data.portfolio_by_ind_assets() # 4. 종목별투자비중추이
-    
-    stock_data.rebalance_history() # 5. 리밸런싱발생내역
-
-    qs.extend_pandas()
-    daily_ret.iloc[:,1]
-    
-    # Format the date and time as a string in the desired format, e.g., "YYYY-MM-DD_HH-MM-SS"
-    # Construct the file path including the formatted date and time
-    now = datetime.now()
-    formatted_now = now.strftime("%Y%m%d_%H%M")  
-    html_file_path = rf'C:\kannie\Halloween_kospi_{formatted_now}.html'
-
-    qs.reports.html(daily_ret.iloc[:,1], benchmark="^KS11", output=html_file_path, title='Halloween2_KS11')
-    webbrowser.open(html_file_path)
-
-    return HttpResponse(html_file_path)
-
-def algo_View(request):
-    return render(request, 'portfolio/AdjHalloween_all.html')
-
-def algo1_View(request):
-    return render(request, 'portfolio/templates/AdjHalloween_all.html')
-
-def algo2_View(request):
-    return render(request, 'portfolio/templates/Halloween_all_2.html')
-
-def rebalancing(request):
-
- 
-    keyring.set_password('real_app_key', 'a_kannie', 'PSnvAltwjE5ZrOaITkVgetxCutSSexVH4qEw')
-    keyring.set_password('real_app_secret', 'a_kannie', 'LLhGO6tUDaepjBRFtocxjcYPZbkLfR5mKRFJrPccIkOBVfLsUhkVMFNWy7h7bWAD4CSq3nPowAYX/MMocSI9MAXrbNximason8X8V44iWkrrH/+IJT7E8CAN6fiCQwcnuHLZi/ryI/AzgHLHxwf56cCj/jEMtjrvxf6aITV5WrzSSmYLNOg=')    
-    
-    app_key = 'real_app_key'
-    app_secret = 'real_app_secret'
-    ID = 'a_kannie'
-    mock = '0' # 실전
-    cano = '64099516' # 카니실전
-   
-    sys1 = systemtrade(app_key, app_secret, ID, mock , cano) 
-    df1 = sys1.main()
-    print(df1)
-
-    # sys1.rebalancing_trade_at_once()
-    # sys1.execute()
-
-
-    keyring.set_password('mock_app_key', 'v_kannie', 'PSnwe2lboWhKABz4afYQUf5Cnm0x6IlBxt6F')
-    keyring.set_password('mock_app_secret', 'v_kannie', 'zFilo09//IcL6SKcVd+VHCxiGuhmVhu+llV1emGjL+J202Y9w1hxyFszqhvzBXjcM34t3QTULxOxM5heeVPCJJQSTSaiZEYMHXyddWCaLVwZiT93dpzgwfnOC0Stc1pmvlxbBAzux5ASV+hZuiYAZ6KTYKxexelADUlR3mIBDbeNfBkNuiw=')
-    app_key = 'mock_app_key'
-    app_secret = 'mock_app_secret'
-    mock = '1' 
-    ID = 'v_kannie'  
-    cano = '50102070' #카니 모의
-
-    sys2 = systemtrade(app_key, app_secret, ID, mock, cano) 
-    df2 = sys2.main()
-    print(df2)
-
-
-
-    keyring.set_password('mock_app_key', '@2229673', 'PSy3N0hiW3taBNYtIzKpuH2xnZ6jt72KqpQf')
-    keyring.set_password('mock_app_secret', '@2229673', '7/xPBWEvxqjEWPZ7R/w5XhA/bXX7ULjmL7da6Amn4/0drE+8HYXf9vAt/GrB93vsOzVp1vxzQ1+95gvpux2GlM9r8O3zs72TabFVezX7usnkA8AKAC+e2YVBXgms5lVxNFRBJ9tXoS9ypS7yjWfm09BB6ZCXtQJkaSmR4gsT21rAJOiZUeA=')
-
-    app_key = 'mock_app_key'
-    app_secret = 'mock_app_secret'
-    mock = '1' 
-    ID = '@2229673' 
-    cano = '50102559' #유진 모의
-    
-    sys3 = systemtrade(app_key, app_secret, ID, mock, cano) 
-    df3 = sys3.main()
-    print(df3)
-
-    # sys3.rebalancing_trade_at_once()
-    # sys3.execute()
-
-    return HttpResponse("Success monthly rebalancing")
-
-def add_daily(request):
-    db = cqrDB()
-    db.add_daily_weights()  #종목별투자비중추이 업데이트
-    db.add_clsweight()  #자산별투자비중추이 업데이트
-    db.add_daily_value() #일별수익률추이 업데이트
-    db.add_monthly_value() #월별수익률추이 업데이트
-    return HttpResponse("Success add_daily_weights")
-
-def add_daily_weights(request): #종목별투자비중추이 업데이트
-    db = cqrDB()
-    db.add_daily_weights()
-    print("Success add_daily_weights")
-    return HttpResponse("Success add_daily_weights")
-
-def add_clsweight(request): #자산별투자비중추이 업데이트
-    db = cqrDB()
-    db.add_clsweight()
-    print("Success add_clsweight")
-    return HttpResponse("Success add_clsweight")
-
-def add_daily_value(request): #일별수익률추이 업데이트 
-    db = cqrDB()    
-    db.add_daily_value()
-    print("Success add_daily_value")
-    return HttpResponse("Success add_daily_value")
-
-def add_monthly_value(request): #월별수익률추이 업데이트
-    db = cqrDB()
-    db.add_monthly_value()
-    print("Success add_monthly_value")
-    return HttpResponse("Success add_monthly_value")
-
-##
-def update_daily_weights(request): #종목별투자비중추이 업데이트
-    db = cqrDB()
-    db.update_daily_weights()
-    print("success")
-    return HttpResponse("Success update_daily_weights")
-
-def update_clsweight(request): #자산별투자비중추이 업데이트
-    db = cqrDB()
-    db.update_clsweight()
-    print("success")
-    return HttpResponse("Success update_clsweight")
-
-def update_daily_value(request): #일별수익률추이 업데이트
-    print("starting update_daily_value")
-    db = cqrDB()    
-    db.update_daily_value()
-    return HttpResponse("Success update_daily_value")
-
-def update_monthly_value(request): #월별수익률추이 업데이트
-    db = cqrDB()
-    db.update_monthly_value()
-    print("success")
-    return HttpResponse("Success update_monthly_value")
 
 class PortfolioLV(ListView):
     model = Portfolio
@@ -348,9 +58,22 @@ class MgrOnlyView(UserPassesTestMixin, TemplateView):
     def test_func(self):
         return self.request.user.is_superuser
 
+def account_list (request):
+    user_id = request.user.id
+
+    #adb = accountDB (user_id = user_id)
+    adb = accountDB ()
+    account_v = adb.get_account_list()
+
+    return render (request,'portfolio/account_list.html', {
+        "user_id" : user_id, 
+        "account_v": account_v,
+
+    })   
+
 def all_port(request):
     port_list = Portfolio.objects.all()
-
+    
     return render (request,'portfolio/portfolio_list.html', {
         'port_list': port_list})   
 
@@ -358,91 +81,42 @@ def my_asset(request):
     if request.user.is_authenticated:
 
         me = request.user.id
-        profile_item = Profile.objects.filter(user_id=me) ##
+        profile_item = Profile.objects.filter(user_id=me) 
         question_item = Questionarie.objects.filter(userid=me)
 
-        keyring.set_password('mock_app_key', '@2229673', 'PSy3N0hiW3taBNYtIzKpuH2xnZ6jt72KqpQf')
-        keyring.set_password('mock_app_secret', '@2229673', '7/xPBWEvxqjEWPZ7R/w5XhA/bXX7ULjmL7da6Amn4/0drE+8HYXf9vAt/GrB93vsOzVp1vxzQ1+95gvpux2GlM9r8O3zs72TabFVezX7usnkA8AKAC+e2YVBXgms5lVxNFRBJ9tXoS9ypS7yjWfm09BB6ZCXtQJkaSmR4gsT21rAJOiZUeA=')
+        account_v = Account.objects.filter(
+            user_id = request.user,
+            )
         
-        key_name = 'mock_app_key'
-        secret_name = 'mock_app_secret'
-        ID = '@2229673'
-        mock = '1' # (1:mock, 0:real)
-        cano = '50102559' #계좌번호
-        #유진모의
+        for account in account_v:
+            if account.계좌명 == "실전":
+                mock='0'
+            else:           
+                mock='1'
+            id = account.user_id
+            cano = account.cano
 
+            keyring.set_password('app_key', id, account.app_key)
+            keyring.set_password('app_secret', id, account.app_secret)    
 
-        # keyring.set_password('real_app_key', 'kannie', 'PSnvAltwjE5ZrOaITkVgetxCutSSexVH4qEw')
-        # keyring.set_password('real_app_secrect', 'kannie', 'LLhGO6tUDaepjBRFtocxjcYPZbkLfR5mKRFJrPccIkOBVfLsUhkVMFNWy7h7bWAD4CSq3nPowAYX/MMocSI9MAXrbNximason8X8V44iWkrrH/+IJT7E8CAN6fiCQwcnuHLZi/ryI/AzgHLHxwf56cCj/jEMtjrvxf6aITV5WrzSSmYLNOg=')
+            sys = systemtrade(app_key = 'app_key', app_secret = 'app_secret', ID = id, cano = cano,  mock = mock, custtype = 'P') 
+            ap, balance = sys.check_account() 
 
-        # keyring.set_password('mock_app_key', 'kannie', 'PSnwe2lboWhKABz4afYQUf5Cnm0x6IlBxt6F')
-        # keyring.set_password('mock_app_secret', 'kannie', 'zFilo09//IcL6SKcVd+VHCxiGuhmVhu+llV1emGjL+J202Y9w1hxyFszqhvzBXjcM34t3QTULxOxM5heeVPCJJQSTSaiZEYMHXyddWCaLVwZiT93dpzgwfnOC0Stc1pmvlxbBAzux5ASV+hZuiYAZ6KTYKxexelADUlR3mIBDbeNfBkNuiw=')
+            print(balance)
+           # print(balance['tot_evlu_amt'])
 
-        # app_key = keyring.get_password('mock_app_key', 'kannie')
-        # app_secret = keyring.get_password('mock_app_secret','kannie')
-
-        url_base = "https://openapivts.koreainvestment.com:29443" #모의투자
-        #url_base = "https://openapivts.koreainvestment.com:9443" #실전투자
-        
-        headers ={"content-type":"application/json"}
-        path = "oauth2/tokenP"
-        body = {
-            "grant_type": "client_credentials",
-            "appkey": key_name,
-            "appsecret": secret_name,
-        }
-
-        url = f"{url_base}/{path}"
-
-        #access token 발급
-        res = requests.post(url, headers=headers, data=json.dumps(body))
-        access_token = res.json()['access_token']
-                
-        path = "/uapi/domestic-stock/v1/trading/inquire-balance"
-        url = f"{url_base}/{path}"
-
-        headers = {
-            "Content-Type": "application/json",
-            "authorization": f"Bearer {access_token}",
-            "appKey": key_name,
-            "appSecret": secret_name,
-            "tr_id": "VTTC8434R"
-        }
-
-        params = {
-            "CANO": "50102559",  # 계좌번호 앞 8지리
-            "ACNT_PRDT_CD": "01",  # 계좌번호 뒤 2자리
-            "AFHR_FLPR_YN": "N",  # 시간외단일가여부
-            "OFL_YN": "",  # 공란
-            "INQR_DVSN": "01",  # 조회구분
-            "UNPR_DVSN": "01",  # 단가구분
-            "FUND_STTL_ICLD_YN": "N",  # 펀드결제분포함여부
-            "FNCG_AMT_AUTO_RDPT_YN": "N",  # 융자금액자동상환여부        
-            "PRCS_DVSN": "00",  # 처리구분(00: 전일매매포함)
-            "CTX_AREA_FK100": "",  # 연속조회검색조건
-            "CTX_AREA_NK100": ""  # 연속조회키
-        }
-        time.sleep(2)
-        res = requests.get(url, headers=headers, params=params) #계좌잔고
-        data = res.json()['output2']
-
-        print(data)
-        #ap=pd.DataFrame.from_records(res.json()['output2'])
-        #ap
-
-        print('시작 시간 :', datetime.now().strftime('%m/%d %H:%M:%S'))
-
+        #print('시작 시간 :', datetime.now().strftime('%m/%d %H:%M:%S'))
 
         return render(request, 'portfolio/my_asset.html', {
             "profile_item":profile_item, 
             "question_item":question_item,
-            "data":data,
-          #  "balance": balance,
+            "account_v":account_v ,
+            "balance": balance,
             })
     else:
         return render(request, 'portfolio/mgronly_view.html', {})
 
-def mgr_only(request): #종목별 weight 조회
+def mgr_only(request, ty): #종목별 투자비중 조회
     if request.user.is_authenticated and request.user.is_superuser :
 
         querydict=request.GET.copy()
@@ -472,7 +146,12 @@ def mgr_only(request): #종목별 weight 조회
 
         date_from = fromdate
         date_to = todate          
-        daily_mp_w = dailyMPweight.objects.filter(date__gte=date_from, date__lte=date_to).order_by('-date')
+
+        daily_mp_w = dailyMPweight.objects.filter(
+                    date__gte=date_from,
+                    date__lte=date_to,
+                    port_id=str(ty) #ty
+                ).order_by('-date')
 
         p = Paginator(daily_mp_w, 20)
         page = request.GET.get('page')
@@ -485,11 +164,12 @@ def mgr_only(request): #종목별 weight 조회
                 "todate":todate,
                 "date_from":date_from,
                 "date_to":date_to,
+                "type":ty,
                 })   
     else:
         return render (request,'portfolio/mgronly_view.html', {  })   
 
-def mgr_only3(request): #자산별투자비중조회
+def mgr_only3(request, ty): #자산별 투자비중 조회
     if request.user.is_authenticated and request.user.is_superuser:
         querydict=request.GET.copy()
 
@@ -518,8 +198,12 @@ def mgr_only3(request): #자산별투자비중조회
         
         date_from = fromdate
         date_to = todate
-        daily_mp_w = MPclsweight.objects.filter(date__gte=date_from, date__lte=date_to).order_by('-date')
-
+        
+        daily_mp_w = MPclsweight.objects.filter(
+            date__gte=date_from, date__lte=date_to, 
+            port_id= str(ty), #ty
+            ).order_by('-date')
+        
         p = Paginator(daily_mp_w, 20)
         page = request.GET.get('page')
         mp_w = p.get_page(page)
@@ -531,11 +215,12 @@ def mgr_only3(request): #자산별투자비중조회
                 "todate":todate,
                 "date_from":date_from,
                 "date_to":date_to,
+                "type":ty,
                 })   
     else:
         return render(request, 'portfolio/mgronly3_view.html', {})   
     
-def mgr_only1(request): #일별수익률조회
+def mgr_only1(request, ty): #일별 수익률 조회
     if request.user.is_authenticated and request.user.is_superuser:
         querydict=request.GET.copy()
 
@@ -564,7 +249,10 @@ def mgr_only1(request): #일별수익률조회
         
         date_from = fromdate
         date_to = todate
-        daily_mp_w = dailyMPvalue.objects.filter(date__gte=date_from, date__lte=date_to).order_by('-date')
+        daily_mp_w = dailyMPvalue.objects.filter(
+            date__gte=date_from, date__lte=date_to, 
+            port_id= str(ty), #ty
+            ).order_by('-date')
 
         p = Paginator(daily_mp_w, 20)
         page = request.GET.get('page')
@@ -577,11 +265,12 @@ def mgr_only1(request): #일별수익률조회
                 "todate":todate,
                 "date_from":date_from,
                 "date_to":date_to,
+                "type": ty,
                 })   
     else:
         return render(request, 'portfolio/mgronly1_view.html', {})   
 
-def mgr_only2(request): #월별수익률조회
+def mgr_only2(request, ty): #월별 수익률조회
     if request.user.is_authenticated and request.user.is_superuser:
         querydict=request.GET.copy()
 
@@ -610,7 +299,10 @@ def mgr_only2(request): #월별수익률조회
         
         date_from = fromdate
         date_to = todate
-        daily_mp_w = monthlyMPvalue.objects.filter(date__gte=date_from, date__lte=date_to).order_by('-date')
+        daily_mp_w = monthlyMPvalue.objects.filter(
+            date__gte=date_from, date__lte=date_to, 
+            port_id= str(ty), #ty
+            ).order_by('-date')
 
         p = Paginator(daily_mp_w, 20)
         page = request.GET.get('page')
@@ -623,6 +315,7 @@ def mgr_only2(request): #월별수익률조회
                 "todate":todate,
                 "date_from":date_from,
                 "date_to":date_to,
+                "type": ty,
                 })   
     else:
         return render(request, 'portfolio/mgronly2_view.html', {})      
@@ -704,19 +397,223 @@ def cal_risk(request):
     #2, 안정추구형, 21-40
     #3, 중립형, 41-60
     #4, 적극형, 61-80
-    #5, 공격형, 81-90
-    
-def calculate_sum(request):
-    calc = Calculator()  # Create an instance of the Calculator class  
-    sum_result = calc.sum(10,5)
-    
-    response_content = (f"Sum: {sum_result}<br>")
-    return HttpResponse(response_content)
+    #5, 공격형, 81-90    
 
-def calculate_minus(request):
-    calc = Calculator()  # Create an instance of the Calculator class
-    minus_result = calc.minus(10,5)
+def algo(request, ty):      # 모델링 CVS 파일생성: 일별수익률, 월별수익률, 자산별투자비중, 종목별투자비중
+    tic = [ "114260.KS",    # Bond, cash, mmf, kosdq, KOSPI, NASDAQ, S&P
+           "153130.KS", "157450.KS","229200.KS", "278530.KS", "379810.KS", "379800.KS"] 
 
-    response_content = (f"Minus: {minus_result}<br>")
-    return HttpResponse(response_content)
+    fromdate = "2021-04-05"
+    todate = date.today().strftime("%Y-%m-%d")
+
+    stock_data = StockData(tic) 
+    data = stock_data.download_data(fromdate, todate,'1d') 
+    data.Close.dropna(thresh = 6)
+    df,ret = stock_data.clean()
+
+    values = {
+        5: (1, 0, 1, 0, 1, 0),                  #공격형
+        4: (0.7, 0.3, 0.7, 0.3, 0.7, 0.3),      #적극형
+        3: (0.5, 0.5, 0.5, 0.5, 0.5, 0.5),      #중립형
+        2: (0.3, 0.7, 0.3, 0.7, 0.3, 0.7),      #안정형
+    }
+
+    # Retrieve values based on ty
+    odd_stock_w, odd_bond_w, even_stock_w, even_bond_w, even_passive_stock_w, even_passive_bond_w = values.get(ty, (None, None, None, None, None, None))
+
+    #Bond, cash, mmf, kosdq, KOSPI, NASDAQ, S&P
+    #홀수11-4월 (코스닥60, 코스피40). 홀수 5-10월(나스닥50,S&P50)
+    #짝수11-4월 (코스닥50, 코스피50). 짝수 5-10월(나스닥50,S&P50)
+    odd_buy = np.array([(1/3*odd_bond_w), (1/3*odd_bond_w), (1/3*odd_bond_w), 0.6*odd_stock_w, 0.4*odd_stock_w, 0.0*odd_stock_w, 0.0*odd_stock_w])          # Even 11 - Odd 4. Active
+    odd_hold = np.array([(1/3*odd_bond_w), (1/3*odd_bond_w), (1/3*odd_bond_w), 0.0*odd_stock_w, 0.0*odd_stock_w, 0.5*odd_stock_w, 0.5*odd_stock_w])         # Odd 5 - Odd 10. 
+    even_buy = np.array([(1/3*even_bond_w), (1/3*even_bond_w), (1/3*even_bond_w), 0.5*even_stock_w, 0.5*even_stock_w, 0.0*even_stock_w, 0.0*even_stock_w])  # Odd 11 - Even 4. NOTE: Here, we shift Kospi weight to Nasdaq instead of S&P 500 to be consistent with our logic that 11-4 should be more aggressive than 5-10. 
+    even_hold = np.array([(1/3*even_passive_bond_w), (1/3*even_passive_bond_w), (1/3*even_passive_bond_w), 0.0*even_passive_stock_w, 0.0*even_passive_stock_w, 0.5*even_passive_stock_w, 0.5*even_passive_stock_w])  # Even 5 - Even 10
+
+    halloween_adj = stock_data.algo1(1000,odd_buy,odd_hold,even_buy,even_hold) 
+    
+    stock_data.results()[0]
+    stock_data.results()[1]
+ 
+    now = datetime.now()
+    formatted_now = now.strftime("%Y%m%d")  
+
+    # 1. 일별수익률추이
+    source_file_path = rf'portfolio/templates/{ty}_일별수익률추이{formatted_now}.csv'
+    destination_file_path = rf'portfolio/templates/{ty}_일별수익률추이.csv'
+    daily_ret = stock_data.daily_ret() 
+    daily_ret.to_csv(destination_file_path)
+    #shutil.copy(source_file_path, destination_file_path)
+
+    # 2. 월별수익률추이
+    source_file_path = rf'portfolio/templates/{ty}_월별수익률추이{formatted_now}.csv'
+    destination_file_path = rf'portfolio/templates/{ty}_월별수익률추이.csv'
+    monthly_ret = stock_data.monthly_ret() 
+    monthly_ret.to_csv(destination_file_path)
+    #shutil.copy(source_file_path, destination_file_path)
+    
+    # 3. 자산별투자비중추이
+    source_file_path = rf'portfolio/templates/{ty}_자산별투자비중추이{formatted_now}.csv'
+    destination_file_path = rf'portfolio/templates/{ty}_자산별투자비중추이.csv'   
+    port_weights = stock_data.portfolio_by_asset_class() 
+    port_weights = port_weights[1]
+    port_weights.to_csv(destination_file_path)
+    #shutil.copy(source_file_path, destination_file_path)
+    
+    # 4. 종목별투자비중추이
+    source_file_path = rf'portfolio/templates/{ty}_종목별투자비중추이{formatted_now}.csv'
+    destination_file_path = rf'portfolio/templates/{ty}_종목별투자비중추이.csv'  
+    cls_weight=stock_data.portfolio_by_ind_assets() 
+    cls_weight.to_csv(destination_file_path)
+    #shutil.copy(source_file_path, destination_file_path)
+   
+    # 5. 리밸런싱발생내역
+    source_file_path = rf'portfolio/templates/{ty}_리밸런싱발생내역{formatted_now}.csv'
+    # destination_file_path = r'portfolio/templates/{ty}_리밸런싱발생내역.csv'     
+    # rebal_history = stock_data.rebalance_history()  
+    # rebal_history.to_csv(destination_file_path)
+    #shutil.copy(source_file_path, destination_file_path)
+
+    # extend pandas functionality with metrics, etc.
+    qs.extend_pandas()
+    daily_ret.iloc[:,1]
+    
+    html_file_path = rf'portfolio/templates/portfolio/chesleyalgo_ty{ty}.html'
+
+    qs.reports.html(daily_ret['일별수익률']     
+                , benchmark="^GSPC", output=html_file_path, title=rf'chesleyalgo_ty{ty}')
+    #webbrowser.open(html_file_path)
+
+    #return HttpResponse("success")
+    return render(request, rf'portfolio/chesleyalgo_ty{ty}.html')
+
+def algo_View(request, ty): # 모델결과보기
+    return render(request, rf'portfolio/chesleyalgo_ty{ty}.html')
+
+def add_daily(request, ty):     # 모델링 DB 일일 저장
+    db = cqrDB(type = ty)
+                      
+    print("success constructor - {db.type}")
+
+    db.add_daily_weights()     #종목별투자비중추이 업데이트
+    print("Success add_daily_weights")
+
+    db.add_clsweight()         #자산별투자비중추이 업데이트
+    print("Success add_clsweight")
+
+    db.add_daily_value ()      #일별수익률추이 업데이트
+    print("Success add_daily_value")
+
+    db.add_monthly_value ()    #월별수익률추이 업데이트
+    print("Success add_monthly_value")
+
+    return HttpResponse("Success add_daily_weights")
+
+def init_add_daily (request, ty):   # 모델링 DB 초기화
+    db = cqrDB(ty)
+    print("success constructor - {db.type}")
+
+    db.update_daily_weights()     #종목별투자비중추이 업데이트
+    print("Success init_종목별투자비중")
+
+    db.update_clsweight()         #자산별투자비중추이 업데이트
+    print("Success init_자산별투자비중")
+
+    db.update_daily_value ()      #일별수익률추이 업데이트
+    print("Success init_일별수익률")
+
+    db.update_monthly_value ()    #월별수익률추이 업데이트
+    print("Success init_월별수익률")
+
+    return HttpResponse("Success add_daily_weights")
+
+def rebalancing_00(request, id):       # 월간 계좌 리밸런싱
+
+    account_v = Account.objects.filter(
+        id = id,
+        )
+    account = account_v.first()
+
+    if account.계좌명 == "실전":
+        mock='0'
+    else:           
+        mock='1'
+    user_id = account.user_id
+    cano = account.cano
+    port_id = account.portfolio_id
+
+    port_v = Portfolio.objects.filter(
+        portfolio_id = port_id,
+        )
+    port = port_v.first()
+
+    keyring.set_password('app_key', user_id, account.app_key)
+    keyring.set_password('app_secret', user_id, account.app_secret)    
+    sys = systemtrade(app_key = 'app_key', app_secret = 'app_secret', ID = user_id, cano = cano,  mock = mock, custtype = 'P', port_subtype=port.sub_type) 
+
+    sys.schedule_rebalancing_00()
+    sys.execute()
+
+    return HttpResponse("Success monthly rebalancing 00")
+
+def rebalancing_06(request, id):       # 월간 계좌 리밸런싱
+
+    account_v = Account.objects.filter(
+        id = id,
+        )
+    account = account_v.first()
+
+    if account.계좌명 == "실전":
+        mock='0'
+    else:           
+        mock='1'
+    user_id = account.user_id
+    cano = account.cano
+    port_id = account.portfolio_id
+
+    port_v = Portfolio.objects.filter(
+        portfolio_id = port_id,
+        )
+    port = port_v.first()
+
+    keyring.set_password('app_key', user_id, account.app_key)
+    keyring.set_password('app_secret', user_id, account.app_secret)    
+    sys = systemtrade(app_key = 'app_key', app_secret = 'app_secret', ID = user_id, cano = cano,  mock = mock, custtype = 'P', port_subtype=port.sub_type) 
+
+    sys.schedule_rebalancing_06()
+    sys.execute()
+
+    return HttpResponse("Success monthly rebalancing 06")
+
+def account_item(request, id):  
+
+    account_v = Account.objects.filter(
+        id = id,
+        )
+    account = account_v.first()
+
+    if account.계좌명 == "실전":
+        mock='0'
+    else:           
+        mock='1'
+    id = account.user_id
+    cano = account.cano
+
+    keyring.set_password('app_key', id, account.app_key)
+    keyring.set_password('app_secret', id, account.app_secret)    
+
+    # sys = systemtrade(app_key = 'app_key', app_secret = 'app_secret', ID = id, cano = cano,  mock = mock, custtype = 'P') 
+    # ap, balance = sys.check_account() 
+    # print(balance)
+    # print(balance['tot_evlu_amt'])
+
+    me = account.user_id
+    profile_item = Profile.objects.filter(user_name=me) 
+    question_item = Questionarie.objects.filter(user_name=me)
+
+    return render(request, 'portfolio/account_item.html', {
+        "profile_item":profile_item, 
+        "question_item":question_item,
+        "account":account ,
+        # "balance": balance,
+        })
 

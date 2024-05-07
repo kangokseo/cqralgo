@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %} account_item.html {% endblock %}
+
+{% block content %}
+<br>
+<h2> 계좌조회 </h2>
+<br><br>
+
+<div class="d-flex">
+  <p>          
+      {% for profile in profile_item %}
+      <b> 사용자 ID : </b>{{profile.user}} <br>
+      <b> 투자자 리스크 성향 : </b>{{profile.RiskTolDesc}} - {{profile.RiskTol}} <br>
+      <b> 성향 분석하기 : </b> <a href="{% url 'view_survey' profile.id %}">Survey</a> <br>
+      {% endfor %}
+      <br><br>
+  </p>
+  <br><br>
+</div>
+
+<table class="table table-sm table-hover">
+    <thead>
+      <tr>
+        <th scope="col">계좌번호</th>
+        <th scope="col">계좌명</th>
+        <th scope="col">매입금액</th>
+        <th scope="col">평가금액</th>
+        <th scope="col">평가손익</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+            <tr>
+                <td>{{account.계좌번호}}</td>
+                <td>{{account.계좌명}}</td>  
+                <td>{{balance.pchs_amt_smtl_amt|floatformat:2|intcomma}}</td> 
+                <td>{{balance.evlu_amt_smtl_amt|floatformat:2|intcomma}}</td>
+                <td>{{balance.evlu_pfls_smtl_amt|floatformat:2|intcomma}}</td>            
+            </tr>    
+
+    </tbody>
+</table>
+
+{% endblock %}

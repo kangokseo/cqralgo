@@ -1,0 +1,66 @@
+
+.main-container {
+    display: flex;  /* Establishes a flex context for child elements */
+    height: 100vh;  /* Optional: takes full height of the viewport */
+}
+.container {
+    flex-grow: 1;  /* Allows the container to take up the remaining space */
+    padding: 10px;
+}
+
+.row {
+    margin: 0;
+}
+
+
+.sidebar {
+    width: 220px;  /* Fixed width for the sidebar */
+    background-color: #f1f1f1;
+    padding: 10px;
+    overflow-y: auto;  /* Allows scrolling within the sidebar if content overflows */
+    overflow-x: hidden;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    padding-top: 20px;
+}
+
+.sidebar li a {
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+.sidebar li a:hover {
+    background-color: #ddd;
+}
+
+.content {
+    overflow-y: auto;  /* Allows scrolling within the content area if content overflows */
+}
+
+.home-image {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 70%;
+    height: 500px;
+    padding: 20px 0 0 20px;
+}
+
+.title {
+    color: #161717;
+    font-weight:bond;
+}
+.powered {
+    color: rgba(42, 63, 47, 0.715); 
+    position: relative;
+    top: 30%;
+    font-style: italic;
+}
+
+
+
