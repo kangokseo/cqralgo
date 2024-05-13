@@ -2,6 +2,8 @@
 
 {% block title %} mgronly_view.html {% endblock %}
 
+
+
 {% block content %}
 
     {% if type == 5 %}    <h2>공격형 종목별 투자비중</h2>
@@ -10,6 +12,9 @@
     {% elif type == 2 %}   <h2>안전형 종목별 투자비중</h2>
     {% endif %}
     <br>
+
+    {% if user.is_staff %}
+
     <div class="d-flex justify-content-end">
 
         <p>
@@ -43,7 +48,7 @@
         <tbody>
 
 
-        {% if user.is_authenticated %}
+
             {% if mp_w %}
                 {% for mp in mp_w %}
                 <tr>
@@ -61,11 +66,7 @@
                 {% endfor %}
 
             {% endif %}
-    
-        {% else %}
-            <h2>You must be logged in first.</h2>
-            <p class="font-italic"><a href="{% url 'login' %}">Log in</a></p>
-        {% endif %}
+
 
         </tbody>
     </table>
@@ -110,4 +111,9 @@
         </div>
     </div>
 
+    {% else %}
+        <h2>관리자로 로그인해야합니다</h2>
+    {% endif %}
+
 {% endblock %}
+

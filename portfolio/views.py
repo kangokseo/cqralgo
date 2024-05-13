@@ -509,7 +509,7 @@ def add_daily(request, ty):     # 모델링 DB 일일 저장
     return HttpResponse("Success add_daily_weights")
 
 def init_add_daily (request, ty):   # 모델링 DB 초기화
-    db = cqrDB(ty)
+    db = cqrDB(type=ty)
     print("success constructor - {db.type}")
 
     db.update_daily_weights()     #종목별투자비중추이 업데이트
@@ -526,7 +526,7 @@ def init_add_daily (request, ty):   # 모델링 DB 초기화
 
     return HttpResponse("Success add_daily_weights")
 
-def rebalancing_00(request, id):       # 월간 계좌 리밸런싱
+def rebalancing_00(request, id):       # 지정가 리밸런싱
 
     account_v = Account.objects.filter(
         id = id,
@@ -555,7 +555,7 @@ def rebalancing_00(request, id):       # 월간 계좌 리밸런싱
 
     return HttpResponse("Success monthly rebalancing 00")
 
-def rebalancing_06(request, id):       # 월간 계좌 리밸런싱
+def rebalancing_06(request, id):       # 장후시간외 리밸런싱
 
     account_v = Account.objects.filter(
         id = id,
@@ -601,11 +601,13 @@ def account_item(request, id):
     keyring.set_password('app_key', id, account.app_key)
     keyring.set_password('app_secret', id, account.app_secret)    
 
-    # sys = systemtrade(app_key = 'app_key', app_secret = 'app_secret', ID = id, cano = cano,  mock = mock, custtype = 'P') 
-    # ap, balance = sys.check_account() 
-    # print(balance)
-    # print(balance['tot_evlu_amt'])
+    #(증권사) 계좌 평가손 가져오기  
+    sys = systemtrade(app_key = 'app_key', app_secret = 'app_secret', ID = id, cano = cano,  mock = mock, custtype = 'P') 
+    ap, balance = sys.check_account() 
+    print(balance)
+    print(balance['tot_evlu_amt'])
 
+    #사용자, 투자자리스크 성향 가져오기
     me = account.user_id
     profile_item = Profile.objects.filter(user_name=me) 
     question_item = Questionarie.objects.filter(user_name=me)
@@ -614,6 +616,6 @@ def account_item(request, id):
         "profile_item":profile_item, 
         "question_item":question_item,
         "account":account ,
-        # "balance": balance,
+        "balance": balance,
         })
 

@@ -10,6 +10,7 @@
 {% elif type == 2 %}   <h2>안전형 자산별 투자비중</h2>
 {% endif %}
 
+    {% if user.is_staff %}
     <br>
     <div class="d-flex justify-content-end">
         <p>
@@ -90,6 +91,8 @@
        </ul>
       </nav>
 
-
+    {% else %}
+      <h2>관리자로 로그인해야합니다</h2>
+    {% endif %}
 
 {% endblock %}

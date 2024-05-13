@@ -10,8 +10,11 @@ urlpatterns = [
     path('portfolio/<int:pk>/', views.PortfolioDV.as_view(), name='detail'),    
     path('my_asset/', views.my_asset, name='my_asset'),
     path('account_list/', views.account_list, name='account_list'),
+
     path('account_item/<int:id>', views.account_item, name='account_item'),
-    
+    path('util_rebal_00/<int:id>', views.rebalancing_00, name='rebalancing_00'),    #지정가 리밸런싱
+    path('util_rebal_06/<int:id>', views.rebalancing_06, name='rebalancing_06'),    #장후시간외 리밸런싱
+
     #path('show_survey/<profile_id>', views.show_survey, name='show_survey'),
     path('survey/<int:pk>', views.customer_survey, name='view_survey'),
     path('update_survey/<int:pk>', views.update_survey, name='update_survey'),
@@ -25,14 +28,10 @@ urlpatterns = [
 
     #path('myasset/survey', SurveyView.as_view(), name='survey'),
     path('algo/<int:ty>/', views.algo, name='algo'), #run algo
-
     path('algoview/<int:ty>', views.algo_View, name='algo_View'),  #모델결과보기
 
     path('util_daily/<int:ty>/', views.add_daily, name='add_daily'),
-    path('util_rebal_00/<int:id>', views.rebalancing_00, name='rebalancing_00'),
-    path('util_rebal_06/<int:id>', views.rebalancing_06, name='rebalancing_06'),
     path('util_daily/init/<int:ty>/', views.init_add_daily, name='init_add_daily'),
-
 
 ]
 

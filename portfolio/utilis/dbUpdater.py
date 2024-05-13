@@ -70,7 +70,7 @@ class cqrDB:        # '체슬리알고1' 데이타
         self.conn.close()
 
 
-    def add_daily_weights(self): #종목별투자비중추이
+    def add_daily_weights(self): #종목별투자비중추이 일일업데이트
         curObj = self.conn.cursor()
         file_path = rf'portfolio/templates/{self.type}_종목별투자비중추이.csv'
         df = pd.read_csv(file_path)
@@ -120,7 +120,7 @@ class cqrDB:        # '체슬리알고1' 데이타
         
         self.conn.commit()
 
-    def add_clsweight(self): #자산별투자비중추이 
+    def add_clsweight(self): #자산별투자비중추이 일일업데이트
         curObj = self.conn.cursor()
 
         file_path = rf'portfolio/templates/{self.type}_자산별투자비중추이.csv'
@@ -157,7 +157,7 @@ class cqrDB:        # '체슬리알고1' 데이타
 
         self.conn.commit()
 
-    def add_daily_value(self): #일별수익률추이
+    def add_daily_value(self): #일별수익률추이 일일업데이트
         curObj = self.conn.cursor()
 
         file_path = rf'portfolio/templates/{self.type}_일별수익률추이.csv'
@@ -207,7 +207,7 @@ class cqrDB:        # '체슬리알고1' 데이타
 
         self.conn.commit()  
 
-    def add_monthly_value(self): #월별수익률추이
+    def add_monthly_value(self): #월별수익률추이 일일업데이트
         curObj = self.conn.cursor()
         file_path = rf'portfolio/templates/{self.type}_월별수익률추이.csv'
         df = pd.read_csv(file_path)        
@@ -222,20 +222,18 @@ class cqrDB:        # '체슬리알고1' 데이타
                     })
         df=df[['Date','코스닥150','KODEX200','나스닥100','SP500','국고채3','단기채','통안채','cash','port_val','월별수익률','누적수익률']]
 
-        sql = f"select max(date) from portfolio_monthlyMPvalue where port_id='{self.type}'"
-        curObj.execute(sql)
-        rs = curObj.fetchone()
-        todate = rs[0].strftime("%Y-%m-%d") # max(date)
-
         try:               
-            sql = f"DELETE FROM portfolio_monthlyMPvalue WHERE date = '{todate}' AND port_id='{self.type}'"
+            sql = f"DELETE FROM portfolio_monthlyMPvalue WHERE date = (SELECT MAX(date) FROM portfolio_monthlyMPvalue) AND port_id='{self.type}'"
             curObj.execute(sql)
             self.conn.commit()  
         except Exception as e:
             print(f"An error occurred while deleting records: {e}")
             self.conn.rollback()  
 
-        
+        sql = f"select max(date) from portfolio_monthlyMPvalue where port_id='{self.type}'"
+        curObj.execute(sql)
+        rs = curObj.fetchone()
+        todate = rs[0].strftime("%Y-%m-%d") # max(date)        
 
         for idx in range (len(df)):
             s_date = df.Date.values[idx][:10]

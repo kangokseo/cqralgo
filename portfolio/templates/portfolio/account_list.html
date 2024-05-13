@@ -6,6 +6,7 @@
     <br>
     <h2> 계좌 관리 </h2>
     <br><br>
+    {% if user.is_staff %}
 
     <table class="table table-sm table-hover">
             
@@ -23,6 +24,7 @@
         </thead>
 
         <tbody>
+            
             {% for account in account_v %}
             <tr>
                 <td>{{ account.0 }}</td>
@@ -39,11 +41,14 @@
                 <td colspan="8">No accounts available.</td>
             </tr>
             {% endfor %}
+  
         </tbody>
-
-
 
     </table>
 
+    {% else %}
+        <a> 관리자 전용 화면입니다. 관리자로 로그인하세요. </a>
+
+    {% endif %}
 
 {% endblock %}

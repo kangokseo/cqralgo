@@ -10,6 +10,9 @@
     {% elif type == 2 %}   <h2>안전형 일별 수익률</h2>
     {% endif %}
     <br>
+
+    {% if user.is_staff %}
+
     <div class="d-flex justify-content-end">
         <p>
 
@@ -96,6 +99,8 @@
        </ul>
       </nav>
 
-
+    {% else %}
+      <h2>관리자로 로그인해야합니다</h2>
+    {% endif %}
 
 {% endblock %}

@@ -10,6 +10,9 @@
     {% elif type == 2 %}   <h2>안전형 월별 수익률</h2>
     {% endif %}
     <br>
+
+    {% if user.is_staff %}
+
     <div class="d-flex justify-content-end">
         <p>
             <form id="dateForm" action="{% url 'mgr_only2' type%}" method="get">
@@ -97,5 +100,8 @@
        </ul>
       </nav>
 
+    {% else %}
+      <h2>관리자로 로그인해야합니다</h2>
+    {% endif %}
 
 {% endblock %}
