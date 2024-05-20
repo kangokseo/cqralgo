@@ -40,7 +40,7 @@ class systemtrade:
             "appsecret": self.app_secret
         }
         res = requests.post(url, headers=headers, data=json.dumps(body))
-        time.sleep(0.1)
+        time.sleep(0.2)
 
         self.kst_tz = pytz.timezone('Asia/Seoul') # timezone 
         self.access_token = res.json()['access_token']      

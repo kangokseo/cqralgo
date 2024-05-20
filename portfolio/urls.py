@@ -16,8 +16,8 @@ urlpatterns = [
     path('util_rebal_06/<int:id>', views.rebalancing_06, name='rebalancing_06'),    #장후시간외 리밸런싱
 
     #path('show_survey/<profile_id>', views.show_survey, name='show_survey'),
-    path('survey/<int:pk>', views.customer_survey, name='view_survey'),
-    path('update_survey/<int:pk>', views.update_survey, name='update_survey'),
+    path('survey/<str:pk>', views.view_survey, name='view_survey'),
+    path('update_survey/<str:pk>', views.update_survey, name='update_survey'),
     path('add_survey/<int:pk>', views.add_survey, name='add_survey'),
 
     #path('mgr_only/<str:fromdate>/<str:todate>/', views.mgr_only, name='mgr_only'), #종목별 weight

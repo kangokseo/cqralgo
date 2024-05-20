@@ -130,17 +130,8 @@ class StockData:
         """ End of backtest /// """
         return self.shares, self.cash_rem, self.mkt_val,self.strat
     
-    def algo1(self,initial_cash,odd_buy,odd_hold,even_buy,even_hold):  # 11 - 4, 5 - 10 
-        # Halloween Adjusted 짝수 홀수 11 - 4 월 (아빠)
-        """ Without the assumption of starting cash"""
-
-        """ Weights """
-        # odd_stock_w = 0.7
-        # odd_bond_w = 0.3
-        # even_stock_w = 0.5
-        # even_bond_w = 0.5
-        # even_passive_stock_w = 0.3
-        # even_passive_bond_w = 0.7
+    # Cqra 1 (aka.Halloween, 11-4월 짝/홀수 조정) 
+    def algo1(self,initial_cash,odd_buy,odd_hold,even_buy,even_hold):  # 11 - 4, 5 - 10,
 
         port_list = [initial_cash]  # Seed money 
         port = port_list[0]

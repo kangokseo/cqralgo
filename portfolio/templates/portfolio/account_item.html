@@ -13,7 +13,7 @@
       {% for profile in profile_item %}
       <b> 사용자 ID : </b>{{profile.user}} <br>
       <b> 투자자 리스크 성향 : </b>{{profile.RiskTolDesc}} - {{profile.RiskTol}} <br>
-      <b> 성향 분석하기 : </b> <a href="{% url 'view_survey' profile.id %}">Survey</a> <br>
+      <b> 성향 분석하기 : </b> <a href="{% url 'view_survey' profile.user_name %}">Survey</a> <br>
       {% endfor %}
       <br><br>
   </p>

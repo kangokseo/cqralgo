@@ -4,15 +4,15 @@
 
 {% block content %}
 
-    <h1> Risk Tolerance Questionare </h1>
+    <h1> 투자자성향 설문 </h1>
     <br>
 
-    {% for profile in profile_item %}
+    <!-- {% for profile in profile_item %}
         <li>참고</li>
         <li>{{profile.id}}</li>
         <li>{{profile.riskscore}}</li>
     {% endfor %}<br/>
-
+ -->
 
     {% if submitted %}
         Submitted successfully!
@@ -22,9 +22,13 @@
 
             {{ form.as_p }}
 
-            <button type="submit">Submit</button>
+            <b>투자자성향 스코어: {{survey.riskscore|floatformat:"2" }} </b> 
+            <br/><br/>
+
+            <button type="submit">입력하기</button>
         </form>
     {% endif %}
 
+ 
 
 {% endblock %}

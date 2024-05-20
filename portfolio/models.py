@@ -69,7 +69,7 @@ class InvUniv(models.Model):
         return self.종목명 
     
 
-class Questionarie(models.Model):
+class Questionarie(models.Model):   #성향분석설문
     userid = models.CharField(max_length=5, null=True, blank=True)
     user_name = models.CharField(null=True, blank=True)
     QA1 = models.CharField(max_length=5, null=True, blank=True)

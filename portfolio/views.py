@@ -1,3 +1,5 @@
+from django.shortcuts import get_object_or_404, render
+
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
@@ -321,31 +323,57 @@ def mgr_only2(request, ty): #월별 수익률조회
         return render(request, 'portfolio/mgronly2_view.html', {})      
 
 def add_survey(request, pk):
+
     submitted = False
-    quest = Questionarie.objects.get(id=pk)
-    
+    form = QuestionForm(request.POST or None)
+
     if request.method == "POST":
-        form = QuestionForm(request.POST)
         if form.is_valid():
-            form.save() #save to db
-            submitted=True
-            #return HttpResponseRedirect('myasset/add_survey?submitted=True')
+            a=cal_risk(form)
+            instance = form.save(commit=False)
+            instance.riskscore = a
+            instance.user_name = pk
+            instance.save()
+
+            cur_survey = Questionarie.objects.get(user_name=pk)
+            # return render(request, 'portfolio/add_survey.html', 
+            #     {'form':form, 
+            #     'submitted':submitted,
+            #     'survey':cur_survey,
+            #     })
+            return render(request, 'portfolio/view_survey.html', {
+                "survey_record": cur_survey,
+            })
     else:
-        form=QuestionForm
-        if 'submitted' in request.GET:
-            submitted = True
-    return render(request, 'portfolio/add_survey.html', {'form':form, 'submitted':submitted})
+        return render(request, 'portfolio/add_survey.html', 
+        {'form':form, 
+        })
 
-def customer_survey(request, pk):
+def view_survey(request, pk): #성향분석설문 결과
 
-	survey_record  = Questionarie.objects.get(id=pk)
+    try:
+        survey_record = Questionarie.objects.get(user_name=pk)
 
-	return render(request, 'portfolio/view_survey.html', {
-			"survey_record":survey_record,
-			})
+        return render(request, 'portfolio/view_survey.html', {
+            "survey_record": survey_record,
+        })
 
-def update_survey(request, pk):
-    cur_survey = Questionarie.objects.get(id=pk)
+    except Questionarie.DoesNotExist:
+        
+        return add_survey(request, pk)
+        #return HttpResponse("설문데이터 없슴")
+
+        # form = QuestionForm(request.POST)
+        # submitted=False
+
+        # return render(request, 'portfolio/add_survey.html', {
+        #     'form':form, 
+        #     'pk':pk,
+        #     #'submitted':submitted
+        #     })
+
+def update_survey(request, pk): #성향분석설문 제출화면
+    cur_survey = Questionarie.objects.get(user_name=pk)
     form = QuestionForm(request.POST or None, instance=cur_survey)
 
     if form.is_valid():     
@@ -353,9 +381,6 @@ def update_survey(request, pk):
         instance = form.save(commit=False)
         instance.riskscore = a
         instance.save()
-        #form.cleaned_data['riskscore'] = a
-        #instance.save
-        #form.save()
         print("success")
     else:
         print("not success")

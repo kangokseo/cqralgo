@@ -4,7 +4,7 @@
 
 {% block content %}
 
-    <h1> Risk Tolerance Questionare </h1>
+    <h1> 투자자 성향 결과</h1>
     <br>
 
 
@@ -15,30 +15,29 @@
         </div>
         <div class="card-body">
       
-      <p class="card-text">
-      <strong>Q1: </strong>{{survey_record.QA1}}</p>
-      
-      <p class="card-text">
-      <strong>Q2: </strong>{{survey_record.QA2}}
-      </p>
-      
-      <p class="card-text">
-      <strong>Q3: </strong>{{survey_record.QA3}}</p>
-      
-      <p class="card-text">
-      <strong>Q4: </strong>{{survey_record.QA4}}</p>
-      
-      <p class="card-text">
-      <strong>투자성향 점수: </strong>{{survey_record.riskscore}}</p>
-      
-          
+            <p class="card-text">
+            <strong>Q1: </strong>{{survey_record.QA1}}</p>
+            
+            <p class="card-text">
+            <strong>Q2: </strong>{{survey_record.QA2}}
+            </p>
+            
+            <p class="card-text">
+            <strong>Q3: </strong>{{survey_record.QA3}}</p>
+            
+            <p class="card-text">
+            <strong>Q4: </strong>{{survey_record.QA4}}</p>
+            
+            <p class="card-text">
+            <strong>투자성향 점수: </strong>{{survey_record.riskscore}}</p>
+
         </div>
-      </div>
+    </div>
       
       <br/><br/>
-      <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Back</a>
+      <a href="{% url 'account_list' %}" class="btn btn-secondary btn-sm">Back</a>
       
-      <a href="{% url 'update_survey' survey_record.id %}" class="btn btn-secondary btn-sm">Update</a>
+      <a href="{% url 'update_survey' survey_record.user_name %}" class="btn btn-secondary btn-sm">Update</a>
 
       
 
