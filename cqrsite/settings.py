@@ -35,7 +35,7 @@ DEBUG = False #heroku
 #DEBUG = True #development
 
 #ALLOWED_HOSTS = ['localhost','127.0.0.1','cqrsite-96a18609ac40.herokuapp.com','cqrsite.herokuapp.com']
-ALLOWD_HOSTS = []
+ALLOWD_HOSTS = [*]
 
 
 # Application definition
