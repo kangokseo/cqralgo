@@ -36,8 +36,9 @@ SECRET_KEY="django-insecure-h9=sp9%*hddrh+nl+s*du))0er3c^hsiypm8)j2sr^+&xlz)j5"
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False #heroku
+#DEBUG = False #heroku
 # DEBUG = True #development
+DEBUG = os.getenv('DEBUG', 'False').lower() in ['true', '1', 't']
 
 #ALLOWED_HOSTS = ['localhost','127.0.0.1','cqrsite-96a18609ac40.herokuapp.com','cqrsite.herokuapp.com']
 ALLOWD_HOSTS = ['*']
@@ -100,7 +101,7 @@ WSGI_APPLICATION = 'cqrsite.wsgi.application'
 # }
 
 
-#postgres 
+
 DATABASES = {
     'default': {
         'ENGINE': os.environ.get("DB_ENGINE"),
@@ -115,19 +116,7 @@ DATABASES = {
     },
 }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'd3uk0pkcqmcvms',  
-#         'USER': 'beqixckfvdlbcz', 
-#         'PASSWORD': '96db29853fe015dd6ed8ff5c96480a81312cfae915217fe182aa4992a315dfff',
-#         'HOST': 'ec2-54-144-112-84.compute-1.amazonaws.com', #빈칸이면 localhost
-#         'PORT': '5432', #빈칸이면 5432
-#         'OPTIONS': {
-#             'client_encoding': 'UTF8',  # Set the correct encoding here
-#         },
-#     },
-# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
