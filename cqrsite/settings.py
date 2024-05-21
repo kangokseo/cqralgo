@@ -116,9 +116,9 @@ WSGI_APPLICATION = 'cqrsite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dfjm72gnfllehc',  
-        'USER': 'faalmacnukufhb', 
-        'PASSWORD': 'DB_PASSWORD=6f88b32386929328155edb7330336a30bc2a25cf6faf18bf39115cb83cf3029f',
+        'NAME': 'd3uk0pkcqmcvms',  
+        'USER': 'beqixckfvdlbcz', 
+        'PASSWORD': '96db29853fe015dd6ed8ff5c96480a81312cfae915217fe182aa4992a315dfff',
         'HOST': 'ec2-54-144-112-84.compute-1.amazonaws.com', #빈칸이면 localhost
         'PORT': '5432', #빈칸이면 5432
         'OPTIONS': {
@@ -126,7 +126,6 @@ DATABASES = {
         },
     },
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
