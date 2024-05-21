@@ -28,8 +28,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY")
+#SECRET_KEY = os.environ.get("SECRET_KEY")
 
+SECRET_KEY="django-insecure-h9=sp9%*hddrh+nl+s*du))0er3c^hsiypm8)j2sr^+&xlz)j5"
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -98,21 +99,33 @@ WSGI_APPLICATION = 'cqrsite.wsgi.application'
 
 
 #postgres 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': os.environ.get("DB_ENGINE"),
+#         'NAME': os.environ.get("DB_NAME"),  
+#         'USER': os.environ.get("DB_USER"), 
+#         'PASSWORD': os.environ.get("DB_PASSWORD"),
+#         'HOST': os.environ.get("DB_HOST"), #빈칸이면 localhost
+#         'PORT': '5432', #빈칸이면 5432
+#         'OPTIONS': {
+#             'client_encoding': 'UTF8',  # Set the correct encoding here
+#         },
+#     },
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get("DB_ENGINE"),
-        'NAME': os.environ.get("DB_NAME"),  
-        'USER': os.environ.get("DB_USER"), 
-        'PASSWORD': os.environ.get("DB_PASSWORD"),
-        'HOST': os.environ.get("DB_HOST"), #빈칸이면 localhost
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'dfjm72gnfllehc',  
+        'USER': 'faalmacnukufhb', 
+        'PASSWORD': 'DB_PASSWORD=6f88b32386929328155edb7330336a30bc2a25cf6faf18bf39115cb83cf3029f',
+        'HOST': 'ec2-54-144-112-84.compute-1.amazonaws.com', #빈칸이면 localhost
         'PORT': '5432', #빈칸이면 5432
         'OPTIONS': {
             'client_encoding': 'UTF8',  # Set the correct encoding here
         },
     },
 }
-
-
 
 
 # Password validation
