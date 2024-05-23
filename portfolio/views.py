@@ -29,6 +29,7 @@ import yfinance as yf
 import shutil
 import os
 
+
 from portfolio.utilis.MP_gen import StockData       #cvs 모델링
 from portfolio.utilis.dbUpdater import cqrDB 
 from portfolio.utilis.dbUpdater import accountDB        #db 클래스
@@ -73,6 +74,7 @@ def account_list (request):
         "user_id": user_id,
         "account_v": account_v,
     })
+
 
 
 def all_port(request):

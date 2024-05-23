@@ -2,58 +2,78 @@ import psycopg2
 import pandas as pd
 from datetime import datetime, date
 
+
+from django.db import connection
+
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
 class accountDB:    # 계좌데이타
-    def __init__(self, **kwargs):
-        try:
-            self.conn = psycopg2.connect(
-                host=os.environ.get("DB_HOST"),
-                database=os.environ.get("DB_NAME"),
-                user=os.environ.get("DB_USER"), 
-                password=os.environ.get("DB_PASSWORD")
-            )
-            curObj = self.conn.cursor()
-            self.user_id = kwargs.get('user_id', 'Unknown')
-            print("Connection established")
-        except Exception as e:
-            print(f"Error connecting to the database: {e}")
+    # def __init__(self, **kwargs):
+    #     try:
+    #         self.conn = psycopg2.connect(
+    #             host=os.environ.get("DB_HOST"),
+    #             database=os.environ.get("DB_NAME"),
+    #             user=os.environ.get("DB_USER"), 
+    #             password=os.environ.get("DB_PASSWORD")
+    #         )
+    #         curObj = self.conn.cursor()
+    #         self.user_id = kwargs.get('user_id', 'Unknown')
+    #         print("Connection established")
+    #     except Exception as e:
+    #         print(f"Error connecting to the database: {e}")
 
-    def __del__(self):
-        try:
-            self.conn.close()
-            print("Connection closed")
-        except AttributeError:
-            print("Failed to close the connection because it was never established.")
-
-
-    def get_account_list (self): #종목별투자비중추이 초기업데이트
-        try:
-            curObj = self.conn.cursor()
-            sql1 = "SELECT auth_user.username AS user_name, " \
-                   "portfolio_account.계좌명 AS account_name, " \
-                   "portfolio_account.cano, " \
-                   "portfolio_account.app_key, " \
-                   "portfolio_account.app_secret, " \
-                   "portfolio_portfolio.title AS portfolio_title, " \
-                   "portfolio_portfolio.sub_type_desc AS portfolio_type_desc,  " \
-                   "portfolio_portfolio.sub_type AS portfolio_type,  " \
-                   "portfolio_account.id " \
-                   "FROM auth_user, portfolio_account, portfolio_portfolio " \
-                   "WHERE auth_user.username = portfolio_account.user_id "
-            sql2 = "AND portfolio_account.portfolio_id = portfolio_portfolio.portfolio_id"
-            sql = sql1 + sql2
-            curObj.execute(sql)
-            rs = curObj.fetchall()
-            return rs
-        except Exception as e:
-            print(f"Error executing query: {e}")
-            return None
+    # def __del__(self):
+    #     try:
+    #         self.conn.close()
+    #         print("Connection closed")
+    #     except AttributeError:
+    #         print("Failed to close the connection because it was never established.")
 
 
+    # def get_account_list (self): #종목별투자비중추이 초기업데이트
+        # try:
+        #     curObj = self.conn.cursor()
+        #     sql1 = "SELECT auth_user.username AS user_name, " \
+        #            "portfolio_account.계좌명 AS account_name, " \
+        #            "portfolio_account.cano, " \
+        #            "portfolio_account.app_key, " \
+        #            "portfolio_account.app_secret, " \
+        #            "portfolio_portfolio.title AS portfolio_title, " \
+        #            "portfolio_portfolio.sub_type_desc AS portfolio_type_desc,  " \
+        #            "portfolio_portfolio.sub_type AS portfolio_type,  " \
+        #            "portfolio_account.id " \
+        #            "FROM auth_user, portfolio_account, portfolio_portfolio " \
+        #            "WHERE auth_user.username = portfolio_account.user_id "
+        #     sql2 = "AND portfolio_account.portfolio_id = portfolio_portfolio.portfolio_id"
+        #     sql = sql1 + sql2
+        #     curObj.execute(sql)
+        #     rs = curObj.fetchall()
+        #     return rs
+        # except Exception as e:
+        #     print(f"Error executing query: {e}")
+        #     return None
+
+    def get_account_list(self):
+        with connection.cursor() as cursor:
+            sql = """
+            SELECT auth_user.username AS user_name, 
+                   portfolio_account.계좌명 AS account_name, 
+                   portfolio_account.cano, 
+                   portfolio_account.app_key, 
+                   portfolio_account.app_secret, 
+                   portfolio_portfolio.title AS portfolio_title, 
+                   portfolio_portfolio.sub_type_desc AS portfolio_type_desc,  
+                   portfolio_portfolio.sub_type AS portfolio_type,  
+                   portfolio_account.id 
+            FROM auth_user, portfolio_account, portfolio_portfolio 
+            WHERE auth_user.username = portfolio_account.user_id AND 
+                  portfolio_account.portfolio_id = portfolio_portfolio.portfolio_id
+            """
+            cursor.execute(sql)
+            return cursor.fetchall()
 
 class cqrDB:        # '체슬리알고1' 데이타
     def __init__(self, **kwargs):
