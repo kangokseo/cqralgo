@@ -21,7 +21,11 @@ class accountDB:    # 계좌데이타
         print("constructor - accountDB")
 
     def __del__(self):
-        self.conn.close()
+        #self.conn.close()
+
+        if self.conn:
+            self.conn.close()
+
 
     def get_account_list (self): #종목별투자비중추이 초기업데이트
         curObj = self.conn.cursor()
@@ -62,12 +66,14 @@ class cqrDB:        # '체슬리알고1' 데이타
         
         curObj = self.conn.cursor()
         self.type = kwargs.get('type', 5)
-        print("constructor")
+        print("constructor-cqrDB")
 
 
 
     def __del__(self):
-        self.conn.close()
+        #self.conn.close()
+        if self.conn:
+            self.conn.close()
 
 
     def add_daily_weights(self): #종목별투자비중추이 일일업데이트
