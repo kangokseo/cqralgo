@@ -20,11 +20,8 @@ class accountDB:    # 계좌데이타
         self.user_id = kwargs.get('user_id', 'Unknown')
         print("constructor - accountDB")
 
-    def __del__(self):
+    # def __del__(self):
         #self.conn.close()
-
-        if self.conn:
-            self.conn.close()
 
 
     def get_account_list (self): #종목별투자비중추이 초기업데이트
@@ -70,10 +67,9 @@ class cqrDB:        # '체슬리알고1' 데이타
 
 
 
-    def __del__(self):
-        #self.conn.close()
-        if self.conn:
-            self.conn.close()
+    # def __del__(self):
+    #     #self.conn.close()
+
 
 
     def add_daily_weights(self): #종목별투자비중추이 일일업데이트
