@@ -20,8 +20,8 @@ class accountDB:    # 계좌데이타
         self.user_id = kwargs.get('user_id', 'Unknown')
         print("constructor - accountDB")
 
-    # def __del__(self):
-        #self.conn.close()
+    def __del__(self):
+        self.conn.close()
 
 
     def get_account_list (self): #종목별투자비중추이 초기업데이트
@@ -67,8 +67,8 @@ class cqrDB:        # '체슬리알고1' 데이타
 
 
 
-    # def __del__(self):
-    #     #self.conn.close()
+    def __del__(self):
+        self.conn.close()
 
 
 
@@ -225,7 +225,7 @@ class cqrDB:        # '체슬리알고1' 데이타
         df=df[['Date','코스닥150','KODEX200','나스닥100','SP500','국고채3','단기채','통안채','cash','port_val','월별수익률','누적수익률']]
 
         try:               
-            sql = f"DELETE FROM portfolio_monthlyMPvalue WHERE date = (SELECT MAX(date) FROM portfolio_monthlyMPvalue) AND port_id='{self.type}'"
+            sql = f"DELETE FROM portfolio_monthlyMPvalue WHERE date = (SELECT MAX(date) FROM portfolio_monthlyMPvalue WHERE port_id='{self.type}') AND port_id='{self.type}'"
             curObj.execute(sql)
             self.conn.commit()  
         except Exception as e:

@@ -55,7 +55,7 @@ class StockData:
                 pass
             else: 
                 # Now, we assume that we have # of shares, mkt value of each asset (i.e. we are invested)
-                print("Print daily return", self.df['Date'][i])
+                #print("Print daily return", self.df['Date'][i])
                 new_mkt_value = mkt_value*(self.ret.iloc[i,:]) # Record returns over the previous period 
                 # NOTE: For daily returns, each asset return should be equal to the returns matrix. But, portfolio value may be unique. 
                 port = np.sum(new_mkt_value) + cash_remaining # Record new portfolio value 

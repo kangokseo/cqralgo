@@ -23,11 +23,10 @@ import json
 import numpy as np
 import pandas as pd
 import webbrowser
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import quantstats as qs
 import yfinance as yf
 import shutil
-import matplotlib.pyplot as plt
 import os
 
 from portfolio.utilis.MP_gen import StockData       #cvs 모델링
@@ -39,7 +38,11 @@ from cqrsite.views import HomeView
 from .forms import QuestionForm
 from .models import ModelPort, Portfolio, Profile, Questionarie, dailyMPweight, dailyMPvalue, monthlyMPvalue, MPclsweight, Account
 
-os.environ['MPLBACKEND'] = 'Agg'
+import matplotlib
+matplotlib.use('Agg')  # Set the backend to 'Agg' to avoid GUI requirements
+
+
+#os.environ['MPLBACKEND'] = 'Agg'
 
 class PortfolioLV(ListView):
     model = Portfolio
@@ -510,6 +513,10 @@ def algo(request, ty):      # 모델링 CVS 파일생성: 일별수익률, 월�
 
     #return HttpResponse("success")
     return render(request, rf'portfolio/chesleyalgo_ty{ty}.html')
+
+
+
+
 
 def algo_View(request, ty): # 모델결과보기
     return render(request, rf'portfolio/chesleyalgo_ty{ty}.html')
