@@ -9,66 +9,75 @@ load_dotenv()
 
 class accountDB:    # 계좌데이타
     def __init__(self, **kwargs):
-        self.conn = psycopg2.connect(
-            host=os.environ.get("DB_HOST"),
-            database=os.environ.get("DB_NAME"),
-            user= os.environ.get("DB_USER"), 
-            password=os.environ.get("DB_PASSWORD")
-        )
-        curObj = self.conn.cursor()
-
-        self.user_id = kwargs.get('user_id', 'Unknown')
-        print("constructor - accountDB")
+        try:
+            self.conn = psycopg2.connect(
+                host=os.environ.get("DB_HOST"),
+                database=os.environ.get("DB_NAME"),
+                user=os.environ.get("DB_USER"), 
+                password=os.environ.get("DB_PASSWORD")
+            )
+            curObj = self.conn.cursor()
+            self.user_id = kwargs.get('user_id', 'Unknown')
+            print("Connection established")
+        except Exception as e:
+            print(f"Error connecting to the database: {e}")
 
     def __del__(self):
-        self.conn.close()
+        try:
+            self.conn.close()
+            print("Connection closed")
+        except AttributeError:
+            print("Failed to close the connection because it was never established.")
 
 
     def get_account_list (self): #종목별투자비중추이 초기업데이트
-        curObj = self.conn.cursor()
-
-        sql1 = "SELECT auth_user.username AS user_name, " \
-            "portfolio_account.계좌명 AS account_name, " \
-            "portfolio_account.cano, " \
-            "portfolio_account.app_key, " \
-            "portfolio_account.app_secret, " \
-            "portfolio_portfolio.title AS portfolio_title, " \
-            "portfolio_portfolio.sub_type_desc AS portfolio_type_desc,  " \
-            "portfolio_portfolio.sub_type AS portfolio_type,  " \
-            "portfolio_account.id " \
-            "FROM auth_user, portfolio_account, portfolio_portfolio " \
-            "WHERE auth_user.username = portfolio_account.user_id "
-        sql2 = "AND portfolio_account.portfolio_id = portfolio_portfolio.portfolio_id"
-        sql = sql1+sql2
-
-        curObj.execute(sql)
-        rs = curObj.fetchall()
-
-        # df = pd.DataFrame(rs, columns=['user_name', 'account_number', 'account_name','app_key','app_secret', \
-        #                                'cano', 'portfolio_title', 'portfolio_sub_type'])
-        # print(df)
-
-        return rs
+        try:
+            curObj = self.conn.cursor()
+            sql1 = "SELECT auth_user.username AS user_name, " \
+                   "portfolio_account.계좌명 AS account_name, " \
+                   "portfolio_account.cano, " \
+                   "portfolio_account.app_key, " \
+                   "portfolio_account.app_secret, " \
+                   "portfolio_portfolio.title AS portfolio_title, " \
+                   "portfolio_portfolio.sub_type_desc AS portfolio_type_desc,  " \
+                   "portfolio_portfolio.sub_type AS portfolio_type,  " \
+                   "portfolio_account.id " \
+                   "FROM auth_user, portfolio_account, portfolio_portfolio " \
+                   "WHERE auth_user.username = portfolio_account.user_id "
+            sql2 = "AND portfolio_account.portfolio_id = portfolio_portfolio.portfolio_id"
+            sql = sql1 + sql2
+            curObj.execute(sql)
+            rs = curObj.fetchall()
+            return rs
+        except Exception as e:
+            print(f"Error executing query: {e}")
+            return None
 
 
 
 class cqrDB:        # '체슬리알고1' 데이타
     def __init__(self, **kwargs):
-        self.conn = psycopg2.connect(
-            host=os.environ.get("DB_HOST"),
-            database=os.environ.get("DB_NAME"),
-            user= os.environ.get("DB_USER"), 
-            password=os.environ.get("DB_PASSWORD")
-        )
-        
-        curObj = self.conn.cursor()
-        self.type = kwargs.get('type', 5)
-        print("constructor-cqrDB")
+        try:
+            self.conn = psycopg2.connect(
+                host=os.environ.get("DB_HOST"),
+                database=os.environ.get("DB_NAME"),
+                user= os.environ.get("DB_USER"), 
+                password=os.environ.get("DB_PASSWORD")
+            )
+            curObj = self.conn.cursor()
+            self.type = kwargs.get('type', 5)
+            print("Connection established")
+        except Exception as e:
+            print(f"Error connecting to the database: {e}")
 
 
 
     def __del__(self):
-        self.conn.close()
+        try:
+            self.conn.close()
+            print("Connection closed")
+        except AttributeError:
+            print("Failed to close the connection because it was never established.")
 
 
 

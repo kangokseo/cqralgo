@@ -63,18 +63,17 @@ class MgrOnlyView(UserPassesTestMixin, TemplateView):
     def test_func(self):
         return self.request.user.is_superuser
 
-def account_list (request):
+def account_list (request):  
     user_id = request.user.id
-
-    #adb = accountDB (user_id = user_id)
-    adb = accountDB ()
+    adb = accountDB()
     account_v = adb.get_account_list()
-
-    return render (request,'portfolio/account_list.html', {
-        "user_id" : user_id, 
+    if account_v is None:
+        return HttpResponse("Error fetching accounts", status=500)
+    return render(request, 'portfolio/account_list.html', {
+        "user_id": user_id,
         "account_v": account_v,
+    })
 
-    })   
 
 def all_port(request):
     port_list = Portfolio.objects.all()
