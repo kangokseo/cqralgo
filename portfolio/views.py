@@ -75,8 +75,6 @@ def account_list (request):
         "account_v": account_v,
     })
 
-
-
 def all_port(request):
     port_list = Portfolio.objects.all()
     
@@ -514,10 +512,6 @@ def algo(request, ty):      # 모델링 CVS 파일생성: 일별수익률, 월�
 
     #return HttpResponse("success")
     return render(request, rf'portfolio/chesleyalgo_ty{ty}.html')
-
-
-
-
 
 def algo_View(request, ty): # 모델결과보기
     return render(request, rf'portfolio/chesleyalgo_ty{ty}.html')
