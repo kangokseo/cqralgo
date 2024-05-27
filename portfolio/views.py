@@ -622,7 +622,7 @@ def account_item(request, id):
         print("Account 가져오기 성공")
     except Exception as e:
         print("Account 가져오기 실패")
-        break
+
 
     if account.계좌명 == "실전":
         mock='0'
@@ -638,7 +638,7 @@ def account_item(request, id):
         print("패스워드 저장 성공")
     except Exception as e:
         print("패스워드 저장 실패")
-        break
+
 
 
     #(증권사) 계좌 평가손 가져오기  
@@ -650,7 +650,7 @@ def account_item(request, id):
         print("평가손 가져오기 성공")
     except Exception as e:
         print("평가손 가져오기 실패")
-        break
+
 
 
     #사용자, 투자자리스크 성향 가져오기
