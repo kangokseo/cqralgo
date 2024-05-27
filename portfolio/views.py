@@ -94,7 +94,6 @@ def my_asset(request):
             )
         except Exception as e:
             print("프로파일 가져오기 실패")
-            break
 
         for account in account_v:
             if account.계좌명 == "실전":
@@ -117,7 +116,6 @@ def my_asset(request):
 
             except Exception as e:
                 print("패스워드 저장/클래스 초기화 실패")
-                break
 
 
         return render(request, 'portfolio/my_asset.html', {
