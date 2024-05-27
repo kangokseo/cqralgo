@@ -613,10 +613,14 @@ def rebalancing_06(request, id):       # 장후시간외 리밸런싱
 
 def account_item(request, id):  
 
-    account_v = Account.objects.filter(
-        id = id,
-        )
-    account = account_v.first()
+    try:
+        account_v = Account.objects.filter(
+            id = id,
+            )
+        account = account_v.first()
+        print("Account 가져오기 성공")
+    except Exception as e:
+        print("Account 가져오기 실패")
 
     if account.계좌명 == "실전":
         mock='0'
@@ -629,20 +633,28 @@ def account_item(request, id):
     keyring.set_password('app_secret', id, account.app_secret)    
 
     #(증권사) 계좌 평가손 가져오기  
-    sys = systemtrade(app_key = 'app_key', app_secret = 'app_secret', ID = id, cano = cano,  mock = mock, custtype = 'P') 
-    ap, balance = sys.check_account() 
-    print(balance)
-    print(balance['tot_evlu_amt'])
+    try:
+        sys = systemtrade(app_key = 'app_key', app_secret = 'app_secret', ID = id, cano = cano,  mock = mock, custtype = 'P') 
+        ap, balance = sys.check_account() 
+        
+        print(balance['tot_evlu_amt'])
+        print("평가손 가져오기 성공")
+    except Exception as e:
+        print("평가손 가져오기 실패")
 
     #사용자, 투자자리스크 성향 가져오기
-    me = account.user_id
-    profile_item = Profile.objects.filter(user_name=me) 
-    question_item = Questionarie.objects.filter(user_name=me)
+    try:
+        me = account.user_id
+        profile_item = Profile.objects.filter(user_name=me) 
+        question_item = Questionarie.objects.filter(user_name=me)
 
-    return render(request, 'portfolio/account_item.html', {
-        "profile_item":profile_item, 
-        "question_item":question_item,
-        "account":account ,
-        "balance": balance,
-        })
+        return render(request, 'portfolio/account_item.html', {
+            "profile_item":profile_item, 
+            "question_item":question_item,
+            "account":account ,
+            "balance": balance,
+            })
+    except Exception as e:
+         print("투자자성향 가져오기 실패")
+
 
