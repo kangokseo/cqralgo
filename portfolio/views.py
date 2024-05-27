@@ -84,16 +84,15 @@ def all_port(request):
 def my_asset(request):
     if request.user.is_authenticated:
 
-        try:
-            me = request.user.id
-            profile_item = Profile.objects.filter(user_id=me) 
-            question_item = Questionarie.objects.filter(userid=me)
 
-            account_v = Account.objects.filter(
-                user_id = request.user,
-            )
-        except Exception as e:
-            print("프로파일 가져오기 실패")
+        me = request.user.id
+        profile_item = Profile.objects.filter(user_id=me) 
+        question_item = Questionarie.objects.filter(userid=me)
+
+        account_v = Account.objects.filter(
+            user_id = request.user,
+        )
+
 
         for account in account_v:
             if account.계좌명 == "실전":
@@ -103,20 +102,15 @@ def my_asset(request):
             id = account.user_id
             cano = account.cano
 
-            try:
-                keyring.set_password('app_key', id, account.app_key)
-                keyring.set_password('app_secret', id, account.app_secret)    
+            keyring.set_password('app_key', id, account.app_key)
+            keyring.set_password('app_secret', id, account.app_secret)    
 
-                sys = systemtrade(app_key = 'app_key', app_secret = 'app_secret', ID = id, cano = cano,  mock = mock, custtype = 'P') 
-                ap, balance = sys.check_account() 
+            sys = systemtrade(app_key = 'app_key', app_secret = 'app_secret', ID = id, cano = cano,  mock = mock, custtype = 'P') 
+            ap, balance = sys.check_account() 
 
-                print(balance)
-                # print(balance['tot_evlu_amt'])
-                #print('시작 시간 :', datetime.now().strftime('%m/%d %H:%M:%S'))
-
-            except Exception as e:
-                print("패스워드 저장/클래스 초기화 실패")
-
+            print(balance)
+            # print(balance['tot_evlu_amt'])
+            #print('시작 시간 :', datetime.now().strftime('%m/%d %H:%M:%S'))
 
         return render(request, 'portfolio/my_asset.html', {
             "profile_item":profile_item, 
