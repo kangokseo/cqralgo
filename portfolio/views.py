@@ -119,6 +119,7 @@ def my_asset(request):
                 print("패스워드 저장/클래스 초기화 실패")
                 break
 
+
         return render(request, 'portfolio/my_asset.html', {
             "profile_item":profile_item, 
             "question_item":question_item,
@@ -647,6 +648,7 @@ def account_item(request, id):
         print("패스워드 저장 실패")
         break
 
+
     #(증권사) 계좌 평가손 가져오기  
     try:
         sys = systemtrade(app_key = 'app_key', app_secret = 'app_secret', ID = id, cano = cano,  mock = mock, custtype = 'P') 
@@ -657,6 +659,7 @@ def account_item(request, id):
     except Exception as e:
         print("평가손 가져오기 실패")
         break
+
 
     #사용자, 투자자리스크 성향 가져오기
     try:
@@ -672,6 +675,6 @@ def account_item(request, id):
             })
     except Exception as e:
          print("투자자성향 가져오기 실패")
-         break
+
 
 
