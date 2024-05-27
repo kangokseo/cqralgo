@@ -30,8 +30,8 @@ class systemtrade:
             self.url_base = "https://openapi.koreainvestment.com:9443" # 실전 투자  
         url = f"{self.url_base}/{path}" 
 
-        self.app_key = keyring.get_password(self.app_key, self.ID)
-        self.app_secret = keyring.get_password(self.app_secret, self.ID)
+        # self.app_key = keyring.get_password(self.app_key, self.ID)
+        # self.app_secret = keyring.get_password(self.app_secret, self.ID)
 
         headers = {"content-type": "application/json"}
         body = {
