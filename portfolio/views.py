@@ -84,14 +84,18 @@ def all_port(request):
 def my_asset(request):
     if request.user.is_authenticated:
 
-        me = request.user.id
-        profile_item = Profile.objects.filter(user_id=me) 
-        question_item = Questionarie.objects.filter(userid=me)
+        try:
+            me = request.user.id
+            profile_item = Profile.objects.filter(user_id=me) 
+            question_item = Questionarie.objects.filter(userid=me)
 
-        account_v = Account.objects.filter(
-            user_id = request.user,
+            account_v = Account.objects.filter(
+                user_id = request.user,
             )
-        
+        except Exception as e:
+            print("프로파일 가져오기 실패")
+            break
+
         for account in account_v:
             if account.계좌명 == "실전":
                 mock='0'
@@ -110,7 +114,7 @@ def my_asset(request):
                 print(balance)
                 # print(balance['tot_evlu_amt'])
                 #print('시작 시간 :', datetime.now().strftime('%m/%d %H:%M:%S'))
-                
+
             except Exception as e:
                 print("패스워드 저장/클래스 초기화 실패")
                 break
