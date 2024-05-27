@@ -626,11 +626,16 @@ def account_item(request, id):
         mock='0'
     else:           
         mock='1'
-    id = account.user_id
-    cano = account.cano
 
-    keyring.set_password('app_key', id, account.app_key)
-    keyring.set_password('app_secret', id, account.app_secret)    
+    try:
+        id = account.user_id
+        cano = account.cano
+
+        keyring.set_password('app_key', id, account.app_key)
+        keyring.set_password('app_secret', id, account.app_secret)    
+        print("패스워드 저장 성공")
+    except Exception as e:
+        print("패스워드 저장 실패")
 
     #(증권사) 계좌 평가손 가져오기  
     try:
