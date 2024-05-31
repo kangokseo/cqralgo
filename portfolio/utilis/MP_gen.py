@@ -437,7 +437,7 @@ class StockData:
 
     # 3. 자산별투자비중추이
     def portfolio_by_asset_class(self):
-        risk_level = [3, 1, 3, 2, 1, 1, 5]  # 코덱스, 3년, 나스닥, s&p, 단기채권, 단기통안채, 코스
+        risk_level = [3, 1, 3, 2, 1, 1, 5]  # 코덱스, 3년, 나스닥, s&p, 단기채권, 단기통안채, 코스피
         asset_perc = pd.DataFrame([self.res_pct.iloc[:,[6]].sum(axis = 1),
             self.res_pct.iloc[:,[0,2]].sum(axis = 1),
             self.res_pct.iloc[:,[3]].sum(axis = 1),

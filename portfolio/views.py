@@ -593,9 +593,11 @@ def rebalancing_00(request, id):       # 지정가 리밸런싱
         )
     port = port_v.first()
 
-    keyring.set_password('app_key', user_id, account.app_key)
-    keyring.set_password('app_secret', user_id, account.app_secret)    
-    sys = systemtrade(app_key = 'app_key', app_secret = 'app_secret', ID = user_id, cano = cano,  mock = mock, custtype = 'P', port_subtype=port.sub_type) 
+    app_key=account.app_key
+    app_secret=account.app_secret
+    # keyring.set_password('app_key', user_id, account.app_key)
+    # keyring.set_password('app_secret', user_id, account.app_secret)    
+    sys = systemtrade(app_key = app_key, app_secret = app_secret, ID = user_id, cano = cano,  mock = mock, custtype = 'P', port_subtype=port.sub_type) 
 
     sys.schedule_rebalancing_00()
     sys.execute()
@@ -622,9 +624,12 @@ def rebalancing_06(request, id):       # 장후시간외 리밸런싱
         )
     port = port_v.first()
 
-    keyring.set_password('app_key', user_id, account.app_key)
-    keyring.set_password('app_secret', user_id, account.app_secret)    
-    sys = systemtrade(app_key = 'app_key', app_secret = 'app_secret', ID = user_id, cano = cano,  mock = mock, custtype = 'P', port_subtype=port.sub_type) 
+    app_key=account.app_key
+    app_secret=account.app_secret
+    # keyring.set_password('app_key', user_id, account.app_key)
+    # keyring.set_password('app_secret', user_id, account.app_secret)   
+  
+    sys = systemtrade(app_key = app_key, app_secret = app_secret, ID = user_id, cano = cano,  mock = mock, custtype = 'P', port_subtype=port.sub_type) 
 
     sys.schedule_rebalancing_06()
     sys.execute()
