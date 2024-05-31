@@ -276,8 +276,8 @@ class systemtrade:
 
         print(target_day)
         today = datetime.datetime.now().astimezone(self.kst_tz)
-        today_plus_two = today + datetime.timedelta(minutes=2)
-        today_plus_three = today + datetime.timedelta(minutes=2, seconds=40)
+        today_plus_two = today + datetime.timedelta(minutes=1)
+        today_plus_three = today + datetime.timedelta(minutes=1, seconds=10)
 
         # 06 : 장후 시간외 (15:30~16:00)
         # 05: 장전시간외(08:30-8:40. 8:20부터 주문가능). 전일종가
@@ -335,7 +335,7 @@ class systemtrade:
         # 06 : 장후 시간외 (15:30~16:00)
         # 05: 장전시간외(08:30-8:40. 8:20부터 주문가능). 전일종가 15시40분
         startDt = datetime.datetime.now().astimezone(self.kst_tz).replace(hour=15,minute=40,second=10,microsecond=0)
-        self.endDt = datetime.datetime.now().astimezone(self.kst_tz).replace(hour=15,minute=40,second=40,microsecond=0)
+        self.endDt = datetime.datetime.now().astimezone(self.kst_tz).replace(hour=15,minute=40,second=20,microsecond=0)
         
         schedule.clear() # 스케줄 초기화
 
