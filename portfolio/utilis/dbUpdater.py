@@ -134,7 +134,11 @@ class cqrDB:        # '체슬리알고1' 데이타
 
             file_path = rf'portfolio/templates/{self.type}_자산별투자비중추이.csv'
             df = pd.read_csv(file_path)
-            df=df.rename(columns={'5':'cls5', '3':'cls3','2':'cls2', '1':'cls1'})
+            df=df.rename(columns={'6':'cls6', '5':'cls5','2':'cls2', '1':'cls1'})
+            df['cls6'] = df['cls6'].str.rstrip('%').astype(float) / 100
+            df['cls5'] = df['cls5'].str.rstrip('%').astype(float) / 100
+            df['cls2'] = df['cls2'].str.rstrip('%').astype(float) / 100
+            df['cls1'] = df['cls1'].str.rstrip('%').astype(float) / 100
 
             sql = f"select max(date) from portfolio_MPclsweight where port_id='{self.type}'"
             curObj.execute(sql)
@@ -146,11 +150,13 @@ class cqrDB:        # '체슬리알고1' 데이타
 
                 if s_date > todate:
                     i_port_id = self.type
-                    item5_val = round(float(df.cls5.values[idx].rstrip('%'))/100,6)
-                    item4_val =0
-                    item3_val = round(float(df.cls3.values[idx].rstrip('%'))/100,6)
-                    item2_val = round(float(df.cls2.values[idx].rstrip('%'))/100,6)
-                    item1_val = round(float(df.cls1.values[idx].rstrip('%'))/100,6)
+
+                    item5_val = round(df['cls6'].values[idx] + df['cls5'].values[idx], 6)
+                    item4_val = 0
+                    item3_val = 0
+                    item2_val = round(df['cls2'].values[idx] + df['cls1'].values[idx], 6)
+                    item1_val = 0
+
                     tot_val = round(float(df.total.values[idx].rstrip('%'))/100,6)
                     risk_val = round(float(df.위험자산비중.values[idx].rstrip('%'))/100,6)
 
@@ -339,16 +345,23 @@ class cqrDB:        # '체슬리알고1' 데이타
 
             file_path = rf'portfolio/templates/{self.type}_자산별투자비중추이.csv'
             df = pd.read_csv(file_path)
-            df=df.rename(columns={'5':'cls5', '3':'cls3','2':'cls2', '1':'cls1'})
+            df=df.rename(columns={'6':'cls6', '5':'cls5','2':'cls2', '1':'cls1'})
+            df['cls6'] = df['cls6'].str.rstrip('%').astype(float) / 100
+            df['cls5'] = df['cls5'].str.rstrip('%').astype(float) / 100
+            df['cls2'] = df['cls2'].str.rstrip('%').astype(float) / 100
+            df['cls1'] = df['cls1'].str.rstrip('%').astype(float) / 100
+           # df=df.rename(columns={'5':'cls5', '3':'cls3','2':'cls2', '1':'cls1'})
 
             for idx in range (len(df)):
                 s_date = df.Date.values[idx][:10]
                 i_port_id = self.type 
-                item5_val = round(float(df.cls5.values[idx].rstrip('%'))/100,6)
-                item4_val =0
-                item3_val = round(float(df.cls3.values[idx].rstrip('%'))/100,6)
-                item2_val = round(float(df.cls2.values[idx].rstrip('%'))/100,6)
-                item1_val = round(float(df.cls1.values[idx].rstrip('%'))/100,6)
+
+                item5_val = round(df['cls6'].values[idx] + df['cls5'].values[idx], 6)
+                item4_val = 0
+                item3_val = 0
+                item2_val = round(df['cls2'].values[idx] + df['cls1'].values[idx], 6)
+                item1_val = 0
+
                 tot_val = round(float(df.total.values[idx].rstrip('%'))/100,6)
                 risk_val = round(float(df.위험자산비중.values[idx].rstrip('%'))/100,6)
 

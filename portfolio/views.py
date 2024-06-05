@@ -447,7 +447,7 @@ def cal_risk(request):
     #5, 공격형, 81-90    
 
 def algo(request, ty):      # 모델링 CVS 파일생성: 일별수익률, 월별수익률, 자산별투자비중, 종목별투자비중
-    tic = [ "114260.KS",    # Bond, cash, mmf, kosdq, KOSPI, NASDAQ, S&P
+    tic = [ "114260.KS",    # 국고채3년, 단기채권, 단기통안채, kosdq, KOSPI, NASDAQ, S&P
            "153130.KS", "157450.KS","229200.KS", "278530.KS", "379810.KS", "379800.KS"] 
 
     fromdate = "2021-04-05"
@@ -458,7 +458,8 @@ def algo(request, ty):      # 모델링 CVS 파일생성: 일별수익률, 월�
     data.Close.dropna(thresh = 6)
     df,ret = stock_data.clean()
 
-    values = {
+    # odd_stock_w, odd_bond_w, even_stock_w, even_bond_w, even_passive_stock_w, even_passive_bond_w
+    values = { 
         5: (1, 0, 1, 0, 1, 0),                  #공격형
         4: (0.7, 0.3, 0.7, 0.3, 0.7, 0.3),      #적극형
         3: (0.5, 0.5, 0.5, 0.5, 0.5, 0.5),      #중립형
@@ -468,7 +469,7 @@ def algo(request, ty):      # 모델링 CVS 파일생성: 일별수익률, 월�
     # Retrieve values based on ty
     odd_stock_w, odd_bond_w, even_stock_w, even_bond_w, even_passive_stock_w, even_passive_bond_w = values.get(ty, (None, None, None, None, None, None))
 
-    #Bond, cash, mmf, kosdq, KOSPI, NASDAQ, S&P
+    #Bond, cash, mmf, kosdaq, KOSPI, NASDAQ, S&P
     #홀수11-4월 (코스닥60, 코스피40). 홀수 5-10월(나스닥50,S&P50)
     #짝수11-4월 (코스닥50, 코스피50). 짝수 5-10월(나스닥50,S&P50)
     odd_buy = np.array([(1/3*odd_bond_w), (1/3*odd_bond_w), (1/3*odd_bond_w), 0.6*odd_stock_w, 0.4*odd_stock_w, 0.0*odd_stock_w, 0.0*odd_stock_w])          # Even 11 - Odd 4. Active

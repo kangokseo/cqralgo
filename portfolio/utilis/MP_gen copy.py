@@ -435,37 +435,22 @@ class StockData:
     def to_percentage(self, value):
         return f"{value * 100:.2f}%"
 
-    # 3. 자산별투자비중추이  
-    def portfolio_by_asset_class(self): 
-        # risk_level = [3, 1, 3, 2, 1, 1, 5]  # 코덱스, 3년, 나스닥, s&p, 단기채권, 단기통안채, 코스피
-        # asset_perc = pd.DataFrame([self.res_pct.iloc[:,[6]].sum(axis = 1),
-        #     self.res_pct.iloc[:,[0,2]].sum(axis = 1),
-        #     self.res_pct.iloc[:,[3]].sum(axis = 1),
-        #     self.res_pct.iloc[:,[1,4,5]].sum(axis = 1),
-        #     self.res_pct.iloc[:,[7]].sum(axis = 1),],
-        #     index = [5,3,2,1,0]).T
-        # asset_perc['total'] = asset_perc.sum(axis = 1)
-        # asset_perc['위험자산비중'] = asset_perc[[5]]
-
-        risk_level = [5, 6, 5, 2, 2, 1, 1]  #Bond, cash, mmf, kosdaq, KOSPI, NASDAQ, S&P
-        asset_perc = pd.DataFrame([
-            self.res_pct.iloc[:,[1]].sum(axis = 1), #6
-            self.res_pct.iloc[:,[0,2]].sum(axis = 1), #5
-            self.res_pct.iloc[:,[7]].sum(axis = 1), #0
-            self.res_pct.iloc[:,[3,4]].sum(axis = 1), #2
-            self.res_pct.iloc[:,[5,6]].sum(axis = 1), #1
-            ],
-            index = [6,5,3, 2,1]).T
+    # 3. 자산별투자비중추이
+    def portfolio_by_asset_class(self):
+        risk_level = [3, 1, 3, 2, 1, 1, 5]  # 코덱스, 3년, 나스닥, s&p, 단기채권, 단기통안채, 코스피
+        asset_perc = pd.DataFrame([self.res_pct.iloc[:,[6]].sum(axis = 1),
+            self.res_pct.iloc[:,[0,2]].sum(axis = 1),
+            self.res_pct.iloc[:,[3]].sum(axis = 1),
+            self.res_pct.iloc[:,[1,4,5]].sum(axis = 1),
+            self.res_pct.iloc[:,[7]].sum(axis = 1),],
+            index = [5,3,2,1,0]).T
         asset_perc['total'] = asset_perc.sum(axis = 1)
-        asset_perc['위험자산비중'] =  pd.to_numeric(asset_perc[1], errors='coerce') + pd.to_numeric(asset_perc[2], errors='coerce') 
+        asset_perc['위험자산비중'] = asset_perc[[5]]
 
         self.max_asset_weight = asset_perc.iloc[:,:5].max().max()   # 개별 자산비중 최고치
         self.X = asset_perc.applymap(self.to_percentage)
         self.X['rebal'] = self.rebal
         return self.max_asset_weight, self.X
-
-
-        
     
     # 4. 종목별투자비중추이
     def portfolio_by_ind_assets(self):
