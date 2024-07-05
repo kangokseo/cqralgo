@@ -28,7 +28,7 @@ import quantstats as qs
 import yfinance as yf
 import shutil
 import os
-
+import warnings
 
 from portfolio.utilis.MP_gen import StockData       #cvs 모델링
 from portfolio.utilis.dbUpdater import cqrDB 
@@ -447,6 +447,8 @@ def cal_risk(request):
     #5, 공격형, 81-90    
 
 def algo(request, ty):      # 모델링 CVS 파일생성: 일별수익률, 월별수익률, 자산별투자비중, 종목별투자비중
+    
+    warnings.filterwarnings('ignore', category=FutureWarning)
     tic = [ "114260.KS",    # 국고채3년, 단기채권, 단기통안채, kosdq, KOSPI, NASDAQ, S&P
            "153130.KS", "157450.KS","229200.KS", "278530.KS", "379810.KS", "379800.KS"] 
 

@@ -2,6 +2,7 @@ import yfinance as yf
 import pandas as pd
 import numpy as np
 
+
 class StockData:
     def __init__(self, ticker):
         self.ticker = ticker
@@ -12,6 +13,7 @@ class StockData:
         """
         Downloads historical stock data for the given ticker between start_date and end_date.
         """
+
         self.data = yf.download(self.ticker, 
                                 start=start_date, end=end_date,
                                 interval = int, 
@@ -30,6 +32,23 @@ class StockData:
         self.df.insert(1, 'end of month', 
                      (self.df.Date.dt.month - self.df.Date.shift(-1).dt.month).isin([0,np.nan]))
         
+        #'first week Monday'
+        # self.df.insert(1, 'end of month', 
+        #        ((self.df.Date.dt.day <= 7) & (self.df.Date.dt.weekday == 0)))
+        #'first week Tuesday'
+        # self.df.insert(1, 'first week Tuesday', 
+        #        ((self.df.Date.dt.day <= 7) & (self.df.Date.dt.weekday == 1)))
+
+        #'second week Wednesday'
+        # self.df.insert(1, 'end of month', 
+        #        ((self.df.Date.dt.day >= 8) & (self.df.Date.dt.day <= 14) & (self.df.Date.dt.weekday == 2)))
+
+        # self.df.insert(1, 'third week Friday', 
+        #        ((self.df.Date.dt.day >= 15) & (self.df.Date.dt.day <= 21) & (self.df.Date.dt.weekday == 4)))
+
+        # self.df.insert(1, 'fourth week Thursday', 
+        #        ((self.df.Date.dt.day >= 22) & (self.df.Date.dt.day <= 28) & (self.df.Date.dt.weekday == 3)))
+
         """ self.df[self.df['end of month'] == False] """
 
         """" Returns Dataframe"""
@@ -106,7 +125,7 @@ class StockData:
 
             else: 
                 if bool(self.df['end of month'][i]) == False: # Rebalance when end of month
-                    print("Rebalance", self.df["Date"][i])
+                    #print("Rebalance", self.df["Date"][i])
                     # Determine which strategy to use
                     if self.df.month.values[i] in [10,11,12,1,2,3]: # Halloween strategy
                         X = odd_buy 
@@ -130,7 +149,7 @@ class StockData:
         """ End of backtest /// """
         return self.shares, self.cash_rem, self.mkt_val,self.strat
     
-    # Cqra 1 (aka.Halloween, 11-4월 짝/홀수 조정) 
+    # 시큐라1 (aka.Halloween, 11-4월 짝/홀수 조정) 
     def algo1(self,initial_cash,odd_buy,odd_hold,even_buy,even_hold):  # 11 - 4, 5 - 10,
 
         port_list = [initial_cash]  # Seed money 
