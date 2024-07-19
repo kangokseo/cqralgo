@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}CQRA2 성능 리포트{% endblock %}
+
+{% block content %}
+    <br>
+    <h2 class="text-center">CQRA2 성능 리포트</h2>
+    <br>
+    <div class="container">
+        <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th class="text-center"> 타입</th>
+                    <th class="text-center"> 설 명</th>
+                    <th class="text-center">전체결과</th>
+                    <th class="text-center">범위결과</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center"><b>공격형</b></td>
+                    <td class="text-center">위험자산군의 비중을 100%까지 운용<br></td>
+                    <td class="text-center">
+                        <a href="{% url 'type_view' 5 %}" class="btn btn-secondary btn-sm">전체 리포트 보기</a>
+                    </td>                    
+                    <td class="text-center">
+                        <form method="get" action="{% url 'type_view_range' 5 %}" class="form-inline">
+                            <input type="date" id="r_fromdate" name="r_fromdate" value="{{ r_fromdate|default:default_fromdate }}" class="form-control d-inline" style="width: auto; display: inline-block;" />
+                            ~
+                            <input type="date" id="r_todate" name="r_todate" value="{{ r_todate|default:default_todate }}" class="form-control d-inline" style="width: auto; display: inline-block;" />
+                            <button type="submit" class="btn btn-secondary btn-sm ml-2">날짜범위 리포트 보기</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center"><b>적극투자형</b></td>
+                    <td class="text-center">위험자산군의 비중을 70%로 제한<br>나머지는 채권형으로 운용</td>
+                    <td class="text-center">
+                        <a href="{% url 'type_view' 4 %}" class="btn btn-secondary btn-sm">전체 리포트 보기</a>
+                    </td>
+                    <td class="text-center">
+                        <form method="get" action="{% url 'type_view_range' 4 %}" class="form-inline">
+                            <input type="date" id="r_fromdate" name="r_fromdate" value="{{ r_fromdate|default:default_fromdate }}" class="form-control d-inline" style="width: auto; display: inline-block;" />
+                            ~
+                            <input type="date" id="r_todate" name="r_todate" value="{{ r_todate|default:default_todate }}" class="form-control d-inline" style="width: auto; display: inline-block;" />
+                            <button type="submit" class="btn btn-secondary btn-sm ml-2">날짜범위 리포트 보기</button>
+                        </form>
+                    </td>                    
+                </tr>
+                <tr>
+                    <td class="text-center"><b>위험중립형</b></td>
+                    <td class="text-center">위험자산군의 비중을 50%로 제한<br> 나머지는 채권형으로 운용</td>
+                    <td class="text-center">
+                        <a href="{% url 'type_view' 3 %}" class="btn btn-secondary btn-sm">전체 리포트 보기</a>
+                    </td>
+                    <td class="text-center">
+                        <form method="get" action="{% url 'type_view_range' 3 %}" class="form-inline">
+                            <input type="date" id="r_fromdate" name="r_fromdate" value="{{ r_fromdate|default:default_fromdate }}" class="form-control d-inline" style="width: auto; display: inline-block;" />
+                            ~
+                            <input type="date" id="r_todate" name="r_todate" value="{{ r_todate|default:default_todate }}" class="form-control d-inline" style="width: auto; display: inline-block;" />
+                            <button type="submit" class="btn btn-secondary btn-sm ml-2">날짜범위 리포트 보기</button>
+                        </form>
+                    </td>                    
+                </tr>
+                <tr>
+                    <td class="text-center"><b>안정추구형</b></td>
+                    <td class="text-center">위험자산군의 비중을 30%로 제한<br> 나머지는 채권형으로 운용</td>
+                    <td class="text-center">
+                        <a href="{% url 'type_view' 2 %}" class="btn btn-secondary btn-sm">전체 리포트 보기</a>
+                    </td>
+                    <td class="text-center">
+                        <form method="get" action="{% url 'type_view_range' 5 %}" class="form-inline">
+                            <input type="date" id="r_fromdate" name="r_fromdate" value="{{ r_fromdate|default:default_fromdate }}" class="form-control d-inline" style="width: auto; display: inline-block;" />
+                            ~
+                            <input type="date" id="r_todate" name="r_todate" value="{{ r_todate|default:default_todate }}" class="form-control d-inline" style="width: auto; display: inline-block;" />
+                            <button type="submit" class="btn btn-secondary btn-sm ml-2">날짜범위 리포트 보기</button>
+                        </form>
+                    </td>                    
+                </tr>
+            </tbody>
+        </table>
+        <p class="text-center"> ( 위험자산군 = 위험등급1 + 위험등급2 + 위험등급3 ) </p>
+    </div>
+{% endblock %}
+

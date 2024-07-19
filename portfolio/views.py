@@ -1,9 +1,7 @@
 from django.shortcuts import get_object_or_404, render
-
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
-from django.http import HttpResponse
 from django.http import HttpResponse
 from django.views.generic import ListView, DetailView
 from django.views.generic import TemplateView
@@ -12,6 +10,7 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from django.core.paginator import Paginator
 from django.utils import timezone
+
 from datetime import datetime, timedelta
 from datetime import date
 import time
@@ -28,7 +27,10 @@ import quantstats as qs
 import yfinance as yf
 import shutil
 import os
+<<<<<<< HEAD
 import warnings
+=======
+>>>>>>> feature
 
 from portfolio.utilis.MP_gen import StockData       #cvs 모델링
 from portfolio.utilis.dbUpdater import cqrDB 

@@ -1,0 +1,45 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Custom QuantStats Report</title>
+        <style>
+            body { font-family: Arial, sans-serif; }
+            h1, h2 { text-align: center; }
+            .container { width: 80%; margin: 0 auto; }
+            .chart { text-align: center; }
+            .table-container { margin-top: 20px; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Custom Report for AAPL</h1>
+            <div class="chart">
+                <h2>Returns</h2>
+                <img src="returns.png" alt="Returns">
+            </div>
+            <div class="chart">
+                <h2>Monthly Returns</h2>
+                <img src="monthly_returns.png" alt="Monthly Returns">
+            </div>
+            <div class="chart">
+                <h2>Drawdowns</h2>
+                <img src="drawdowns.png" alt="Drawdowns">
+            </div>
+            <div class="chart">
+                <h2>Rolling Volatility</h2>
+                <img src="rolling_volatility.png" alt="Rolling Volatility">
+            </div>
+            <div class="chart">
+                <h2>Rolling Sharpe Ratio</h2>
+                <img src="rolling_sharpe.png" alt="Rolling Sharpe Ratio">
+            </div>
+            <div class="table-container">
+                <h2>Performance Metrics</h2>
+                {metrics}
+            </div>
+        </div>
+    </body>
+    </html>
+    

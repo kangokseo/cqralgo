@@ -20,6 +20,7 @@ urlpatterns = [
 
     path('', views.home, name='home'),
     path('', include('portfolio.urls')),
+    path('', include('cqra2.urls')),
 
 ] 
 

@@ -6,10 +6,10 @@ from .views import PortfolioDV, PortfolioLV
 #app_name = 'portfolio'
 urlpatterns = [
 
-    path('portfolio/', views.all_port, name='all_port'),
+    path('portfolio/', views.all_port, name='all_port'), #포트폴리오
     path('portfolio/<int:pk>/', views.PortfolioDV.as_view(), name='detail'),    
     path('my_asset/', views.my_asset, name='my_asset'),
-    path('account_list/', views.account_list, name='account_list'),
+    path('account_list/', views.account_list, name='account_list'), #계좌관리
 
     path('account_item/<int:id>', views.account_item, name='account_item'),
     path('util_rebal_00/<int:id>', views.rebalancing_00, name='rebalancing_00'),    #지정가 리밸런싱
