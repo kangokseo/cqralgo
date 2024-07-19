@@ -44,9 +44,8 @@
             <th scope="col">누적수익</th>
           </tr>
         </thead>
+
         <tbody>
-
-
         {% if user.is_authenticated %}
             {% if mp_v %}
                 {% for mp in mp_v %}
@@ -71,7 +70,6 @@
             <h2>You must be logged in first.</h2>
             <p class="font-italic"><a href="{% url 'login' %}">Log in</a></p>
         {% endif %}
-
         </tbody>
     </table>
          

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %} mgr_daily_ret.html {% endblock %}
+
+{% load humanize %}
+{% load custom_filters %}
+{% block content %}
+
+<br>
+{% if type == 5 %}    <h2>일별수익률 (공격형)</h2>
+{% elif type == 4 %}   <h2>일별수익률 (적극형)</h2>
+{% elif type == 3 %}   <h2>일별수익률 (중립형)</h2>
+{% elif type == 2 %}   <h2>일별수익률 (안전형)</h2>
+{% endif %}
+<br>
+
+    {% if user.is_staff %}
+    <div class="d-flex justify-content-end">
+        <p> 
+            <a href="{% url 'mgr_monthly_ret' type %}" class="btn btn-secondary mr-2  btn-sm">월별수익률</a>                  
+            <a href="{% url 'mgr_asset_wgt' type %}" class="btn btn-secondary mr-2  btn-sm">종목별투자비중</a>
+            <a href="{% url 'mgr_class_wgt' type %}" class="btn btn-secondary mr-2 btn-sm">자산별투자비중</a>
+        </p>
+    </div>
+    <table class="table table-sm table-hover">
+        <thead>
+          <tr>
+            <th scope="col" style="text-align: center;">Date</th>
+            <th scope="col" style="text-align: center;">코스닥</th>
+            <th scope="col" style="text-align: center;">KOSPI</th>
+            <th scope="col" style="text-align: center;">나스닥</th>
+            <th scope="col" style="text-align: center;">S&P500</th>
+            <th scope="col" style="text-align: center;">국고채</th>
+            <th scope="col" style="text-align: center;">단기채</th>
+            <th scope="col" style="text-align: center;">통안채</th>
+            <th scope="col" style="text-align: center;">Value</th>
+            <th scope="col" style="text-align: center;">일수익</th>
+            <th scope="col" style="text-align: center;">누적수익</th>
+          </tr>
+        </thead>
+
+        <tbody>
+        {% if user.is_authenticated %}
+            {% if mp_v %}
+                {% for mp in mp_v %}
+                <tr>
+                    <td style="text-align: center;">{{mp.date|date:"Y/m/d"}}</td>
+                    <td style="text-align: center;">{{mp.item1_val|floatformat:2|intcomma}}</td>
+                    <td style="text-align: center;">{{mp.item2_val|floatformat:2|intcomma}}</td>
+                    <td style="text-align: center;">{{mp.item3_val|floatformat:2|intcomma}}</td>
+                    <td style="text-align: center;">{{mp.item4_val|floatformat:2|intcomma}}</td>
+                    <td style="text-align: center;">{{mp.item5_val|floatformat:2|intcomma}}</td>
+                    <td style="text-align: center;">{{mp.item6_val|floatformat:2|intcomma}}</td>
+                    <td style="text-align: center;">{{mp.item7_val|floatformat:2|intcomma}}</td>
+                    <td style="text-align: center;">{{mp.port_val|floatformat:2|intcomma }}</td>
+                    <td style="text-align: center;">{{ mp.port_ret|percentage }}</td>
+                    <td style="text-align: center;">{{ mp.acum_ret|percentage }}</td>
+                </tr>    
+                {% endfor %}
+            {% endif %}    
+        {% else %}
+            <h2>You must be logged in first.</h2>
+            <p class="font-italic"><a href="{% url 'login' %}">Log in</a></p>
+        {% endif %}
+        </tbody>
+
+    </table>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">                
+        {% if mp_v.has_previous %}
+            <li class="page-item"><a class="page-link" style="color: black;" href="?page=1"> &laquo 맨앞 </a></li>
+            <li class="page-item"><a class="page-link" style="color: black;" href="?page={{ mp_v.previous_page_number }}"> < 이전 </a></li>            
+        {% endif %}       
+        {% for i in nums %}
+            <li class="page-item"><a class="page-link" style="color: black;" href="?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
+        {% endfor %}        
+        {% if mp_v.has_next %}
+            <li class="page-item"><a class="page-link" style="color: black;" href="?page={{ mp_v.next_page_number }}"> 다음 > </a></li>        
+            <li class="page-item"><a class="page-link" style="color: black;" href="?page={{ mp_v.paginator.num_pages }}"> 맨뒤 &raquo </a></li>        
+        {% endif %}      
+       </ul>
+    </nav>
+
+    <br>
+    <div class="d-flex justify-content-center">
+        <div class="col-md-6">
+            <div class="d-flex justify-content-center">
+                <a href="{% url 'run_algo' type %}" class="btn btn-secondary mr-2 btn-sm">모델링 Refresh</a>
+                <a href="#" class="btn btn-secondary mr-2 btn-sm">DB 일일업데이트</a>
+                <a href="{% url 'init_mpdb' type %}" class="btn btn-secondary mr-2 btn-sm">DB 초기화</a>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+      <h3>관리자로 로그인해야합니다</h3>
+    {% endif %}
+
+{% endblock %}

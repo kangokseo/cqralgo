@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'widget_tweaks',
     'portfolio.apps.PortfolioConfig',
+    'cqra2.apps.CqraConfig',
 
 ]
 

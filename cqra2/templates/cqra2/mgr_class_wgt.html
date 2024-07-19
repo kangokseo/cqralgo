@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %} mgr_class_wgt.html {% endblock %}
+{% load custom_filters %}
+{% block content %}
+    <br>
+    {% if type == 5 %}    <h2>자산별 투자비중 (공격형)</h2>
+    {% elif type == 4 %}   <h2>자산별 투자비중 (적극형)</h2>
+    {% elif type == 3 %}   <h2>자산별 투자비중 (중립형)</h2>
+    {% elif type == 2 %}   <h2>자산별 투자비중 (안전형)</h2>
+    {% endif %}
+    <br>
+
+    <div class="d-flex justify-content-end">
+        <p>
+            <a href="{% url 'mgr_daily_ret' type%}" class="btn btn-secondary mr-2 btn-sm">일별수익률</a>
+            <a href="{% url 'mgr_monthly_ret' type%}" class="btn btn-secondary mr-2  btn-sm">월별수익률</a>
+            <a href="{% url 'mgr_asset_wgt' type%}" class="btn btn-secondary mr-2  btn-sm">종목별투자비중</a>            
+        </p>
+    </div>
+
+    <table class="table table-sm table-hover">
+        <thead>
+          <tr>
+            <th scope="col" style="text-align: center;">Date</th>
+            <th scope="col" style="text-align: center;">위험등급5</th>
+            <th scope="col" style="text-align: center;">위험등급4</th>
+            <th scope="col" style="text-align: center;">위험등급3</th>
+            <th scope="col" style="text-align: center;">위험등급2</th>
+            <th scope="col" style="text-align: center;">위험등급1</th>
+            <th scope="col" style="text-align: center;">Total</th>
+            <th scope="col" style="text-align: center;">위험자산비중</th>
+          </tr>
+        </thead>
+        <tbody>
+
+        {% if user.is_authenticated %}
+            {% if mp_w %}
+                {% for mp in mp_w %}
+                <tr>
+                    <td style="text-align: center;">{{mp.date|date:"Y/m/d"}}</td>
+                    <td style="text-align: center;">{{mp.cls5_val|percentage}}</td>
+                    <td style="text-align: center;">{{mp.cls4_val|percentage}}</td>
+                    <td style="text-align: center;">{{mp.cls3_val|percentage}}</td>
+                    <td style="text-align: center;">{{mp.cls2_val|percentage}}</td>
+                    <td style="text-align: center;">{{mp.cls1_val|percentage}}</td>
+                    <td style="text-align: center;">{{mp.total|percentage}}</td>
+                    <td style="text-align: center;">{{mp.risk_val|percentage}}</td>
+                </tr>    
+                {% endfor %}
+
+            {% endif %}
+    
+        {% else %}
+            <h2>You must be logged in first.</h2>
+            <p class="font-italic"><a href="{% url 'login' %}">Log in</a></p>
+        {% endif %}
+
+        </tbody>
+    </table>
+         
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">          
+      
+      {% if mp_w.has_previous %}
+          <li class="page-item"><a class="page-link" style="color: black;" href="?page=1"> &laquo 맨앞 </a></li>
+      
+          <li class="page-item"><a class="page-link" style="color: black;" href="?page={{ mp_w.previous_page_number }}"> < 이전 </a></li>
+          
+      {% endif %}
+      
+      {% for i in nums %}
+          <li class="page-item"><a class="page-link" style="color: black;" href="?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
+      {% endfor %}
+      
+      {% if mp_w.has_next %}
+          <li class="page-item"><a class="page-link" style="color: black;" href="?page={{ mp_w.next_page_number }}"> 다음 > </a></li>
+      
+          <li class="page-item"><a class="page-link" style="color: black;" href="?page={{ mp_w.paginator.num_pages }}"> 맨뒤 &raquo </a></li>
+      
+      {% endif %}
+      
+       </ul>
+    </nav>
+
+{% endblock %}
