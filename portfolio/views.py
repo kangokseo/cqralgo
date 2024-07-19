@@ -27,10 +27,7 @@ import quantstats as qs
 import yfinance as yf
 import shutil
 import os
-<<<<<<< HEAD
 import warnings
-=======
->>>>>>> feature
 
 from portfolio.utilis.MP_gen import StockData       #cvs 모델링
 from portfolio.utilis.dbUpdater import cqrDB 
