@@ -10,10 +10,7 @@ import requests
 from datetime import datetime, timedelta, date
 from django.utils import timezone
 
-
-
 def port_list(request):   #시큐라2 성능
-
     default_todate = timezone.now().date()
     default_fromdate = default_todate - timedelta(days=365)
 
@@ -22,9 +19,8 @@ def port_list(request):   #시큐라2 성능
         'default_todate': default_todate.strftime('%Y-%m-%d'),
     })   
 
-def type_view(request, ty): # 결과 보기
+def type_view(request, ty): # 전체리포트 보기
     return render(request, rf'cqra2/cqra2_ty{ty}.html')
-
 
 def type_view_range (request, ty): # 범위 리포트 보기
     
@@ -44,8 +40,6 @@ def type_view_range (request, ty): # 범위 리포트 보기
     run_cqra2_range_rpt(r_fromdate, r_todate, ty)
 
     return render(request, rf'cqra2/cqra2_range_ty{ty}.html')
-    
-
 
 def acct_list (request):  #계좌관리
     return render(request, 'cqra2/account_list.html', {
@@ -155,7 +149,6 @@ def mgr_class_wgt(request, ty): #자산별 투자비중 조회
     else:
         return render(request, 'cqra2/mgr_class_wgt.html', {})   
 
-
 def mgr_daily_ret(request, ty): #일별 수익률 조회
     if request.user.is_authenticated and request.user.is_superuser:
         querydict=request.GET.copy()
@@ -205,7 +198,6 @@ def mgr_daily_ret(request, ty): #일별 수익률 조회
                 })   
     else:
         return render(request, 'cqra2/mgr_daily_ret.html', {})   
-
 
 def mgr_monthly_ret(request, ty): #월별 수익률 조회
     if request.user.is_authenticated and request.user.is_superuser:

@@ -6,8 +6,6 @@ import quantstats as qs
 from cqra2.services.MP_gen import CQRA 
 
 
-
-
 def run_cqra2_mp (ty):  
 
     # ticker [국고채3년, 단기채권, 단기통안채, kosdq, KOSPI, NASDAQ, S&P]
@@ -68,18 +66,11 @@ def run_cqra2_mp (ty):
     stock = daily_ret.iloc[:,9]  
     return stock
 
-    # qs.extend_pandas()
-    # html_file_path = rf'cqra2/templates/cqra2/cqra2_ty{ty}.html'
-
-    # #qs.plots.monthly_returns(stock, savefig='static/img/monthly_returns.png')
-    # qs.reports.html(stock, benchmark="SPY", mode='basic', output=html_file_path, title=f'CQRA type {ty} Performance Report')
-
 
 def run_cqra2_rpt(ty,df):  
     qs.extend_pandas()
     html_file_path = rf'cqra2/templates/cqra2/cqra2_ty{ty}.html'
 
-    #qs.plots.monthly_returns(stock, savefig='static/img/monthly_returns.png')
     qs.reports.html(df, benchmark="SPY", mode='basic', output=html_file_path, title=f'CQRA Type{ty} Performance Report')
 
 

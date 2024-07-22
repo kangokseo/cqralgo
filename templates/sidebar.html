@@ -1,13 +1,15 @@
 {% load static %}
 
 <div class="sidebar">
-    <img src= {% static "img/chesleyqr_gr.png" %} alt="Sidebar Image" style="width:90%;">
 
+    <a href="{% url 'home' %}">
+        <img src="{% static 'img/chesleyqr_gr.png' %}" alt="Sidebar Image" style="width:90%;">
+    </a>
+    <br>
+    <hr>
     <ul>
-        <li><a href="{% url 'home' %}">홈</a></li>
-
-        <li><a href="{% url 'port_list' %}">성능리포팅</a></li>
         <li><a href="{% url 'acct_list' %}">계좌관리</a></li>
+        <li><a href="{% url 'port_list' %}">성능리포팅</a></li>
         <li>
             <a href="javascript:void(0)" class="dropdown-toggle" onclick="toggleVisibility('investment-types')">관리상세 </a>
             <ul id="investment-types" style="display: none; padding-left: 20px;">
@@ -17,7 +19,7 @@
                 <li><a href="{% url 'mgr_monthly_ret' 2%}">- 안전추구형</a></li>
             </ul>
         </li>
-
+        <hr>
         <li><a href="{% url 'all_port' %}">시큐라1 성능</a></li>
         <li><a href="{% url 'account_list' %}">시큐라1 계좌관리</a></li>
         <li>
@@ -29,6 +31,7 @@
                 <li><a href="{% url 'mgr_only' 2%}" style="padding-left: 30px;">- 안전추구형</a></li>
             </ul>
         </li>
+        <hr>
         <li><a href="{% url 'my_asset' %}">내계좌 정보 </a></li>
         <li>
             {% if user.is_authenticated %}
