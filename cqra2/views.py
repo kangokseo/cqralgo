@@ -23,21 +23,12 @@ def type_view(request, ty): # 전체리포트 보기
     return render(request, rf'cqra2/cqra2_ty{ty}.html')
 
 def type_view_range (request, ty): # 범위 리포트 보기
-    
+    db = cqra2_TBL(type = ty)   
     r_fromdate = request.GET.get('r_fromdate')
     r_todate = request.GET.get('r_todate')
 
-    try:
-        r_fromdate = datetime.strptime(r_fromdate, '%Y-%m-%d').date()
-    except (ValueError, TypeError):
-        r_fromdate = None
-
-    try:
-        r_todate = datetime.strptime(r_todate, '%Y-%m-%d').date()
-    except (ValueError, TypeError):
-        r_todate = None
-
-    run_cqra2_range_rpt(r_fromdate, r_todate, ty)
+    stock = db.search_daily_value(r_fromdate, r_todate)     #db data search
+    run_cqra2_range_rpt(ty, stock) 
 
     return render(request, rf'cqra2/cqra2_range_ty{ty}.html')
 
@@ -260,5 +251,13 @@ def init_mpdb (request, ty):   # 모델링 DB 초기화
     db.update_clsweight()         #자산별투자비중추이 업데이트
     db.update_daily_value ()      #일별수익률추이 업데이트
     db.update_monthly_value ()    #월별수익률추이 업데이트
-    return HttpResponse("Success add_daily_weights")
+    return HttpResponse("Success init DB")
+
+def daily_update_mpdb (request, ty):     # 모델링 DB 일일 저장
+    db = cqra2_TBL(type = ty)    
+    db.add_daily_weights()     #종목별투자비중추이 업데이트
+    db.add_clsweight()         #자산별투자비중추이 업데이트
+    db.add_daily_value ()      #일별수익률추이 업데이트
+    db.add_monthly_value ()    #월별수익률추이 업데이트
+    return HttpResponse("Success daily_update DB")
 

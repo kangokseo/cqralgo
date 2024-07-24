@@ -67,28 +67,30 @@ def run_cqra2_mp (ty):
     return stock
 
 
-def run_cqra2_rpt(ty,df):  
+def run_cqra2_rpt(ty,df): 
+
+    import warnings
+    warnings.simplefilter(action='ignore', category=FutureWarning)
+
     qs.extend_pandas()
     html_file_path = rf'cqra2/templates/cqra2/cqra2_ty{ty}.html'
 
     qs.reports.html(df, benchmark="SPY", mode='basic', output=html_file_path, title=f'CQRA Type{ty} Performance Report')
 
 
-def run_cqra2_range_rpt(r_fromdate, r_todate, type):  
+def run_cqra2_range_rpt(type, df):  
 
-    csv_file_path = rf'cqra2/templates/{type}_일별수익률추이.csv'
-    df = pd.read_csv(csv_file_path, parse_dates=['Date'])
+    df['date'] = pd.to_datetime(df['date'])
+    df['port_ret'] = pd.to_numeric(df['port_ret'], errors='coerce')
 
-    mask = (df['Date'] >= pd.to_datetime(r_fromdate)) & (df['Date'] <= pd.to_datetime(r_todate))
-    filtered_df = df.loc[mask]
-    stock = filtered_df[['Date', '일별수익률']].set_index('Date')
-    stock = stock.sort_index()
-
-    if stock.empty:
-        raise ValueError(f"No data available between {r_fromdate} and {r_todate}")
+    stock  = df[['date', 'port_ret']].set_index('date')
+    stock  = stock.sort_index()
+                
+    import warnings
+    warnings.simplefilter(action='ignore', category=FutureWarning)
 
     qs.extend_pandas()
     html_file_path = rf'cqra2/templates/cqra2/cqra2_range_ty{type}.html'
-    qs.reports.html(stock['일별수익률'], benchmark="SPY", mode='basic', output=html_file_path, title=f'CQRA Type{type} Performance Report')
+    qs.reports.html(stock ['port_ret'], benchmark="SPY", mode='basic', output=html_file_path, title=f'CQRA Type{type} Performance Report')
 
     return html_file_path  

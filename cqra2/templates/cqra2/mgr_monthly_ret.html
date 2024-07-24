@@ -13,6 +13,8 @@
 {% endif %}
 <br>
 
+{% if user.is_staff %}
+
 <div class="d-flex justify-content-end">
     <p>       
         <a href="{% url 'mgr_daily_ret' type %}" class="btn btn-secondary mr-2  btn-sm">일별수익률</a>        
@@ -62,11 +64,15 @@
     </tbody>
 
     {% else %}
-        <h2>You must be logged in first.</h2>
+        <h2>관리자로 로그인해야합니다</h2>
         <p class="font-italic"><a href="{% url 'login' %}">Log in</a></p>
     {% endif %}
 
 </table>
+
+{% else %}
+    <h2>관리자로 로그인해야합니다</h2>
+{% endif %}
 
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">            

@@ -53,11 +53,9 @@ class accountDB:    # 계좌데이타
             print(f"Error executing query: {e}")
             return None
 
-
 class cqra2_TBL:        # 'CQRA2' 
     def __init__(self, **kwargs):
         self.type = kwargs.get('type', 5)
-
 
     def add_daily_weights(self): #종목별투자비중추이 일일업데이트
 
@@ -107,8 +105,6 @@ class cqra2_TBL:        # 'CQRA2'
                     except Exception as e:
                         print(f"An error occurred while inserting record: {s_date}")
                         break  
-            
-
 
     def add_clsweight(self): #자산별투자비중추이 일일업데이트
         with connection.cursor() as curObj:
@@ -466,3 +462,22 @@ class cqra2_TBL:        # 'CQRA2'
                 
             print(f"Success init_월별수익률_{self.type}")
         
+    def search_daily_value(self,r_fromdate, r_todate): 
+        try:
+            with connection.cursor() as cursor:
+                sql = f"SELECT date, port_id, port_val, port_ret " \
+                    f"FROM cqra2_dailyMPvalue " \
+                    f"WHERE date between '{r_fromdate}' and '{r_todate}' " \
+                    f"and port_id='{self.type}' order by date asc"
+                cursor.execute(sql)
+                rows = cursor.fetchall()
+
+                columns = [col[0] for col in cursor.description]
+                df = pd.DataFrame(rows, columns=columns)
+
+                return df
+                
+        except Exception as e:
+            print(f"Error executing query: {e}")
+            return None
+

@@ -17,8 +17,8 @@ urlpatterns = [
     path('cqra2/mgr_monthly_ret/ty<int:ty>/', views.mgr_monthly_ret, name='mgr_monthly_ret'), #월별수익률 
 
     path('cqra2/mp/ty<int:ty>/', views.run_algo, name='run_algo'), #run algo
-    path('cqra2/mp/init_db/ty<int:ty>/', views.init_mpdb, name='init_mpdb'),
-    
+    path('cqra2/mp/init_mpdb/ty<int:ty>/', views.init_mpdb, name='init_mpdb'),
+    path('cqra2/mp/daily_update_mpdb/ty<int:ty>/', views.daily_update_mpdb, name='daily_update_mpdb'),
 
 ]
 

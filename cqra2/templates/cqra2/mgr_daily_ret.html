@@ -86,7 +86,7 @@
         <div class="col-md-6">
             <div class="d-flex justify-content-center">
                 <a href="{% url 'run_algo' type %}" class="btn btn-secondary mr-2 btn-sm">모델링 Refresh</a>
-                <a href="#" class="btn btn-secondary mr-2 btn-sm">DB 일일업데이트</a>
+                <a href="{% url 'daily_update_mpdb' type %}" class="btn btn-secondary mr-2 btn-sm">DB 일일업데이트</a>
                 <a href="{% url 'init_mpdb' type %}" class="btn btn-secondary mr-2 btn-sm">DB 초기화</a>
             </div>
         </div>
