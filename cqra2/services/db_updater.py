@@ -9,26 +9,6 @@ import os
 load_dotenv()
 
 class accountDB:    # 계좌데이타
-    # def __init__(self, **kwargs):
-    #     try:
-    #         self.conn = psycopg2.connect(
-    #             host=os.environ.get("DB_HOST"),
-    #             database=os.environ.get("DB_NAME"),
-    #             user=os.environ.get("DB_USER"), 
-    #             password=os.environ.get("DB_PASSWORD")
-    #         )
-    #         curObj = self.conn.cursor()
-    #         self.user_id = kwargs.get('user_id', 'Unknown')
-    #         print("Connection established")
-    #     except Exception as e:
-    #         print(f"Error connecting to the database: {e}")
-
-    # def __del__(self):
-    #     try:
-    #         self.conn.close()
-    #         print("Connection closed")
-    #     except AttributeError:
-    #         print("Failed to close the connection because it was never established.")
 
     def get_account_list(self):
         try:
@@ -476,7 +456,7 @@ class cqra2_TBL:        # 'CQRA2'
                 df = pd.DataFrame(rows, columns=columns)
 
                 return df
-                
+
         except Exception as e:
             print(f"Error executing query: {e}")
             return None

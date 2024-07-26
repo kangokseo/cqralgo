@@ -2,8 +2,66 @@
 
 {% block title %} account_list.html {% endblock %}
 
+
 {% block content %}
     <br>
-    <h2>계좌 관리</h2>
+    <h2 class="text-center"> CQRA2 계좌 관리 </h2>
+    <br>
+
+    {% if user.is_staff %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>Username</th>
+                    <th></th>
+                    <th>Type</th>
+                    <th></th>
+                    <th>Account Type</th>
+                    <th>Account Number</th>
+                    <th>Portfolio Title</th>                    
+                    <th class="text-center">월간리밸런싱</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for account in account_v %}
+                <tr>
+                    <td>{{ account.0 }}</td>
+                    <td><a href="#" class="btn btn-secondary btn-sm">수정</a></td>
+                    <td>{{ account.6 }}</td>
+                    <td><a href="#" class="btn btn-secondary btn-sm">투자성향</a></td>
+                    <td>{{ account.1 }}</td>
+                    <td>{{ account.2 }}</td>
+                    <td>{{ account.5 }}</td>
+                    <td><a href="#" class="btn btn-secondary btn-sm">장후시간외. 15:30-16:00 </a></td>
+                    <td><a href="#" class="btn btn-secondary btn-sm">지정가. 9:00-3:30</a></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center">No accounts available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br><br>
+        <p>
+            <b>주문방법</b><br>
+            - 지정가 (Limit Order). 가격과 수량을 지정하여 주문내는 방식.<br>
+            - 시장가 (Market Order). 수량만 지정하여 즉시 거래를 체결하고자 할때 사용하는 방식.<br>           
+            - 조건부지정가 (Conditional Order). 처음에는 지정가 주문으로 제출되고, 거래가 체결되지 않은 경우는 시장가 주문으로 전환.<br>           
+            - 최유리지정가 (Best Order). 지금 거래할수 있는 첫 가격으로 주문이 나감. 매수/매도 1호가에만 주문이 나가므로 호가를 잡아먹는 사태를 방지할수 있다. <br>              
+            - 장전시간외 (08:30-8:40. 8:20부터 주문가능). 전일종가 <br>           
+            - 장후시간외 (15:40-16:00. 15:30부터 주문가능). 당일 종가.<br>           
+            - 시간외단일가 (16:00-18:00). 당일종가의 10%범위내.<br>
+        </p>
+    </div>
+
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+            관리자 전용 화면입니다. 관리자로 로그인하세요.
+        </div>
+    {% endif %}
 
 {% endblock %}

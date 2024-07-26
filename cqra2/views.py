@@ -1,14 +1,25 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.paginator import Paginator
-
-from cqra2.services.biz_logic import run_cqra2_mp, run_cqra2_rpt, run_cqra2_range_rpt
+from cqra2.services.db_updater import accountDB
 from cqra2.services.db_updater import cqra2_TBL 
+from cqra2.services.biz_logic import run_cqra2_mp, run_cqra2_rpt, run_cqra2_range_rpt
 from .models import dailyMPweight, dailyMPvalue, monthlyMPvalue, MPclsweight
 
 import requests
 from datetime import datetime, timedelta, date
 from django.utils import timezone
+
+def acct_list (request):  
+    user_id = request.user.id
+    adb = accountDB()
+    account_v = adb.get_account_list()
+    if account_v is None:
+        return HttpResponse("계좌 조회 에러", status=500)
+    return render(request, 'cqra2/account_list.html', {
+        "user_id": user_id,
+        "account_v": account_v,
+    })
 
 def port_list(request):   #시큐라2 성능
     default_todate = timezone.now().date()
@@ -31,10 +42,6 @@ def type_view_range (request, ty): # 범위 리포트 보기
     run_cqra2_range_rpt(ty, stock) 
 
     return render(request, rf'cqra2/cqra2_range_ty{ty}.html')
-
-def acct_list (request):  #계좌관리
-    return render(request, 'cqra2/account_list.html', {
-    })
 
 def mgr_asset_wgt(request, ty): #종목별 투자비중 조회
     if request.user.is_authenticated and request.user.is_superuser :

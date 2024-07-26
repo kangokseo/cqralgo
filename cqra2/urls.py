@@ -5,6 +5,7 @@ from . import views
 #app_name = 'portfolio'
 urlpatterns = [
 
+    path('cqra2/acct_list/', views.acct_list, name='acct_list'), #계좌관리
     path('cqra2/port_list', views.port_list, name='port_list'), #포트폴리오
     path('cqra2/port_list/ty<int:ty>', views.type_view, name='type_view'),  #모델 결과보기
     path('cqra2/port_list/range/ty<int:ty>', views.type_view_range, name='type_view_range'),  #모델 결과보기
